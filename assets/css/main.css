@@ -702,6 +702,19 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   object-fit: cover;
 }
 
+/* Fixed-background parallax — section scrolls over anchored image */
+.section--parallax {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* iOS doesn't support fixed attachment — fall back to scroll */
+@supports (-webkit-touch-callout: none) {
+  .section--parallax { background-attachment: scroll; }
+}
+
 .section--fullbleed .section__overlay {
   position: absolute;
   inset: 0;
@@ -1848,12 +1861,15 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   .cycle-words__word { transition: none; }
 }
 
-/* ── 25. WAX SEAL ───────────────────────────────────────────── */
+/* ── 25. EXPLORE DRAGON ─────────────────────────────────────── */
 
-.wax-seal {
-  width: 100px;
-  height: 100px;
+.explore-dragon {
+  width: 340px;
+  max-width: 40%;
+  height: auto;
   flex-shrink: 0;
+  opacity: 0.9;
+  filter: drop-shadow(0 4px 24px rgba(0,0,0,0.4));
 }
 
 /* ── 24. RESPONSIVE ─────────────────────────────────────────── */

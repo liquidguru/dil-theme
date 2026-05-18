@@ -130,17 +130,12 @@ if ( empty( $hero_slides ) ) {
 <!-- ═══════════════════════════════════════════════════════════
      SECTION 4 — COME, EXPLORE LEMBEH (full-bleed)
      ═══════════════════════════════════════════════════════════ -->
-<section class="section--fullbleed" style="min-height:520px;">
-
-    <div class="section__bg">
-        <?php if ( $explore_img ) : ?>
-            <img src="<?php echo esc_url( $explore_img ); ?>"
-                 alt="<?php esc_attr_e( 'The Lembeh Strait at golden hour', 'dil' ); ?>"
-                 loading="lazy">
-        <?php else : ?>
-            <?php echo dil_placeholder( 'Full-bleed — Lembeh Strait / resort wide shot' ); // phpcs:ignore ?>
-        <?php endif; ?>
-    </div>
+<?php
+$explore_style = $explore_img
+    ? 'background-image: url(' . esc_url( $explore_img ) . ');'
+    : '';
+?>
+<section class="section--fullbleed section--parallax" style="<?php echo esc_attr( $explore_style ); ?>">
 
     <div class="section__overlay" aria-hidden="true"></div>
 
@@ -155,39 +150,11 @@ if ( empty( $hero_slides ) ) {
             <?php esc_html_e( 'Lembeh.', 'dil' ); ?>
         </h2>
 
-        <!-- Wax seal SVG -->
-        <svg class="wax-seal" viewBox="0 0 100 100" aria-hidden="true">
-            <defs>
-                <radialGradient id="seal-grad" cx="38%" cy="38%" r="62%">
-                    <stop offset="0%"   stop-color="#8F3033"/>
-                    <stop offset="100%" stop-color="#4A1517"/>
-                </radialGradient>
-            </defs>
-            <!-- Outer ring with spiky edge -->
-            <circle cx="50" cy="50" r="46" fill="url(#seal-grad)"/>
-            <!-- Inner circle border -->
-            <circle cx="50" cy="50" r="38" fill="none" stroke="rgba(245,236,220,0.35)" stroke-width="1"/>
-            <!-- DIL monogram -->
-            <text x="50" y="55" text-anchor="middle" font-size="18"
-                  font-family="'code-pro-light-lc', sans-serif" letter-spacing="4"
-                  fill="rgba(245,236,220,0.85)">DIL</text>
-            <!-- Outer spike ring (decorative) -->
-            <?php
-            for ( $i = 0; $i < 24; $i++ ) {
-                $a = $i * 15 * M_PI / 180;
-                $x1 = 50 + 46 * cos( $a );
-                $y1 = 50 + 46 * sin( $a );
-                $x2 = 50 + 50 * cos( $a + 7.5 * M_PI / 180 );
-                $y2 = 50 + 50 * sin( $a + 7.5 * M_PI / 180 );
-                $x3 = 50 + 46 * cos( $a + 15 * M_PI / 180 );
-                $y3 = 50 + 46 * sin( $a + 15 * M_PI / 180 );
-                echo '<path d="M' . round($x1,2) . ',' . round($y1,2)
-                    . ' L' . round($x2,2) . ',' . round($y2,2)
-                    . ' L' . round($x3,2) . ',' . round($y3,2) . ' Z"'
-                    . ' fill="url(#seal-grad)"/>';
-            }
-            ?>
-        </svg>
+        <img src="<?php echo esc_url( DIL_URI . '/assets/images/dragon.png' ); ?>"
+             alt=""
+             class="explore-dragon"
+             aria-hidden="true"
+             loading="lazy">
 
     </div>
 
