@@ -14,6 +14,7 @@
       if (!ticking) {
         requestAnimationFrame(() => {
           header.classList.toggle('is-scrolled', window.scrollY > 80);
+          setHeaderHeight();
           ticking = false;
         });
         ticking = true;
@@ -559,6 +560,194 @@
         }
       });
     });
+  }
+
+  /* ── Rates page tab switcher ────────────────────────────── */
+
+  document.querySelectorAll('.rates-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.target;
+      document.querySelectorAll('.rates-tab').forEach(t => {
+        t.classList.toggle('is-active', t === tab);
+        t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
+      });
+      document.querySelectorAll('.rates-table-wrap').forEach(wrap => {
+        wrap.hidden = wrap.id !== target;
+      });
+    });
+  });
+
+  /* ── Header height CSS var (for sticky subnav) ──────────── */
+
+  function setHeaderHeight() {
+    const h = document.getElementById('site-header');
+    if (h) {
+      document.documentElement.style.setProperty('--header-h', h.offsetHeight + 'px');
+    }
+    const sub = document.querySelector('.info-subnav');
+    document.documentElement.style.setProperty('--subnav-h', sub ? sub.offsetHeight + 'px' : '0px');
+  }
+  setHeaderHeight();
+  window.addEventListener('resize', setHeaderHeight, { passive: true });
+
+  /* ── Back to top ─────────────────────────────────────────── */
+
+  const backToTop = document.getElementById('back-to-top');
+  if (backToTop) {
+    window.addEventListener('scroll', () => {
+      backToTop.classList.toggle('is-visible', window.scrollY > 400);
+    }, { passive: true });
+    backToTop.addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+
+
+  /* ── Rates calculator ───────────────────────────────────── */
+
+  const ratesCalc = document.getElementById('rates-calc');
+  if (ratesCalc) {
+    const prices = JSON.parse(ratesCalc.dataset.prices || '{}');
+    const SINGLE_SUPP   = { longhouse: 45, garden: 60,  pool: 60,  suite: 60  };
+    const NONDIVER_RATE = { longhouse: 90, garden: 135, pool: 140, suite: 165 };
+    const ROOM_LABELS = {
+      longhouse: 'Longhouse Room',
+      garden:    'Garden / Seaview Bungalow',
+      pool:      'Pool Front Bungalow',
+      suite:     'Bungalow Suite',
+    };
+
+    // Set --ratesbar-h so sticky total panel clears the PDF bar
+    const pdfBar = document.getElementById('rates-pdf-bar');
+    if (pdfBar) {
+      document.documentElement.style.setProperty('--ratesbar-h', pdfBar.offsetHeight + 'px');
+    }
+
+    function calcUpdate() {
+      const roomEl   = ratesCalc.querySelector('input[name="calc_room"]:checked');
+      const divesEl  = ratesCalc.querySelector('input[name="calc_dives"]:checked');
+      const guestsEl = ratesCalc.querySelector('input[name="calc_guests"]:checked');
+      const room   = roomEl   ? roomEl.value   : 'garden';
+      const dives  = divesEl  ? divesEl.value  : '2';
+      const guests = guestsEl ? parseInt(guestsEl.value, 10) : 2;
+      const nights = parseInt(document.getElementById('calc_nights').value, 10) || 7;
+
+      const idx      = nights - 3;
+      const ppPrice  = prices[dives] && prices[dives][room] ? prices[dives][room][idx] : 0;
+      const diveDays = nights - 1;
+
+      // Check non-diver early — a non-diver replaces the 2nd diver in the room
+      const nondiverEl      = ratesCalc.querySelector('input[name="addon_nondiver"]');
+      const nondiverChecked = nondiverEl && nondiverEl.checked;
+
+      // When a non-diver is present, only 1 diver pays the package rate (room is still shared)
+      const effectiveDivers = nondiverChecked ? 1 : guests;
+
+      const breakdown = [];
+
+      // Base package
+      const base = ppPrice * effectiveDivers;
+      const shareLabel = nondiverChecked ? ' · sharing w/ non-diver'
+                       : effectiveDivers === 2 ? ' pp · 2 sharing'
+                       : ' · solo';
+      breakdown.push([ROOM_LABELS[room] + ' · ' + nights + 'N', '$' + ppPrice.toLocaleString() + shareLabel]);
+
+      // Single supplement only if truly alone (no non-diver sharing the room)
+      const singleSupp = effectiveDivers === 1 && !nondiverChecked ? (SINGLE_SUPP[room] || 60) * nights : 0;
+      if (singleSupp) {
+        breakdown.push(['Single supplement · ' + nights + ' nights', '+$' + singleSupp.toLocaleString()]);
+      }
+
+      // Add-ons
+      let addons = 0;
+
+      const nitroxEl    = ratesCalc.querySelector('input[name="addon_nitrox"]');
+      const nitroxDays  = ratesCalc.querySelector('input[name="addon_nitrox_days"]');
+      if (nitroxEl && nitroxEl.checked) {
+        const d    = nitroxDays ? (parseInt(nitroxDays.value, 10) || 1) : diveDays;
+        const cost = 20 * d * effectiveDivers;
+        addons += cost;
+        breakdown.push(['Nitrox · ' + d + 'd' + (effectiveDivers > 1 ? ' × 2' : ''), '+$' + cost.toLocaleString()]);
+      }
+
+      const nightEl    = ratesCalc.querySelector('input[name="addon_night"]');
+      const nightQtyEl = ratesCalc.querySelector('input[name="addon_night_qty"]');
+      if (nightEl && nightEl.checked) {
+        const qty  = nightQtyEl ? (parseInt(nightQtyEl.value, 10) || 1) : 1;
+        const cost = 55 * qty * effectiveDivers;
+        addons += cost;
+        breakdown.push(['Night dives · ' + qty + (effectiveDivers > 1 ? ' × 2' : ''), '+$' + cost.toLocaleString()]);
+      }
+
+      const guideEl   = ratesCalc.querySelector('input[name="addon_guide"]');
+      const guideDays = ratesCalc.querySelector('input[name="addon_guide_days"]');
+      if (guideEl && guideEl.checked) {
+        const d    = guideDays ? (parseInt(guideDays.value, 10) || 1) : diveDays;
+        const cost = 100 * d;
+        addons += cost;
+        breakdown.push(['Private guide · ' + d + 'd', '+$' + cost.toLocaleString()]);
+      }
+
+      const gearEl   = ratesCalc.querySelector('input[name="addon_gear"]');
+      const gearDays = ratesCalc.querySelector('input[name="addon_gear_days"]');
+      if (gearEl && gearEl.checked) {
+        const d    = gearDays ? (parseInt(gearDays.value, 10) || 1) : diveDays;
+        const cost = 30 * d * effectiveDivers;
+        addons += cost;
+        breakdown.push(['Full gear · ' + d + 'd' + (effectiveDivers > 1 ? ' × 2' : ''), '+$' + cost.toLocaleString()]);
+      }
+
+      const nondiverRateEl = document.getElementById('calc-nondiver-rate');
+      const ndRate = NONDIVER_RATE[room] || 135;
+      if (nondiverRateEl) nondiverRateEl.textContent = '+$' + ndRate + ' / night';
+      if (nondiverChecked) {
+        const cost = ndRate * nights;
+        addons += cost;
+        breakdown.push(['Non-diver · ' + nights + 'N', '+$' + cost.toLocaleString()]);
+      }
+
+      const transferEl = ratesCalc.querySelector('input[name="addon_transfer"]');
+      if (transferEl && transferEl.checked) {
+        const allPeople = effectiveDivers + (nondiverChecked ? 1 : 0);
+        const cost = 40 * allPeople;
+        addons += cost;
+        breakdown.push(['Airport transfer · ' + allPeople + (allPeople === 1 ? ' person' : ' persons'), '+$' + cost.toLocaleString()]);
+      }
+
+      const total     = base + singleSupp + addons;
+      const allGuests = effectiveDivers + (nondiverChecked ? 1 : 0);
+      const perPerson = Math.round(total / allGuests);
+
+      document.getElementById('calc-room-label').textContent = ROOM_LABELS[room];
+
+      const breakdownEl = document.getElementById('calc-breakdown');
+      breakdownEl.innerHTML = breakdown.map(([l, r]) =>
+        '<p><span class="bdl">' + l + '</span><span class="bdr">' + r + '</span></p>'
+      ).join('');
+
+      document.getElementById('calc-total').textContent = 'USD ' + total.toLocaleString();
+      document.getElementById('calc-per').textContent   = allGuests > 1
+        ? 'USD ' + perPerson.toLocaleString() + ' per person'
+        : '';
+    }
+
+    // Show/hide qty inputs when their checkbox is toggled
+    [
+      ['addon_nitrox',  'addon_nitrox_days'],
+      ['addon_night',   'addon_night_qty'],
+      ['addon_guide',   'addon_guide_days'],
+      ['addon_gear',    'addon_gear_days'],
+    ].forEach(([cbName, qtyName]) => {
+      const cb  = ratesCalc.querySelector('input[name="' + cbName + '"]');
+      const qty = ratesCalc.querySelector('input[name="' + qtyName + '"]');
+      if (cb && qty) {
+        cb.addEventListener('change', () => { qty.style.display = cb.checked ? '' : 'none'; });
+        qty.addEventListener('input', calcUpdate);
+      }
+    });
+
+    ratesCalc.addEventListener('change', calcUpdate);
+    calcUpdate();
   }
 
   /* ── Utility: escape HTML ────────────────────────────────── */

@@ -49,7 +49,6 @@ $cdn25 = 'https://diveintolembeh.com/wp-content/uploads/2025/07/';
                     [ 'mod' => 'dil_img_bung7',  'default' => $cdn18 . '03/Room-side-view-Medium.jpg',     'alt' => __( 'Bungalow side view', 'dil' ),         'caption' => __( 'Bungalow', 'dil' ),         'sub' => 'Side view' ],
                     [ 'mod' => 'dil_img_bung8',  'default' => $cdn18 . '05/Onsen-Medium.jpg',              'alt' => __( 'Onsen balcony', 'dil' ),              'caption' => __( 'Onsen balcony', 'dil' ),    'sub' => 'Daytime' ],
                     [ 'mod' => 'dil_img_bung9',  'default' => $cdn18 . '05/Room-inside-Medium.jpg',        'alt' => __( 'Room interior', 'dil' ),              'caption' => __( 'Room interior', 'dil' ),    'sub' => 'Air-conditioned' ],
-                    [ 'mod' => 'dil_img_bung10', 'default' => $cdn18 . '05/17-Bungalow-Bedroom-Medium.jpg','alt' => __( 'Bungalow bedroom', 'dil' ),           'caption' => __( 'Bedroom', 'dil' ),          'sub' => 'Strait view' ],
                 ];
                 foreach ( $bungalows as $tile ) :
                     $src = get_theme_mod( $tile['mod'], $tile['default'] ?? '' );

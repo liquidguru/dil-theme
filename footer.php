@@ -58,7 +58,7 @@
                 'depth'          => 1,
                 'fallback_cb'    => function() {
                     echo '<ul>
-                        <li><a href="' . esc_url( home_url('/info/rates/') ) . '">' . esc_html__('Rates &amp; Packages', 'dil') . '</a></li>
+                        <li><a href="' . esc_url( home_url('/rates/') ) . '">' . esc_html__('Rates &amp; Packages', 'dil') . '</a></li>
                         <li><a href="' . esc_url( home_url('/info/getting-here/') ) . '">' . esc_html__('Getting Here', 'dil') . '</a></li>
                         <li><a href="' . esc_url( home_url('/info/') ) . '">' . esc_html__('FAQs', 'dil') . '</a></li>
                         <li><a href="' . esc_url( home_url('/contact/') ) . '">' . esc_html__('Contact', 'dil') . '</a></li>
@@ -107,6 +107,13 @@
     </div>
 
 </footer><!-- .site-footer -->
+
+<!-- Back to top button -->
+<button class="back-to-top" id="back-to-top" aria-label="<?php esc_attr_e( 'Back to top', 'dil' ); ?>">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+        <polyline points="18 15 12 9 6 15"/>
+    </svg>
+</button>
 
 <!-- Global lightbox (must be before wp_footer so main.js can find it by ID) -->
 <div class="lightbox" id="dil-lightbox" role="dialog" aria-modal="true" aria-label="<?php esc_attr_e( 'Photo lightbox', 'dil' ); ?>" hidden>

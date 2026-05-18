@@ -106,8 +106,9 @@ require_once get_template_directory() . '/inc/inner-page.php';
                 <div class="contact-card__label"><?php esc_html_e( 'Postal address', 'dil' ); ?></div>
                 <div class="contact-card__value">Dive Into Lembeh</div>
                 <div class="contact-card__note">
-                    Kasawari Bay, Lembeh Strait<br>
-                    Bitung, North Sulawesi 95522<br>
+                    PT. Pantai Kasawari Indah<br>
+                    Kel. Kasawari, Kec. Aertembaga<br>
+                    Bitung, North Sulawesi 95528<br>
                     Indonesia
                 </div>
             </div>

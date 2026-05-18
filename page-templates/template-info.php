@@ -14,6 +14,8 @@ $banner_img = get_theme_mod( 'dil_banner_info', '' );
 if ( ! $banner_img && has_post_thumbnail() ) {
     $banner_img = get_the_post_thumbnail_url( null, 'dil-banner' );
 }
+
+$cdn = 'https://diveintolembeh.com/wp-content/uploads/';
 ?>
 
 <?php dil_page_banner( [
@@ -31,7 +33,7 @@ if ( ! $banner_img && has_post_thumbnail() ) {
         <nav class="info-subnav" aria-label="<?php esc_attr_e( 'Page sections', 'dil' ); ?>">
             <a href="#getting-here"><?php esc_html_e( 'Getting Here', 'dil' ); ?></a>
             <a href="#faqs"><?php esc_html_e( 'FAQs', 'dil' ); ?></a>
-            <a href="#north-sulawesi"><?php esc_html_e( 'North Sulawesi', 'dil' ); ?></a>
+            <a href="#topside"><?php esc_html_e( 'Topside', 'dil' ); ?></a>
             <a href="#dive-insurance"><?php esc_html_e( 'Dive Insurance', 'dil' ); ?></a>
         </nav>
 
@@ -43,50 +45,61 @@ if ( ! $banner_img && has_post_thumbnail() ) {
             </div>
 
             <?php
-            $getting_here_img = get_theme_mod( 'dil_img_flight_map', '' );
-            if ( $getting_here_img ) :
+            $map_img = get_theme_mod( 'dil_img_indo_map', $cdn . '2018/04/DIL_indo-loc.jpg' );
+            if ( $map_img ) :
             ?>
-                <img src="<?php echo esc_url( $getting_here_img ); ?>"
-                     alt="<?php esc_attr_e( 'SE Asia flight map to Manado (MDC)', 'dil' ); ?>"
-                     loading="lazy"
-                     style="width:100%;margin-bottom:28px;">
-            <?php else : ?>
-                <?php echo dil_placeholder( 'SE Asia flight map to Manado (MDC)' ); // phpcs:ignore ?>
+                <button class="grid-tile" data-full="<?php echo esc_url( $map_img ); ?>" data-alt="<?php esc_attr_e( 'Indonesia location map showing Lembeh Strait', 'dil' ); ?>" style="margin-bottom:28px;">
+                    <img src="<?php echo esc_url( $map_img ); ?>"
+                         alt="<?php esc_attr_e( 'Indonesia location map showing Lembeh Strait', 'dil' ); ?>"
+                         loading="lazy"
+                         style="width:100%;">
+                </button>
             <?php endif; ?>
 
-            <p style="margin-bottom:20px;">
-                <?php esc_html_e( 'Fly into Manado (Sam Ratulangi International, MDC) via Jakarta (Garuda, Lion Air, Batik Air) or Singapore (Silk Air). From Manado airport it\'s 45 minutes to Bitung Harbour; from there a 15-minute speedboat to the resort. We organise all transfers.', 'dil' ); ?>
-            </p>
+            <?php echo apply_filters( 'the_content', get_theme_mod( 'dil_text_gethere_intro', // phpcs:ignore
+                __( '<p>Manado airport — Sam Ratulangi International (MDC) — is the international gateway to North Sulawesi and is approximately a 60-minute drive from the resort. Once in Bitung you board a 15-minute speedboat to Kasawari Bay. We organise all transfers.</p>', 'dil' )
+            ) ); ?>
+
+            <div class="info-flights" style="margin:24px 0 28px;">
+                <h3 style="font-family:var(--font-heading);font-size:13px;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:16px;"><?php esc_html_e( 'Flight options', 'dil' ); ?></h3>
+                <div style="display:grid;gap:12px;">
+                    <div style="padding:16px 20px;border:1px solid var(--border);">
+                        <strong style="font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;"><?php esc_html_e( 'Via Singapore', 'dil' ); ?></strong>
+                        <p style="margin-top:6px;font-size:15px;color:var(--ink-soft);"><?php esc_html_e( 'Singapore Airlines and Scoot fly direct to Manado. Flights operate Monday, Wednesday and Friday. Book via traveloka.com or your preferred booking portal.', 'dil' ); ?></p>
+                    </div>
+                    <div style="padding:16px 20px;border:1px solid var(--border);">
+                        <strong style="font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;"><?php esc_html_e( 'Via Jakarta', 'dil' ); ?></strong>
+                        <p style="margin-top:6px;font-size:15px;color:var(--ink-soft);"><?php esc_html_e( 'Garuda Indonesia and Batik Air operate frequent connections from Jakarta (CGK) to Manado. Multiple daily departures.', 'dil' ); ?></p>
+                    </div>
+                </div>
+            </div>
 
             <div class="accordion" style="margin-top:24px;">
                 <div class="accordion__item">
                     <button class="accordion__trigger" aria-expanded="false">
-                        <span class="accordion__number"></span>
-                        <span class="accordion__title"><?php esc_html_e( 'Visa on arrival', 'dil' ); ?></span>
+                        <span class="accordion__title"><?php esc_html_e( 'Visa on Arrival', 'dil' ); ?></span>
                         <span class="accordion__icon" aria-hidden="true">+</span>
                     </button>
                     <div class="accordion__body">
-                        <p><?php esc_html_e( 'Most nationalities can obtain a 30-day Visa on Arrival (VoA) at Manado airport. It costs USD 35 and can be extended once for another 30 days at a local immigration office.', 'dil' ); ?></p>
+                        <p><?php esc_html_e( 'Indonesia offers a free 30-day Visa on Arrival to citizens of 169 countries. Your passport must be valid for at least 6 months, have a minimum of 2 blank pages, and you must hold a return or onward ticket. The visa can be extended once for an additional 30 days at a local immigration office.', 'dil' ); ?></p>
                     </div>
                 </div>
                 <div class="accordion__item">
                     <button class="accordion__trigger" aria-expanded="false">
-                        <span class="accordion__number"></span>
-                        <span class="accordion__title"><?php esc_html_e( 'Visa-exempt countries', 'dil' ); ?></span>
+                        <span class="accordion__title"><?php esc_html_e( 'Visa-free entry', 'dil' ); ?></span>
                         <span class="accordion__icon" aria-hidden="true">+</span>
                     </button>
                     <div class="accordion__body">
-                        <p><?php esc_html_e( 'Citizens of ASEAN countries, plus a growing list of others including Australia, New Zealand, UK, USA, and most European countries, can enter Indonesia visa-free for 30 days. Check the latest list on the Indonesian Immigration website.', 'dil' ); ?></p>
+                        <p><?php esc_html_e( 'Citizens of ASEAN member countries (Brunei, Malaysia, Philippines, Singapore, Thailand, Vietnam and others), plus Chile and Hong Kong, can enter Indonesia without a visa. Check the latest requirements with the Indonesian Embassy or consulate in your home country before travel.', 'dil' ); ?></p>
                     </div>
                 </div>
                 <div class="accordion__item">
                     <button class="accordion__trigger" aria-expanded="false">
-                        <span class="accordion__number"></span>
                         <span class="accordion__title"><?php esc_html_e( 'Money &amp; banking', 'dil' ); ?></span>
                         <span class="accordion__icon" aria-hidden="true">+</span>
                     </button>
                     <div class="accordion__body">
-                        <p><?php esc_html_e( 'The local currency is Indonesian Rupiah (IDR). There are ATMs in Bitung; we recommend withdrawing cash before the boat ride. The resort accepts USD and AUD in cash, and major credit cards for the main bill.', 'dil' ); ?></p>
+                        <p><?php esc_html_e( 'The local currency is Indonesian Rupiah (IDR). ATMs are available in Bitung — we recommend withdrawing cash before boarding the speedboat. The resort accepts USD and AUD cash, and major credit cards for the main bill.', 'dil' ); ?></p>
                     </div>
                 </div>
             </div>
@@ -102,35 +115,38 @@ if ( ! $banner_img && has_post_thumbnail() ) {
                 <?php
                 $faqs = [
                     [
-                        'q' => __( 'Best time to visit?', 'dil' ),
-                        'a' => __( 'Diving is good year-round. The dry season (May–October) is generally calmer with better visibility. The wet season (November–April) brings slightly rougher conditions but equal critter diversity and lower rates.', 'dil' ),
+                        'q' => __( 'Where exactly is Lembeh?', 'dil' ),
+                        'a' => __( 'The Lembeh Strait is a narrow, sheltered channel in North Sulawesi, Indonesia — approximately 18km long and 1–2km wide, separating the Sulawesi mainland from Lembeh Island. The resort sits on the western shore at Kasawari Bay. Time zone is GMT+8 (WITA — Central Indonesian Time).', 'dil' ),
                     ],
                     [
-                        'q' => __( 'Where exactly is Lembeh?', 'dil' ),
-                        'a' => __( 'The Lembeh Strait separates the Indonesian mainland (North Sulawesi) from Lembeh Island. It\'s a narrow, sheltered channel about 18km long and 1–2km wide. The resort is on the western shore at Kasawari Bay.', 'dil' ),
+                        'q' => __( 'Best time to visit?', 'dil' ),
+                        'a' => __( 'Diving is excellent year-round in Lembeh. The dry season (May–October) generally offers calmer conditions and better visibility. The wet season (November–April) brings slightly rougher seas but equal or better critter diversity, and lower accommodation rates.', 'dil' ),
+                    ],
+                    [
+                        'q' => __( 'What is the climate like?', 'dil' ),
+                        'a' => __( 'Lembeh sits on the equator, so expect consistent warm temperatures of 25°–28°C (78°–82°F) year-round, both above and below the water. Water visibility ranges from 8–20m depending on season and tidal conditions.', 'dil' ),
                     ],
                     [
                         'q' => __( 'Local population and language?', 'dil' ),
-                        'a' => __( 'The local people are Minahasan (Wanua Pakewa), a predominantly Christian community. Bahasa Indonesia is the national language; Minahasan dialects are spoken locally. Most resort staff speak good English.', 'dil' ),
-                    ],
-                    [
-                        'q' => __( 'Medical facilities?', 'dil' ),
-                        'a' => __( 'The nearest recompression chamber is in Manado. There is a clinic in Bitung. We carry oxygen kits on all dive boats and all divemasters hold DAN-certified O2 first-aid qualifications.', 'dil' ),
+                        'a' => __( 'The local people are Minahasan — a predominantly Christian community with a distinct culture, cuisine, and history. Bahasa Indonesia is the national language; Minahasan dialects are spoken locally. Most resort staff speak good English.', 'dil' ),
                     ],
                     [
                         'q' => __( 'Electricity?', 'dil' ),
-                        'a' => __( 'Indonesia uses 220V / 50Hz power. Plug type C and F (two round pins). The resort has reliable generator backup. All camera charging stations in the camera room are surge-protected.', 'dil' ),
+                        'a' => __( 'Indonesia uses 220V / 50Hz. Plug types C and F (two round pins). The resort has reliable generator backup. All camera-charging stations in the camera room are surge-protected.', 'dil' ),
                     ],
                     [
-                        'q' => __( 'What does the DIL logo mean?', 'dil' ),
-                        'a' => __( 'The logo is a stylised dragon — a nod to the Komodo dragon of Indonesia and to the fire-coral coloured waters at dusk. It was hand-drawn by the resort\'s founder.', 'dil' ),
+                        'q' => __( 'Medical facilities?', 'dil' ),
+                        'a' => __( 'The nearest recompression chamber is in Manado. A clinic is available in Bitung. We carry oxygen kits on all dive boats and all divemasters hold DAN-certified O₂ first-aid qualifications. Dive insurance is mandatory for all guests — see the Dive Insurance section below.', 'dil' ),
+                    ],
+                    [
+                        'q' => __( 'What is the Lembeh Sea Dragon?', 'dil' ),
+                        'a' => __( 'The Lembeh Sea Dragon is our resort mascot and logo — a stylised creature inspired by the Lembeh Strait\'s extraordinary critter life. It has become synonymous with muck diving and the unique underwater world of the strait.', 'dil' ),
                     ],
                 ];
                 foreach ( $faqs as $faq ) :
                 ?>
                 <div class="accordion__item">
                     <button class="accordion__trigger" aria-expanded="false">
-                        <span class="accordion__number"></span>
                         <span class="accordion__title"><?php echo esc_html( $faq['q'] ); ?></span>
                         <span class="accordion__icon" aria-hidden="true">+</span>
                     </button>
@@ -142,47 +158,55 @@ if ( ! $banner_img && has_post_thumbnail() ) {
             </div>
         </div>
 
-        <!-- Section 3 — North Sulawesi -->
-        <div class="inner-section" id="north-sulawesi">
+        <!-- Section 3 — Topside -->
+        <div class="inner-section" id="topside">
             <div class="section-head">
                 <div class="section-head__number mono">03</div>
-                <h2 class="section-head__title"><?php esc_html_e( 'North Sulawesi', 'dil' ); ?></h2>
+                <h2 class="section-head__title"><?php esc_html_e( 'Topside', 'dil' ); ?></h2>
             </div>
-            <p style="margin-bottom:28px;">
-                <?php esc_html_e( 'There\'s more to the region than the Strait. Between dives, or on a rest day, North Sulawesi rewards exploration.', 'dil' ); ?>
-            </p>
+
             <?php
-            $sulawesi_img = get_theme_mod( 'dil_img_sulawesi_map', '' );
-            if ( $sulawesi_img ) :
+            $ts1 = get_theme_mod( 'dil_img_topside1', $cdn . '2018/05/TS01.jpg' );
+            $ts2 = get_theme_mod( 'dil_img_topside2', $cdn . '2018/05/TS02.jpg' );
             ?>
-                <img src="<?php echo esc_url( $sulawesi_img ); ?>"
-                     alt="<?php esc_attr_e( 'Map of North Sulawesi with resort location', 'dil' ); ?>"
+            <div class="image-grid image-grid--2col" style="margin-bottom:28px;">
+                <?php foreach ( [ $ts1, $ts2 ] as $i => $src ) : if ( $src ) : ?>
+                    <button class="grid-tile" data-full="<?php echo esc_url( $src ); ?>" data-alt="<?php echo esc_attr__( 'North Sulawesi topside', 'dil' ); ?>">
+                        <img src="<?php echo esc_url( $src ); ?>" alt="<?php echo esc_attr__( 'North Sulawesi topside', 'dil' ); ?>" loading="lazy">
+                    </button>
+                <?php endif; endforeach; ?>
+            </div>
+
+            <?php
+            $area_map = get_theme_mod( 'dil_img_area_map', $cdn . '2018/05/popout-area-map.jpg' );
+            if ( $area_map ) :
+            ?>
+                <img src="<?php echo esc_url( $area_map ); ?>"
+                     alt="<?php esc_attr_e( 'North Sulawesi area map', 'dil' ); ?>"
                      loading="lazy"
                      style="width:100%;margin-bottom:28px;">
             <?php endif; ?>
 
-            <div class="region-grid">
-                <?php
-                $regions = [
-                    [ 'mod' => 'dil_img_tangkoko',    'label' => __( 'Tangkoko NP', 'dil' ),           'alt' => __( 'Tangkoko Nature Reserve — tarsier', 'dil' ) ],
-                    [ 'mod' => 'dil_img_minahasa',     'label' => __( 'Minahasa Highlands', 'dil' ),    'alt' => __( 'Minahasa Highlands', 'dil' ) ],
-                    [ 'mod' => 'dil_img_tomohon',      'label' => __( 'Tomohon Market', 'dil' ),        'alt' => __( 'Tomohon traditional market', 'dil' ) ],
-                    [ 'mod' => 'dil_img_tondano',      'label' => __( 'Lake Tondano', 'dil' ),          'alt' => __( 'Lake Tondano crater lake', 'dil' ) ],
-                ];
-                foreach ( $regions as $region ) :
-                    $src = get_theme_mod( $region['mod'], '' );
-                    ?>
-                    <div class="region-tile">
-                        <?php if ( $src ) : ?>
-                            <img src="<?php echo esc_url( $src ); ?>" alt="<?php echo esc_attr( $region['alt'] ); ?>" loading="lazy">
-                        <?php else : ?>
-                            <?php echo dil_placeholder( $region['label'] ); // phpcs:ignore ?>
-                        <?php endif; ?>
-                        <div class="region-tile__label"><?php echo esc_html( $region['label'] ); ?></div>
-                    </div>
-                    <?php
-                endforeach;
-                ?>
+            <?php echo apply_filters( 'the_content', get_theme_mod( 'dil_text_topside_intro', // phpcs:ignore
+                __( '<p>There is plenty to see and do when you surface. North Sulawesi is a fascinating region with a rich history — Portuguese, Spanish, Dutch and Japanese colonial periods all left their mark before Indonesian independence in 1949. The local Minahasan culture, cuisine, and highland scenery are worth at least one rest day.</p>', 'dil' )
+            ) ); ?>
+
+            <div style="display:grid;gap:24px;margin-top:28px;">
+
+                <div style="border:1px solid var(--border);padding:28px;">
+                    <h3 style="font-family:var(--font-heading);font-size:13px;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px;"><?php esc_html_e( 'Tangkoko National Park', 'dil' ); ?></h3>
+                    <?php echo apply_filters( 'the_content', get_theme_mod( 'dil_text_topside_tangkoko', // phpcs:ignore
+                        __( '<p>An afternoon trip (departing after lunch, returning around 7pm) into the rainforest to see the Tarsius Spectrum — the world\'s smallest nocturnal primate at just 15cm — plus black macaques, cuscus, and hornbills. Wear long trousers, socks, and trainers.</p>', 'dil' )
+                    ) ); ?>
+                </div>
+
+                <div style="border:1px solid var(--border);padding:28px;">
+                    <h3 style="font-family:var(--font-heading);font-size:13px;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:12px;"><?php esc_html_e( 'Minahasa Highlands', 'dil' ); ?></h3>
+                    <?php echo apply_filters( 'the_content', get_theme_mod( 'dil_text_topside_highlands', // phpcs:ignore
+                        __( '<p>A full-day excursion (7am departure, back for dinner) up to 600m elevation. The route takes in the ancient Sawangan cemetery, the famous Tomohon traditional food market, Woloan village — where traditional wooden houses are pre-built for export — Lake Tondano with a freshwater fish lunch, and the striking three-coloured Lake Linau.</p>', 'dil' )
+                    ) ); ?>
+                </div>
+
             </div>
         </div>
 
@@ -192,37 +216,57 @@ if ( ! $banner_img && has_post_thumbnail() ) {
                 <div class="section-head__number mono">04</div>
                 <h2 class="section-head__title"><?php esc_html_e( 'Dive Insurance', 'dil' ); ?></h2>
             </div>
-            <p style="margin-bottom:28px;">
-                <?php esc_html_e( 'We require all guests to hold current dive insurance. DAN (Divers Alert Network) is the industry standard and covers emergency evacuation, recompression treatment, and medical costs.', 'dil' ); ?>
-            </p>
-            <div class="insurance-cards">
-                <div class="insurance-card">
-                    <div class="insurance-card__period"><?php esc_html_e( '10 days', 'dil' ); ?></div>
-                    <div class="insurance-card__price">
-                        <sup>USD</sup>20
-                    </div>
-                    <div class="insurance-card__features">
-                        <?php esc_html_e( 'Emergency evacuation · Hyperbaric treatment · Medical expenses · 24/7 emergency hotline', 'dil' ); ?>
-                    </div>
-                    <a href="https://www.diversalertnetwork.org" target="_blank" rel="noopener"
-                       class="btn btn-outline-dark" style="margin-top:20px;width:100%;justify-content:center;">
-                        <?php esc_html_e( 'Get covered via DAN', 'dil' ); ?>
-                    </a>
-                </div>
-                <div class="insurance-card">
-                    <div class="insurance-card__period"><?php esc_html_e( '30 days', 'dil' ); ?></div>
-                    <div class="insurance-card__price">
-                        <sup>USD</sup>45
-                    </div>
-                    <div class="insurance-card__features">
-                        <?php esc_html_e( 'Everything in 10-day plan · Multi-trip coverage · Travel disruption · Gear replacement', 'dil' ); ?>
-                    </div>
-                    <a href="https://www.diversalertnetwork.org" target="_blank" rel="noopener"
-                       class="btn btn-primary" style="margin-top:20px;width:100%;justify-content:center;">
-                        <?php esc_html_e( 'Get covered via DAN', 'dil' ); ?>
-                    </a>
+
+            <div style="display:flex;align-items:flex-start;gap:32px;flex-wrap:wrap;margin-bottom:28px;">
+                <?php
+                $dan_logo = get_theme_mod( 'dil_img_dan_logo', $cdn . '2017/07/DAN-2-Mobile-249x300.png' );
+                if ( $dan_logo ) :
+                ?>
+                    <img src="<?php echo esc_url( $dan_logo ); ?>"
+                         alt="<?php esc_attr_e( 'DAN — Divers Alert Network', 'dil' ); ?>"
+                         loading="lazy"
+                         style="width:120px;flex-shrink:0;">
+                <?php endif; ?>
+                <div>
+                    <?php echo apply_filters( 'the_content', get_theme_mod( 'dil_text_insurance_intro', // phpcs:ignore
+                        __( '<p><strong>Indonesian law requires all divers to hold valid dive insurance.</strong> Given our remote location, we strongly recommend DAN (Divers Alert Network) — the world\'s most respected non-profit dive insurance provider. DAN Short Term Insurance is available for 10 or 30 days and can be arranged in advance or on arrival at the resort.</p>', 'dil' )
+                    ) ); ?>
                 </div>
             </div>
+
+            <table style="width:100%;border-collapse:collapse;font-size:15px;margin-bottom:28px;">
+                <thead>
+                    <tr style="border-bottom:2px solid var(--burgundy);">
+                        <th style="text-align:left;padding:10px 0;font-family:var(--font-heading);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;"><?php esc_html_e( 'Benefit', 'dil' ); ?></th>
+                        <th style="text-align:right;padding:10px 0;font-family:var(--font-heading);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;"><?php esc_html_e( 'Coverage', 'dil' ); ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $coverage = [
+                        [ __( 'Diving accident / illness — medical &amp; evacuation', 'dil' ), 'USD 100,000' ],
+                        [ __( 'Lost dive equipment (due to diving accident)', 'dil' ),          'USD 4,000'   ],
+                        [ __( 'Extra accommodation &amp; travel (due to diving accident)', 'dil' ), 'USD 4,000' ],
+                        [ __( 'Accidental death &amp; dismemberment', 'dil' ),                  'USD 5,000'   ],
+                        [ __( '24/7 emergency assistance hotline', 'dil' ),                     __( 'Yes', 'dil' ) ],
+                        [ __( 'Depth limit', 'dil' ),                                           __( 'Unlimited', 'dil' ) ],
+                    ];
+                    foreach ( $coverage as $i => $row ) :
+                    ?>
+                    <tr style="border-bottom:1px solid var(--border);<?php echo $i % 2 === 0 ? 'background:var(--surface);' : ''; ?>">
+                        <td style="padding:10px 8px;"><?php echo esc_html( $row[0] ); ?></td>
+                        <td style="padding:10px 8px;text-align:right;font-family:var(--font-mono);font-size:13px;"><?php echo esc_html( $row[1] ); ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+
+            <div style="background:var(--surface);border:1px solid var(--border);padding:20px 24px;font-size:14px;color:var(--ink-soft);">
+                <strong style="font-family:var(--font-heading);font-size:12px;letter-spacing:0.12em;text-transform:uppercase;display:block;margin-bottom:8px;"><?php esc_html_e( 'Emergency number', 'dil' ); ?></strong>
+                <a href="tel:+61882129242" style="font-family:var(--font-mono);font-size:16px;color:var(--burgundy);">+61 8 8212 9242</a>
+                <p style="margin-top:8px;"><?php esc_html_e( 'No restrictions on age, depth, equipment, or gas mix. Coverage available to divers of all experience levels. Payment can be added to your resort bill or charged to a personal credit card.', 'dil' ); ?></p>
+            </div>
+
         </div>
 
     </main>

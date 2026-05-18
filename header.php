@@ -78,7 +78,7 @@
 
                 <!-- CTAs -->
                 <div class="nav-ctas">
-                    <a href="<?php echo esc_url( home_url( '/info/rates/' ) ); ?>" class="btn btn-outline-dark">
+                    <a href="<?php echo esc_url( home_url( '/rates/' ) ); ?>" class="btn btn-outline-dark">
                         <?php esc_html_e( 'Rates', 'dil' ); ?>
                     </a>
                     <a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>" class="btn btn-primary">
@@ -113,7 +113,7 @@
             <a href="<?php echo esc_url( home_url( '/info/' ) ); ?>"><?php esc_html_e( 'Info', 'dil' ); ?></a>
         </div>
         <div class="compact-nav__cta">
-            <a href="<?php echo esc_url( home_url( '/info/rates/' ) ); ?>" class="btn btn-outline-dark">
+            <a href="<?php echo esc_url( home_url( '/rates/' ) ); ?>" class="btn btn-outline-dark">
                 <?php esc_html_e( 'Rates', 'dil' ); ?>
             </a>
             <a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>" class="btn btn-primary">
@@ -145,7 +145,7 @@
         <a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>"><?php esc_html_e( 'Contact', 'dil' ); ?></a>
     </nav>
     <div class="mobile-nav__ctas">
-        <a href="<?php echo esc_url( home_url( '/info/rates/' ) ); ?>" class="btn btn-outline-dark">
+        <a href="<?php echo esc_url( home_url( '/rates/' ) ); ?>" class="btn btn-outline-dark">
             <?php esc_html_e( 'Rates', 'dil' ); ?>
         </a>
         <a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>" class="btn btn-primary">
