@@ -370,6 +370,94 @@
     });
   }
 
+  /* ── Lightbox (gallery grid + inner-page photo tiles) ───── */
+
+  const lightbox  = document.getElementById('dil-lightbox');
+  const lbImg     = document.getElementById('lightbox-img');
+  const lbCaption = document.getElementById('lightbox-caption');
+  const lbClose   = document.getElementById('lightbox-close');
+  const lbPrev    = document.getElementById('lightbox-prev');
+  const lbNext    = document.getElementById('lightbox-next');
+
+  if (lightbox) {
+    let items        = [];
+    let currentIndex = 0;
+
+    function openLightbox(itemList, index) {
+      items        = itemList;
+      currentIndex = index;
+      showSlide(currentIndex);
+      lightbox.hidden = false;
+      document.body.style.overflow = 'hidden';
+      lbClose.focus();
+    }
+
+    function closeLightbox() {
+      lightbox.hidden = true;
+      document.body.style.overflow = '';
+      lbImg.classList.remove('is-loaded');
+    }
+
+    function showSlide(index) {
+      const item = items[index];
+      if (!item) return;
+      const src = item.dataset.full || item.querySelector('img')?.src || '';
+      const alt = item.dataset.alt  || item.querySelector('img')?.alt || '';
+      lbImg.classList.remove('is-loaded');
+      lbImg.src             = src;
+      lbImg.alt             = alt;
+      lbCaption.textContent = alt;
+      lbImg.onload = () => lbImg.classList.add('is-loaded');
+      if (lbImg.complete) lbImg.classList.add('is-loaded');
+      lbPrev.disabled = index === 0;
+      lbNext.disabled = index === items.length - 1;
+    }
+
+    // Gallery grid items
+    if (galleryGrid) {
+      galleryGrid.addEventListener('click', e => {
+        const btn     = e.target.closest('.gallery-grid__item');
+        if (!btn) return;
+        const visible = Array.from(galleryGrid.querySelectorAll('.gallery-grid__item:not(.is-hidden)'));
+        const idx     = visible.indexOf(btn);
+        if (idx !== -1) openLightbox(visible, idx);
+      });
+    }
+
+    // Inner-page grid tiles (resort, diving, etc.)
+    document.addEventListener('click', e => {
+      const tile = e.target.closest('.grid-tile[data-full]');
+      if (!tile) return;
+      // Collect siblings within the same image-grid for prev/next context
+      const grid  = tile.closest('.image-grid');
+      const scope = grid || document;
+      const tiles = Array.from(scope.querySelectorAll('.grid-tile[data-full]'));
+      const idx   = tiles.indexOf(tile);
+      if (idx !== -1) openLightbox(tiles, idx);
+    });
+
+    lbClose.addEventListener('click', closeLightbox);
+
+    lightbox.addEventListener('click', e => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    lbPrev.addEventListener('click', () => {
+      if (currentIndex > 0) { currentIndex--; showSlide(currentIndex); }
+    });
+
+    lbNext.addEventListener('click', () => {
+      if (currentIndex < items.length - 1) { currentIndex++; showSlide(currentIndex); }
+    });
+
+    document.addEventListener('keydown', e => {
+      if (lightbox.hidden) return;
+      if (e.key === 'Escape')      closeLightbox();
+      if (e.key === 'ArrowLeft'  && currentIndex > 0)               { currentIndex--; showSlide(currentIndex); }
+      if (e.key === 'ArrowRight' && currentIndex < items.length - 1) { currentIndex++; showSlide(currentIndex); }
+    });
+  }
+
   /* ── Info page sub-nav (active on scroll) ────────────────── */
 
   const infoSubnav = document.querySelector('.info-subnav');

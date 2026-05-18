@@ -108,6 +108,29 @@
 
 </footer><!-- .site-footer -->
 
+<!-- Global lightbox (must be before wp_footer so main.js can find it by ID) -->
+<div class="lightbox" id="dil-lightbox" role="dialog" aria-modal="true" aria-label="<?php esc_attr_e( 'Photo lightbox', 'dil' ); ?>" hidden>
+    <button class="lightbox__close" id="lightbox-close" aria-label="<?php esc_attr_e( 'Close', 'dil' ); ?>">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/>
+        </svg>
+    </button>
+    <button class="lightbox__prev" id="lightbox-prev" aria-label="<?php esc_attr_e( 'Previous photo', 'dil' ); ?>">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <polyline points="15 18 9 12 15 6"/>
+        </svg>
+    </button>
+    <div class="lightbox__stage">
+        <img class="lightbox__img" id="lightbox-img" src="" alt="">
+        <div class="lightbox__caption" id="lightbox-caption"></div>
+    </div>
+    <button class="lightbox__next" id="lightbox-next" aria-label="<?php esc_attr_e( 'Next photo', 'dil' ); ?>">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <polyline points="9 18 15 12 9 6"/>
+        </svg>
+    </button>
+</div>
+
 <?php wp_footer(); ?>
 </body>
 </html>

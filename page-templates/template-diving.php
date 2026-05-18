@@ -32,22 +32,22 @@ if ( ! $banner_img && has_post_thumbnail() ) {
                 <h2 class="section-head__title"><?php esc_html_e( 'Boats &amp; Schedule', 'dil' ); ?></h2>
             </div>
             <?php echo apply_filters( 'the_content', get_theme_mod( 'dil_text_diving_boats', // phpcs:ignore
-                __( 'Two traditional wooden dive boats depart three times a day — morning, afternoon, and optional night dive. Maximum six divers per boat so the divemaster can give every diver personal attention.', 'dil' )
+                __( '<p>The Lembeh Strait has long been established as one of the best macro diving spots on the planet. Although famous for its \'muck diving\' on black volcanic slopes, the area also boasts some wonderful coral dive sites.</p><p>We schedule up to 3 day dives per day on our twin engine fiberglass dive boats, to a choice of more than 60 dive spots in the Lembeh Strait. After every dive, the boats return to the resort so you can enjoy your surface interval by the swimming pool or make any adjustments to your camera before your next dive. A night dive by boat is available daily, providing we have a minimum of two people.</p>', 'dil' )
             ) ); ?>
             <div class="image-grid image-grid--3col" style="margin-top:28px;">
                 <?php
                 $boats = [
-                    [ 'mod' => 'dil_img_boat1',     'alt' => __( 'Dive boat at the jetty', 'dil' ),         'caption' => __( 'The dive boat', 'dil' ),         'sub' => 'Morning departure' ],
-                    [ 'mod' => 'dil_img_boat2',     'alt' => __( 'Divers entering the water', 'dil' ),       'caption' => __( 'Giant stride entry', 'dil' ),    'sub' => 'House reef' ],
-                    [ 'mod' => 'dil_img_boat3',     'alt' => __( 'Divemaster briefing', 'dil' ),             'caption' => __( 'Pre-dive briefing', 'dil' ),     'sub' => 'Daily' ],
-                    [ 'mod' => 'dil_img_boat4',     'alt' => __( 'Dive boat at sunset', 'dil' ),             'caption' => __( 'Sunset return', 'dil' ),         'sub' => 'Afternoon dive' ],
-                    [ 'mod' => 'dil_img_boat5',     'alt' => __( 'Dock and jetty', 'dil' ),                  'caption' => __( 'The jetty', 'dil' ),             'sub' => 'Kasawari Bay' ],
-                    [ 'mod' => 'dil_img_boat6',     'alt' => __( 'Divers on surface', 'dil' ),               'caption' => __( 'Surface interval', 'dil' ),      'sub' => 'Between dives' ],
+                    [ 'mod' => 'dil_img_boat1', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/16b-Medium.jpg',                               'alt' => __( 'Dive boat', 'dil' ),              'caption' => __( 'Dive boat', 'dil' ),         'sub' => 'Morning departure' ],
+                    [ 'mod' => 'dil_img_boat2', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/boat-side-view-Medium.jpeg',                   'alt' => __( 'Dive boat side view', 'dil' ),    'caption' => __( 'Dive boat', 'dil' ),         'sub' => 'Side view' ],
+                    [ 'mod' => 'dil_img_boat3', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Dive-into-Lembeh-1-Speedboat-Medium.jpg',     'alt' => __( 'Speedboat on the strait', 'dil' ),'caption' => __( 'Speedboat', 'dil' ),         'sub' => 'Kasawari Bay' ],
+                    [ 'mod' => 'dil_img_boat4', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Engines.jpeg',                                'alt' => __( 'Twin engines', 'dil' ),           'caption' => __( 'Twin engines', 'dil' ),      'sub' => 'Fiberglass boats' ],
+                    [ 'mod' => 'dil_img_boat5', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Sun-area-on-boat-Medium-1-e1471947051439.jpg','alt' => __( 'Sun deck on the boat', 'dil' ),   'caption' => __( 'Sun deck', 'dil' ),          'sub' => 'Surface interval' ],
+                    [ 'mod' => 'dil_img_boat6', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/View-from-Dive-center-Medium.jpeg',            'alt' => __( 'View from the dive centre', 'dil' ),'caption' => __( 'Dive centre view', 'dil' ),'sub' => 'Kasawari Bay' ],
                 ];
                 foreach ( $boats as $tile ) :
-                    $src = get_theme_mod( $tile['mod'], '' );
+                    $src = get_theme_mod( $tile['mod'], $tile['default'] ?? '' );
                     ?>
-                    <div class="grid-tile">
+                    <button class="grid-tile" <?php if ( $src ) : ?>data-full="<?php echo esc_url( $src ); ?>" data-alt="<?php echo esc_attr( $tile['alt'] ); ?>"<?php endif; ?>>
                         <?php if ( $src ) : ?>
                             <img src="<?php echo esc_url( $src ); ?>" alt="<?php echo esc_attr( $tile['alt'] ); ?>" loading="lazy">
                         <?php else : ?>
@@ -57,36 +57,33 @@ if ( ! $banner_img && has_post_thumbnail() ) {
                             <div class="grid-tile__caption-text"><?php echo esc_html( $tile['caption'] ); ?></div>
                             <div class="grid-tile__caption-sub"><?php echo esc_html( $tile['sub'] ); ?></div>
                         </div>
-                    </div>
+                    </button>
                     <?php
                 endforeach;
                 ?>
             </div>
         </div>
 
-        <!-- Section 2 — Camera room -->
+        <!-- Section 2 — Camera room (3 images matching original) -->
         <div class="inner-section">
             <div class="section-head">
                 <div class="section-head__number mono">02</div>
                 <h2 class="section-head__title"><?php esc_html_e( 'The Camera Room', 'dil' ); ?></h2>
             </div>
             <?php echo apply_filters( 'the_content', get_theme_mod( 'dil_text_diving_camera', // phpcs:ignore
-                __( 'A dedicated camera room with individual rinse tanks, drying racks, laptop stations with colour-calibrated displays, and high-speed charging. Macro workshops available on request.', 'dil' )
+                __( '<p>We have a large camera room with dedicated well-lit work stations for each guest, as well as separate rinse tanks for cameras.</p><p>Our dive guides are trained in camera handling and are specialised in working in Lembeh\'s unique underwater environment.</p>', 'dil' )
             ) ); ?>
             <div class="image-grid image-grid--3col" style="margin-top:28px;">
                 <?php
                 $camera_room = [
-                    [ 'mod' => 'dil_img_cam1', 'alt' => __( 'Camera room rinse tanks', 'dil' ),          'caption' => __( 'Rinse tanks', 'dil' ),           'sub' => 'Individual' ],
-                    [ 'mod' => 'dil_img_cam2', 'alt' => __( 'Drying racks for camera gear', 'dil' ),      'caption' => __( 'Drying racks', 'dil' ),          'sub' => 'Camera room' ],
-                    [ 'mod' => 'dil_img_cam3', 'alt' => __( 'Laptop station for editing', 'dil' ),        'caption' => __( 'Editing station', 'dil' ),       'sub' => 'Colour-calibrated' ],
-                    [ 'mod' => 'dil_img_cam4', 'alt' => __( 'Underwater camera housing', 'dil' ),         'caption' => __( 'Camera housing', 'dil' ),        'sub' => 'Rental available' ],
-                    [ 'mod' => 'dil_img_cam5', 'alt' => __( 'Macro photography setup', 'dil' ),           'caption' => __( 'Macro setup', 'dil' ),           'sub' => 'Workshop' ],
-                    [ 'mod' => 'dil_img_cam6', 'alt' => __( 'Charging station', 'dil' ),                  'caption' => __( 'Charging station', 'dil' ),      'sub' => 'High-speed' ],
+                    [ 'mod' => 'dil_img_cam1', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/CAMERA-ROOM.jpeg',            'alt' => __( 'Camera room overview', 'dil' ),      'caption' => __( 'Camera room', 'dil' ),  'sub' => 'Full facilities' ],
+                    [ 'mod' => 'dil_img_cam2', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Camera-rinse-tanks.jpg',       'alt' => __( 'Camera rinse tanks', 'dil' ),        'caption' => __( 'Rinse tanks', 'dil' ),  'sub' => 'Individual' ],
+                    [ 'mod' => 'dil_img_cam3', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Camera-room-and-mats-copy.jpg','alt' => __( 'Camera room and dive mats', 'dil' ), 'caption' => __( 'Camera room', 'dil' ),  'sub' => 'With dive mats' ],
                 ];
                 foreach ( $camera_room as $tile ) :
-                    $src = get_theme_mod( $tile['mod'], '' );
+                    $src = get_theme_mod( $tile['mod'], $tile['default'] ?? '' );
                     ?>
-                    <div class="grid-tile">
+                    <button class="grid-tile" <?php if ( $src ) : ?>data-full="<?php echo esc_url( $src ); ?>" data-alt="<?php echo esc_attr( $tile['alt'] ); ?>"<?php endif; ?>>
                         <?php if ( $src ) : ?>
                             <img src="<?php echo esc_url( $src ); ?>" alt="<?php echo esc_attr( $tile['alt'] ); ?>" loading="lazy">
                         <?php else : ?>
@@ -96,32 +93,36 @@ if ( ! $banner_img && has_post_thumbnail() ) {
                             <div class="grid-tile__caption-text"><?php echo esc_html( $tile['caption'] ); ?></div>
                             <div class="grid-tile__caption-sub"><?php echo esc_html( $tile['sub'] ); ?></div>
                         </div>
-                    </div>
+                    </button>
                     <?php
                 endforeach;
                 ?>
             </div>
         </div>
 
-        <!-- Section 3 — House reefs -->
+        <!-- Section 3 — Dive centre & equipment -->
         <div class="inner-section">
             <div class="section-head">
                 <div class="section-head__number mono">03</div>
-                <h2 class="section-head__title"><?php esc_html_e( 'House Reefs', 'dil' ); ?></h2>
+                <h2 class="section-head__title"><?php esc_html_e( 'Dive Centre &amp; Equipment', 'dil' ); ?></h2>
             </div>
-            <?php echo apply_filters( 'the_content', get_theme_mod( 'dil_text_diving_reefs', // phpcs:ignore
-                __( 'Hairball and Aw Shucks — two of the most celebrated muck sites on earth — are our house reefs. Entry directly from the resort. Maximum depth 15m. Night dives on Hairball are legendary.', 'dil' )
+            <?php echo apply_filters( 'the_content', get_theme_mod( 'dil_text_diving_centre', // phpcs:ignore
+                __( '<p>There is also a guest dive gear locker room, with equipment rinse tanks and showers for after the dives. All tanks and weights are provided.</p>', 'dil' )
             ) ); ?>
-            <div class="image-grid image-grid--2col" style="margin-top:28px;">
+            <div class="image-grid image-grid--3col" style="margin-top:28px;">
                 <?php
-                $reefs = [
-                    [ 'mod' => 'dil_img_hairball',  'alt' => __( 'Hairball house reef', 'dil' ),    'caption' => __( 'Hairball', 'dil' ),   'sub' => 'House reef · 0 – 15m' ],
-                    [ 'mod' => 'dil_img_awshucks',  'alt' => __( 'Aw Shucks house reef', 'dil' ),   'caption' => __( 'Aw Shucks', 'dil' ),  'sub' => 'House reef · 0 – 12m' ],
+                $dive_centre = [
+                    [ 'mod' => 'dil_img_dc1', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Guest-locker-room-copy-Medium-1-e1471947448866.jpg', 'alt' => __( 'Guest locker room', 'dil' ),       'caption' => __( 'Locker room', 'dil' ),     'sub' => 'Personal lockers' ],
+                    [ 'mod' => 'dil_img_dc2', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Equipment-room-night-shot-Medium.jpeg',              'alt' => __( 'Equipment room at night', 'dil' ), 'caption' => __( 'Equipment room', 'dil' ),  'sub' => 'Night shot' ],
+                    [ 'mod' => 'dil_img_dc3', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Equipment-room-Medium-1-e1471947482648.jpg',         'alt' => __( 'Equipment room', 'dil' ),          'caption' => __( 'Equipment room', 'dil' ),  'sub' => 'Full kit storage' ],
+                    [ 'mod' => 'dil_img_dc4', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Boat-Interior-Medium.jpg',                           'alt' => __( 'Boat interior', 'dil' ),           'caption' => __( 'Boat interior', 'dil' ),   'sub' => 'Twin-engine boat' ],
+                    [ 'mod' => 'dil_img_dc5', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Giant-stride-Medium.jpg',                            'alt' => __( 'Giant stride entry', 'dil' ),      'caption' => __( 'Giant stride', 'dil' ),    'sub' => 'House reef' ],
+                    [ 'mod' => 'dil_img_dc6', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/camera-tank-view-Medium.jpg',                        'alt' => __( 'Camera tank view', 'dil' ),        'caption' => __( 'Camera tanks', 'dil' ),    'sub' => 'Dive centre' ],
                 ];
-                foreach ( $reefs as $tile ) :
-                    $src = get_theme_mod( $tile['mod'], '' );
+                foreach ( $dive_centre as $tile ) :
+                    $src = get_theme_mod( $tile['mod'], $tile['default'] ?? '' );
                     ?>
-                    <div class="grid-tile" style="aspect-ratio:16/9;">
+                    <button class="grid-tile" <?php if ( $src ) : ?>data-full="<?php echo esc_url( $src ); ?>" data-alt="<?php echo esc_attr( $tile['alt'] ); ?>"<?php endif; ?>>
                         <?php if ( $src ) : ?>
                             <img src="<?php echo esc_url( $src ); ?>" alt="<?php echo esc_attr( $tile['alt'] ); ?>" loading="lazy">
                         <?php else : ?>
@@ -131,35 +132,46 @@ if ( ! $banner_img && has_post_thumbnail() ) {
                             <div class="grid-tile__caption-text"><?php echo esc_html( $tile['caption'] ); ?></div>
                             <div class="grid-tile__caption-sub"><?php echo esc_html( $tile['sub'] ); ?></div>
                         </div>
-                    </div>
+                    </button>
                     <?php
                 endforeach;
                 ?>
             </div>
         </div>
 
-        <!-- Section 4 — Muck diving explainer -->
+        <!-- Section 4 — House reefs (text only — no photos on original) -->
+        <div class="inner-section">
+            <div class="section-head">
+                <div class="section-head__number mono">04</div>
+                <h2 class="section-head__title"><?php esc_html_e( 'House Reefs', 'dil' ); ?></h2>
+            </div>
+            <?php echo apply_filters( 'the_content', get_theme_mod( 'dil_text_diving_reefs', // phpcs:ignore
+                __( '<p>If you have booked a diving package (starting from three nights with two days of diving), we offer complimentary access to our two world-famous house reef dive sites — \'Hairball\' and \'Aw Shucks\' — between the hours of 8AM and 6PM.</p>', 'dil' )
+            ) ); ?>
+        </div>
+
+        <!-- Section 5 — Muck diving explainer -->
         <div class="inner-section">
             <div class="section-head">
                 <h2 class="section-head__title"><?php esc_html_e( 'Muck Diving in the Lembeh Strait', 'dil' ); ?></h2>
             </div>
             <div style="border:1px solid var(--border); padding:32px 28px;">
                 <p class="section__lead" style="margin-bottom:24px;">
-                    <?php esc_html_e( 'What makes the Lembeh Strait special is what isn\'t there: the coral.', 'dil' ); ?>
+                    <?php esc_html_e( 'Lembeh was the first real muck diving destination in the world.', 'dil' ); ?>
                 </p>
                 <?php
                 $muck_points = [
                     [
-                        'heading' => __( 'Why the black sand?', 'dil' ),
-                        'body'    => __( 'Volcanic run-off from the mountains has created a silty, nutrient-rich substrate that\'s irresistible to critters who hide rather than swim. The strait is effectively a wall-to-wall ambush party.', 'dil' ),
+                        'heading' => __( 'Nutrition in the water', 'dil' ),
+                        'body'    => __( 'You need lots of nutrition in the water to feed the small crustaceans and fish that form the beginning of a plentiful food chain. Crystal-clear blue water is wonderful, but it lacks the nutrients required for critter diving. Frogfish, seahorses, scorpionfish, octopus, crabs, shrimps, eels, nudibranchs, puffers, soles — they\'re all here.', 'dil' ),
                     ],
                     [
-                        'heading' => __( 'Cryptic species', 'dil' ),
-                        'body'    => __( 'Mimic octopus, hairy frogfish, blue-ringed octopus, flamboyant cuttlefish, mandarin fish — the Lembeh Strait harbours more weird and wonderful species per square metre than anywhere else on earth.', 'dil' ),
+                        'heading' => __( 'Volcanic black sand', 'dil' ),
+                        'body'    => __( 'White clean sand looks beautiful, but it\'s not ideal for critter photography. The light from your strobe bounces back into the lens, giving bad contrast and over-exposed shots. Volcanic black sand solves both problems — nutrient-rich substrate and a perfect dark backdrop.', 'dil' ),
                     ],
                     [
-                        'heading' => __( 'The slow dive', 'dil' ),
-                        'body'    => __( 'Muck diving is done slowly. You hover above the substrate, move in centimetres, and wait. A 60-minute dive might cover 50 metres. That\'s how it\'s supposed to work.', 'dil' ),
+                        'heading' => __( 'More than just muck', 'dil' ),
+                        'body'    => __( 'Lembeh has critter-infested black sandy slopes, but also beautiful coral dive sites. Angels Window and California Dreaming are two of our favourites — proof that the strait offers far more than its \'muck\' reputation suggests.', 'dil' ),
                     ],
                 ];
                 foreach ( $muck_points as $i => $point ) :
