@@ -25,8 +25,17 @@ if ( ! $banner_img && has_post_thumbnail() ) {
 
     <main class="inner-page__main" id="main-content" tabindex="-1">
 
+        <!-- Anchor sub-nav -->
+        <nav class="info-subnav" aria-label="<?php esc_attr_e( 'Page sections', 'dil' ); ?>">
+            <a href="#boats"><?php esc_html_e( 'Boats &amp; Schedule', 'dil' ); ?></a>
+            <a href="#camera-room"><?php esc_html_e( 'Camera Room', 'dil' ); ?></a>
+            <a href="#dive-centre"><?php esc_html_e( 'Dive Centre', 'dil' ); ?></a>
+            <a href="#house-reefs"><?php esc_html_e( 'House Reefs', 'dil' ); ?></a>
+            <a href="#muck-diving"><?php esc_html_e( 'Muck Diving', 'dil' ); ?></a>
+        </nav>
+
         <!-- Section 1 — Boats & schedule -->
-        <div class="inner-section">
+        <div class="inner-section" id="boats">
             <div class="section-head">
                 <div class="section-head__number mono">01</div>
                 <h2 class="section-head__title"><?php esc_html_e( 'Boats &amp; Schedule', 'dil' ); ?></h2>
@@ -65,7 +74,7 @@ if ( ! $banner_img && has_post_thumbnail() ) {
         </div>
 
         <!-- Section 2 — Camera room (3 images matching original) -->
-        <div class="inner-section">
+        <div class="inner-section" id="camera-room">
             <div class="section-head">
                 <div class="section-head__number mono">02</div>
                 <h2 class="section-head__title"><?php esc_html_e( 'The Camera Room', 'dil' ); ?></h2>
@@ -101,7 +110,7 @@ if ( ! $banner_img && has_post_thumbnail() ) {
         </div>
 
         <!-- Section 3 — Dive centre & equipment -->
-        <div class="inner-section">
+        <div class="inner-section" id="dive-centre">
             <div class="section-head">
                 <div class="section-head__number mono">03</div>
                 <h2 class="section-head__title"><?php esc_html_e( 'Dive Centre &amp; Equipment', 'dil' ); ?></h2>
@@ -140,7 +149,7 @@ if ( ! $banner_img && has_post_thumbnail() ) {
         </div>
 
         <!-- Section 4 — House reefs (text only — no photos on original) -->
-        <div class="inner-section">
+        <div class="inner-section" id="house-reefs">
             <div class="section-head">
                 <div class="section-head__number mono">04</div>
                 <h2 class="section-head__title"><?php esc_html_e( 'House Reefs', 'dil' ); ?></h2>
@@ -151,7 +160,7 @@ if ( ! $banner_img && has_post_thumbnail() ) {
         </div>
 
         <!-- Section 5 — Muck diving explainer -->
-        <div class="inner-section">
+        <div class="inner-section" id="muck-diving">
             <div class="section-head">
                 <h2 class="section-head__title"><?php esc_html_e( 'Muck Diving in the Lembeh Strait', 'dil' ); ?></h2>
             </div>

@@ -103,6 +103,48 @@ $cdn = 'https://diveintolembeh.com/wp-content/uploads/';
                     </div>
                 </div>
             </div>
+
+            <!-- Location map -->
+            <div class="map-frame map-frame--inline" style="margin-top:36px;">
+                <div id="dil-map-gethere"></div>
+            </div>
+
+            <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                if (typeof L === 'undefined') return;
+                var lat = 1.5005, lng = 125.2411;
+                var map = L.map('dil-map-gethere', {
+                    center:             [lat, lng],
+                    zoom:               12,
+                    zoomControl:        false,
+                    scrollWheelZoom:    false,
+                    attributionControl: false,
+                });
+                setTimeout(function () { map.invalidateSize(); }, 50);
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                    subdomains: 'abcd',
+                    maxZoom:    20,
+                }).addTo(map);
+                L.control.attribution({ prefix: false, position: 'bottomright' })
+                    .addAttribution('&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> &copy; <a href="https://carto.com/" target="_blank">CARTO</a>')
+                    .addTo(map);
+                L.control.zoom({ position: 'bottomright' }).addTo(map);
+                var icon = L.divIcon({
+                    className:   'dil-map-marker',
+                    html:        '<div class="dil-map-marker__pulse"></div><div class="dil-map-marker__dot"></div>',
+                    iconSize:    [24, 24],
+                    iconAnchor:  [12, 12],
+                    popupAnchor: [0, -16],
+                });
+                L.marker([lat, lng], { icon: icon })
+                    .addTo(map)
+                    .bindPopup(
+                        '<p class="map-popup__name">Dive Into Lembeh</p>' +
+                        '<p class="map-popup__sub">Kasawari Bay &middot; Lembeh Strait<br>North Sulawesi, Indonesia</p>'
+                    )
+                    .openPopup();
+            });
+            </script>
         </div>
 
         <!-- Section 2 — FAQs -->

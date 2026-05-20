@@ -139,7 +139,27 @@ function dil_sidebar(): void {
             </div>
         </div>
 
-        <!-- 5. TripAdvisor -->
+        <!-- 5. Facebook Page Plugin -->
+        <div class="sidebar-widget widget-facebook">
+            <div class="sidebar-widget__head">
+                <span class="sidebar-widget__label"><?php esc_html_e( 'Facebook', 'dil' ); ?></span>
+            </div>
+            <div class="sidebar-widget__body widget-facebook__body">
+                <iframe
+                    src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Fdiveintolembeh%2F&tabs=timeline&width=300&height=480&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=false&appId"
+                    height="480"
+                    style="border:none;overflow:hidden;"
+                    scrolling="no"
+                    frameborder="0"
+                    allowfullscreen="true"
+                    allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                    loading="lazy"
+                    title="<?php esc_attr_e( 'Dive Into Lembeh on Facebook', 'dil' ); ?>">
+                </iframe>
+            </div>
+        </div>
+
+        <!-- 6. TripAdvisor -->
         <div class="sidebar-widget">
             <div class="sidebar-widget__head">
                 <span class="sidebar-widget__label"><?php esc_html_e( 'Tripadvisor', 'dil' ); ?></span>
@@ -156,44 +176,15 @@ function dil_sidebar(): void {
                 <p class="widget-ta__quote">
                     &ldquo;<?php esc_html_e( 'The best muck diving resort I\'ve stayed at. The divemasters know every inch of the strait.', 'dil' ); ?>&rdquo;
                 </p>
+                <a href="https://www.tripadvisor.com.au/Hotel_Review-g680020-d10520101-Reviews-Dive_Into_Lembeh-Bitung_North_Sulawesi_Sulawesi.html"
+                   class="widget-ta__link"
+                   target="_blank" rel="noopener noreferrer">
+                    <?php esc_html_e( 'Read all reviews', 'dil' ); ?>
+                </a>
             </div>
         </div>
 
-        <!-- 6. From the journal (most recent post) -->
-        <?php
-        $recent = new WP_Query( [ 'posts_per_page' => 1, 'post_status' => 'publish' ] );
-        if ( $recent->have_posts() ) :
-            $recent->the_post();
-            ?>
-            <div class="sidebar-widget">
-                <div class="sidebar-widget__head">
-                    <span class="sidebar-widget__label"><?php esc_html_e( 'From the Journal', 'dil' ); ?></span>
-                </div>
-                <div class="sidebar-widget__body">
-                    <div class="widget-journal__post">
-                        <?php if ( has_post_thumbnail() ) : ?>
-                            <img class="widget-journal__thumb"
-                                 src="<?php the_post_thumbnail_url( 'dil-thumb' ); ?>"
-                                 alt="<?php the_title_attribute(); ?>"
-                                 loading="lazy">
-                        <?php endif; ?>
-                        <div>
-                            <a href="<?php the_permalink(); ?>" class="widget-journal__title">
-                                <?php the_title(); ?>
-                            </a>
-                            <div class="widget-journal__date mono">
-                                <?php echo esc_html( get_the_date( 'j M Y' ) ); ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <?php
-            wp_reset_postdata();
-        endif;
-        ?>
-
-        <!-- 7. Partners -->
+        <!-- 6. Partners -->
         <div class="sidebar-widget">
             <div class="sidebar-widget__head">
                 <span class="sidebar-widget__label"><?php esc_html_e( 'Partners', 'dil' ); ?></span>

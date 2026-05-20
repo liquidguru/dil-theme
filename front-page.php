@@ -285,7 +285,7 @@ $explore_style = $explore_img
 <!-- ═══════════════════════════════════════════════════════════
      SECTION 7 — CRITTER COMPASS
      ═══════════════════════════════════════════════════════════ -->
-<section class="critter-compass">
+<section class="critter-compass" data-critters-url="<?php echo esc_url( DIL_URI . '/assets/images/critters/' ); ?>">
 
     <div class="critter-compass__text">
         <p class="eyebrow section__kicker"><?php esc_html_e( 'What lives here', 'dil' ); ?></p>
@@ -327,23 +327,85 @@ $explore_style = $explore_img
     <div class="video-frame">
         <div class="video-frame__inner">
             <?php
-            $video_id = get_theme_mod( 'dil_hero_video_id', '' );
-            if ( $video_id ) :
+            $video_id   = get_theme_mod( 'dil_hero_video_id',   '391867981' );
+            $video_hash = get_theme_mod( 'dil_hero_video_hash', 'b6d8638803' );
             ?>
                 <iframe
-                    src="https://player.vimeo.com/video/<?php echo esc_attr( $video_id ); ?>?color=6E1F22&byline=0&portrait=0"
+                    src="https://player.vimeo.com/video/<?php echo esc_attr( $video_id ); ?>?h=<?php echo esc_attr( $video_hash ); ?>&color=6E1F22&byline=0&portrait=0"
                     title="<?php esc_attr_e( 'Dive Into Lembeh — four minutes underwater', 'dil' ); ?>"
                     frameborder="0"
-                    allow="autoplay; fullscreen; picture-in-picture"
+                    allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
                     allowfullscreen
+                    referrerpolicy="strict-origin-when-cross-origin"
                     loading="lazy">
                 </iframe>
-            <?php else : ?>
-                <?php echo dil_placeholder( 'Video — Vimeo embed (set dil_hero_video_id in Customizer)' ); // phpcs:ignore ?>
-            <?php endif; ?>
         </div>
     </div>
 
 </section>
+
+<!-- ── Map section ───────────────────────────────────────────── -->
+<section class="map-section">
+
+    <div class="map-section__head">
+        <p class="eyebrow"><?php esc_html_e( 'Find Us', 'dil' ); ?></p>
+        <h2 class="map-section__heading"><?php esc_html_e( 'Kasawari Bay, Lembeh Strait', 'dil' ); ?></h2>
+    </div>
+
+    <div class="map-frame">
+        <div id="dil-map"></div>
+    </div>
+
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    if (typeof L === 'undefined') return;
+
+    var lat = 1.5005, lng = 125.2411; // Kasawari Bay, Lembeh Strait
+
+    var map = L.map('dil-map', {
+        center:           [lat, lng],
+        zoom:             10,
+        zoomControl:      false,
+        scrollWheelZoom:  false,
+        attributionControl: false,
+    });
+
+    // Ensure container has been sized by CSS before Leaflet measures it
+    setTimeout(function () { map.invalidateSize(); }, 50);
+
+    // CartoDB Positron — clean, minimal, no fault/plate lines
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+        subdomains: 'abcd',
+        maxZoom:    20,
+    }).addTo(map);
+
+    // Discrete attribution
+    L.control.attribution({ prefix: false, position: 'bottomright' })
+        .addAttribution('&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> &copy; <a href="https://carto.com/" target="_blank">CARTO</a>')
+        .addTo(map);
+
+    // Zoom control (bottom right)
+    L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+    // Branded pulsing marker
+    var icon = L.divIcon({
+        className:   'dil-map-marker',
+        html:        '<div class="dil-map-marker__pulse"></div><div class="dil-map-marker__dot"></div>',
+        iconSize:    [24, 24],
+        iconAnchor:  [12, 12],
+        popupAnchor: [0, -16],
+    });
+
+    L.marker([lat, lng], { icon: icon })
+        .addTo(map)
+        .bindPopup(
+            '<p class="map-popup__name">Dive Into Lembeh</p>' +
+            '<p class="map-popup__sub">Kasawari Bay &middot; Lembeh Strait<br>North Sulawesi, Indonesia</p>'
+        )
+        .openPopup();
+});
+</script>
 
 <?php get_footer(); ?>

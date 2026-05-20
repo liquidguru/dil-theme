@@ -28,8 +28,18 @@ $cdn25 = 'https://diveintolembeh.com/wp-content/uploads/2025/07/';
 
     <main class="inner-page__main" id="main-content" tabindex="-1">
 
+        <!-- Anchor sub-nav -->
+        <nav class="info-subnav" aria-label="<?php esc_attr_e( 'Page sections', 'dil' ); ?>">
+            <a href="#bungalows"><?php esc_html_e( 'Bungalows', 'dil' ); ?></a>
+            <a href="#suite"><?php esc_html_e( 'Bungalow Suite', 'dil' ); ?></a>
+            <a href="#longhouse"><?php esc_html_e( 'Longhouse Rooms', 'dil' ); ?></a>
+            <a href="#pool"><?php esc_html_e( 'Swimming Pool', 'dil' ); ?></a>
+            <a href="#restaurant"><?php esc_html_e( 'Restaurant &amp; Bar', 'dil' ); ?></a>
+            <a href="#environment"><?php esc_html_e( 'Environment', 'dil' ); ?></a>
+        </nav>
+
         <!-- Section 1 — Bungalows -->
-        <div class="inner-section">
+        <div class="inner-section" id="bungalows">
             <div class="section-head">
                 <div class="section-head__number mono">01</div>
                 <h2 class="section-head__title"><?php esc_html_e( 'Bungalows', 'dil' ); ?></h2>
@@ -71,7 +81,7 @@ $cdn25 = 'https://diveintolembeh.com/wp-content/uploads/2025/07/';
         </div>
 
         <!-- Section 2 — Bungalow Suite -->
-        <div class="inner-section">
+        <div class="inner-section" id="suite">
             <div class="section-head">
                 <div class="section-head__number mono">02</div>
                 <h2 class="section-head__title"><?php esc_html_e( 'Bungalow Suite', 'dil' ); ?></h2>
@@ -109,7 +119,7 @@ $cdn25 = 'https://diveintolembeh.com/wp-content/uploads/2025/07/';
         </div>
 
         <!-- Section 3 — Longhouse Rooms -->
-        <div class="inner-section">
+        <div class="inner-section" id="longhouse">
             <div class="section-head">
                 <div class="section-head__number mono">03</div>
                 <h2 class="section-head__title"><?php esc_html_e( 'Longhouse Rooms', 'dil' ); ?></h2>
@@ -145,7 +155,7 @@ $cdn25 = 'https://diveintolembeh.com/wp-content/uploads/2025/07/';
         </div>
 
         <!-- Section 4 — Swimming Pool -->
-        <div class="inner-section">
+        <div class="inner-section" id="pool">
             <div class="section-head">
                 <div class="section-head__number mono">04</div>
                 <h2 class="section-head__title"><?php esc_html_e( 'Swimming Pool', 'dil' ); ?></h2>
@@ -184,7 +194,7 @@ $cdn25 = 'https://diveintolembeh.com/wp-content/uploads/2025/07/';
         </div>
 
         <!-- Section 5 — Restaurant & Bar -->
-        <div class="inner-section">
+        <div class="inner-section" id="restaurant">
             <div class="section-head">
                 <div class="section-head__number mono">05</div>
                 <h2 class="section-head__title"><?php esc_html_e( 'Restaurant &amp; Bar', 'dil' ); ?></h2>
@@ -226,7 +236,7 @@ $cdn25 = 'https://diveintolembeh.com/wp-content/uploads/2025/07/';
         </div>
 
         <!-- Section 6 — Environmental Commitment (text only) -->
-        <div class="inner-section">
+        <div class="inner-section" id="environment">
             <div class="section-head">
                 <div class="section-head__number mono">06</div>
                 <h2 class="section-head__title"><?php esc_html_e( 'Environmental Commitment', 'dil' ); ?></h2>

@@ -6,7 +6,7 @@
 // Prevent direct access
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'DIL_VERSION', '1.0.0' );
+define( 'DIL_VERSION', '1.2.0' );
 define( 'DIL_DIR',     get_template_directory() );
 define( 'DIL_URI',     get_template_directory_uri() );
 
@@ -48,17 +48,22 @@ function dil_scripts() {
         null
     );
 
-    // Main stylesheet
-    wp_enqueue_style( 'dil-style', DIL_URI . '/assets/css/main.css', [ 'dil-google-fonts' ], DIL_VERSION );
+    // Main stylesheet — version from file mtime for automatic cache-busting
+    wp_enqueue_style( 'dil-style', DIL_URI . '/assets/css/main.css', [ 'dil-google-fonts' ], filemtime( DIL_DIR . '/assets/css/main.css' ) );
 
     // Main JS
-    wp_enqueue_script( 'dil-main', DIL_URI . '/assets/js/main.js', [], DIL_VERSION, true );
+    wp_enqueue_script( 'dil-main', DIL_URI . '/assets/js/main.js', [], filemtime( DIL_DIR . '/assets/js/main.js' ), true );
 
     // Pass data to JS
     wp_localize_script( 'dil-main', 'DIL', [
         'ajaxUrl' => admin_url( 'admin-ajax.php' ),
         'nonce'   => wp_create_nonce( 'dil_nonce' ),
     ] );
+    // Leaflet map — front page and info page
+    if ( is_front_page() || is_page_template( 'page-templates/template-info.php' ) ) {
+        wp_enqueue_style(  'leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', [], '1.9.4' );
+        wp_enqueue_script( 'leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',  [], '1.9.4', true );
+    }
 }
 add_action( 'wp_enqueue_scripts', 'dil_scripts' );
 

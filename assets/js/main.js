@@ -115,6 +115,7 @@
       latin: 'Antennarius striatus',
       depth: '5 – 40 m',
       angle: 0,
+      img:   'hairy-frogfish.jpg',
     },
     {
       id:    'mimic-octopus',
@@ -122,6 +123,7 @@
       latin: 'Thaumoctopus mimicus',
       depth: '3 – 20 m',
       angle: 45,
+      img:   'mimic-octopus.jpg',
     },
     {
       id:    'blue-ringed-octopus',
@@ -129,6 +131,7 @@
       latin: 'Hapalochlaena lunulata',
       depth: '1 – 20 m',
       angle: 90,
+      img:   'blue-ringed-octopus.jpg',
     },
     {
       id:    'mandarin-fish',
@@ -136,6 +139,7 @@
       latin: 'Synchiropus splendidus',
       depth: '1 – 18 m',
       angle: 135,
+      img:   'mandarin-fish.jpg',
     },
     {
       id:    'orangutan-crab',
@@ -143,6 +147,7 @@
       latin: 'Oncinopus sp.',
       depth: '5 – 25 m',
       angle: 180,
+      img:   'orangutan-crab.jpg',
     },
     {
       id:    'mantis-shrimp',
@@ -150,6 +155,7 @@
       latin: 'Odontodactylus scyllarus',
       depth: '3 – 40 m',
       angle: 225,
+      img:   'mantis-shrimp.jpg',
     },
     {
       id:    'banded-sea-snake',
@@ -157,6 +163,7 @@
       latin: 'Laticauda colubrina',
       depth: '0 – 30 m',
       angle: 270,
+      img:   'banded-sea-snake.jpg',
     },
     {
       id:    'painted-frogfish',
@@ -164,14 +171,16 @@
       latin: 'Antennarius pictus',
       depth: '5 – 35 m',
       angle: 315,
+      img:   'painted-frogfish.jpg',
     },
   ];
 
   function buildCritterCompass(container) {
     if (!container) return;
 
-    const svg     = container.querySelector('.critter-compass__svg');
-    const infoBox = container.querySelector('.critter-compass__info');
+    const svg        = container.querySelector('.critter-compass__svg');
+    const infoBox    = container.querySelector('.critter-compass__info');
+    const critterUrl = (container.dataset.crittersUrl || '').replace(/\/$/, '') + '/';
 
     if (!svg || !infoBox) return;
 
@@ -270,8 +279,10 @@
       if (t) t.setAttribute('fill', '#F5ECDC');
 
       // Show critter info
+      const imgSrc = critter.img ? critterUrl + escHtml(critter.img) : '';
       infoBox.innerHTML = `
         <div class="critter-card">
+          ${imgSrc ? `<div class="critter-card__photo grid-tile" data-full="${imgSrc}" data-alt="${escHtml(critter.name)}"><img src="${imgSrc}" alt="${escHtml(critter.name)}" loading="lazy"></div>` : ''}
           <div class="critter-card__name">${escHtml(critter.name)}</div>
           <div class="critter-card__latin">${escHtml(critter.latin)}</div>
           <div class="critter-card__depth">${escHtml(critter.depth)}</div>

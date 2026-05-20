@@ -2,7 +2,7 @@
 
 <footer class="site-footer">
 
-    <div class="footer-eyeline" aria-hidden="true">see you under</div>
+    <div class="footer-eyeline" aria-hidden="true">come <span class="cycle-words"><span class="cycle-words__word is-active">discover</span><span class="cycle-words__word">explore</span><span class="cycle-words__word">dive into</span></span> lembeh</div>
 
     <div class="footer-grid">
 
@@ -25,6 +25,9 @@
                 </a>
                 <a href="https://www.youtube.com/@diveintolembeh" target="_blank" rel="noopener" aria-label="YouTube">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-1.96C18.88 4 12 4 12 4s-6.88 0-8.6.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.94 1.96C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 001.94-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75,15.02 15.5,12 9.75,8.98" fill="rgba(110,31,34,0.15)"/></svg>
+                </a>
+                <a href="https://vimeo.com/liquidguru" target="_blank" rel="noopener" aria-label="Vimeo">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.977 6.416c-.105 2.338-1.739 5.543-4.894 9.609-3.268 4.247-6.026 6.37-8.29 6.37-1.409 0-2.578-1.294-3.553-3.881L5.322 11.4C4.603 8.816 3.834 7.522 3.01 7.522c-.179 0-.806.378-1.881 1.132L0 7.197a315.065 315.065 0 003.501-3.128C5.08 2.701 6.266 1.984 7.055 1.91c1.867-.18 3.016 1.1 3.447 3.838.465 2.953.789 4.789.971 5.507.539 2.45 1.131 3.674 1.776 3.674.502 0 1.256-.796 2.265-2.385 1.004-1.589 1.54-2.797 1.612-3.628.144-1.371-.395-2.061-1.614-2.061-.574 0-1.167.121-1.777.391 1.186-3.868 3.434-5.757 6.762-5.637 2.473.06 3.628 1.664 3.48 4.807z"/></svg>
                 </a>
             </div>
         </div>
@@ -81,6 +84,7 @@
                         <li><a href="https://www.facebook.com/diveintolembeh" target="_blank" rel="noopener">' . esc_html__('Facebook', 'dil') . '</a></li>
                         <li><a href="https://www.instagram.com/diveintolembeh" target="_blank" rel="noopener">' . esc_html__('Instagram', 'dil') . '</a></li>
                         <li><a href="https://www.youtube.com/@diveintolembeh" target="_blank" rel="noopener">' . esc_html__('YouTube', 'dil') . '</a></li>
+                        <li><a href="https://vimeo.com/liquidguru" target="_blank" rel="noopener">' . esc_html__('Vimeo', 'dil') . '</a></li>
                     </ul>';
                 },
             ] );
