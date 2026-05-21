@@ -3,6 +3,26 @@
 
 (function () {
 
+  /* ── Dark mode toggle ────────────────────────────────────── */
+
+  const DARK_KEY = 'dil-theme';
+
+  function applyTheme( theme ) {
+    if ( theme === 'dark' ) {
+      document.documentElement.setAttribute( 'data-theme', 'dark' );
+    } else {
+      document.documentElement.removeAttribute( 'data-theme' );
+    }
+    localStorage.setItem( DARK_KEY, theme );
+  }
+
+  document.querySelectorAll( '.dark-mode-toggle' ).forEach( btn => {
+    btn.addEventListener( 'click', () => {
+      const isDark = document.documentElement.getAttribute( 'data-theme' ) === 'dark';
+      applyTheme( isDark ? 'light' : 'dark' );
+    } );
+  } );
+
   /* ── Sticky nav ──────────────────────────────────────────── */
 
   const header = document.getElementById('site-header');

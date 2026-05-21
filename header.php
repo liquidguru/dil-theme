@@ -8,6 +8,8 @@
     <link rel="icon" type="image/png" sizes="32x32" href="<?php echo esc_url( DIL_URI . '/assets/images/favicon-32x32.png' ); ?>">
     <link rel="icon" type="image/png" sizes="16x16" href="<?php echo esc_url( DIL_URI . '/assets/images/favicon-16x16.png' ); ?>">
     <link rel="apple-touch-icon" sizes="180x180" href="<?php echo esc_url( DIL_URI . '/assets/images/apple-touch-icon.png' ); ?>">
+    <!-- Dark mode: apply saved preference before paint to prevent flash -->
+    <script>(function(){var t=localStorage.getItem('dil-theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');}());</script>
     <?php wp_head(); ?>
 </head>
 <body <?php body_class(); ?>>
@@ -78,6 +80,12 @@
                     </a>
                 </div>
 
+                <!-- Dark mode toggle -->
+                <button class="dark-mode-toggle" id="dark-mode-toggle" aria-label="<?php esc_attr_e( 'Toggle dark mode', 'dil' ); ?>">
+                    <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+                    <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                </button>
+
                 <!-- Partner link -->
                 <a href="https://diveintorajaampat.com/" class="nav-partner" target="_blank" rel="noopener noreferrer">
                     <img src="<?php echo esc_url( DIL_URI . '/assets/images/dira-logo.png' ); ?>"
@@ -121,6 +129,11 @@
             <a href="<?php echo esc_url( home_url( '/galleries/' ) ); ?>"><?php esc_html_e( 'Galleries', 'dil' ); ?></a>
             <a href="<?php echo esc_url( home_url( '/info/' ) ); ?>"><?php esc_html_e( 'Info', 'dil' ); ?></a>
         </div>
+        <button class="dark-mode-toggle dark-mode-toggle--compact" aria-label="<?php esc_attr_e( 'Toggle dark mode', 'dil' ); ?>">
+            <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+            <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+
         <a href="https://diveintorajaampat.com/" class="compact-nav__partner" target="_blank" rel="noopener noreferrer">
             <img src="<?php echo esc_url( DIL_URI . '/assets/images/dira-logo.png' ); ?>"
                  alt="<?php esc_attr_e( 'Dive Into Raja Ampat', 'dil' ); ?>"
@@ -158,6 +171,12 @@
         <a href="<?php echo esc_url( home_url( '/info/' ) ); ?>"><?php esc_html_e( 'Info', 'dil' ); ?></a>
         <a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>"><?php esc_html_e( 'Contact', 'dil' ); ?></a>
     </nav>
+    <button class="dark-mode-toggle dark-mode-toggle--mobile" aria-label="<?php esc_attr_e( 'Toggle dark mode', 'dil' ); ?>">
+        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <span style="font-family:var(--font-heading);font-size:12px;letter-spacing:0.1em;text-transform:uppercase;margin-left:8px;"><?php esc_html_e( 'Dark Mode', 'dil' ); ?></span>
+    </button>
+
     <div class="mobile-nav__ctas">
         <a href="<?php echo esc_url( home_url( '/rates/' ) ); ?>" class="btn btn-outline-dark">
             <?php esc_html_e( 'Rates', 'dil' ); ?>
