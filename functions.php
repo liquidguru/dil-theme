@@ -193,6 +193,65 @@ function dil_handle_contact() {
 add_action( 'wp_ajax_nopriv_dil_contact', 'dil_handle_contact' );
 add_action( 'wp_ajax_dil_contact',        'dil_handle_contact' );
 
+/* ── Hotel / LodgingBusiness JSON-LD schema ─────────────────── */
+
+function dil_schema_jsonld() {
+    $schema = [
+        '@context'    => 'https://schema.org',
+        '@type'       => [ 'LodgingBusiness', 'Resort' ],
+        'name'        => 'Dive Into Lembeh',
+        'alternateName' => 'DIL',
+        'description' => 'Boutique macro-dive resort on the Lembeh Strait, North Sulawesi. World-class muck diving, private Onsen bungalows, freshwater pool and personalised service.',
+        'url'         => 'https://www.diveintolembeh.com',
+        'logo'        => get_template_directory_uri() . '/assets/images/logo.png',
+        'image'       => get_template_directory_uri() . '/assets/images/hero-1.jpg',
+        'telephone'   => '',
+        'email'       => 'info@diveintolembeh.com',
+        'address'     => [
+            '@type'           => 'PostalAddress',
+            'streetAddress'   => 'Kasawari Bay, Bitung',
+            'addressLocality' => 'Bitung',
+            'addressRegion'   => 'North Sulawesi',
+            'postalCode'      => '95524',
+            'addressCountry'  => 'ID',
+        ],
+        'geo' => [
+            '@type'     => 'GeoCoordinates',
+            'latitude'  => '1.5005',
+            'longitude' => '125.2411',
+        ],
+        'priceRange'  => '$$$',
+        'starRating'  => [
+            '@type'       => 'Rating',
+            'ratingValue' => '4',
+        ],
+        'amenityFeature' => [
+            [ '@type' => 'LocationFeatureSpecification', 'name' => 'Freshwater Swimming Pool',  'value' => true ],
+            [ '@type' => 'LocationFeatureSpecification', 'name' => 'Private Onsen Hot Tub',     'value' => true ],
+            [ '@type' => 'LocationFeatureSpecification', 'name' => 'Air Conditioning',          'value' => true ],
+            [ '@type' => 'LocationFeatureSpecification', 'name' => 'Restaurant',                'value' => true ],
+            [ '@type' => 'LocationFeatureSpecification', 'name' => 'Bar',                       'value' => true ],
+            [ '@type' => 'LocationFeatureSpecification', 'name' => 'Dive Centre',               'value' => true ],
+            [ '@type' => 'LocationFeatureSpecification', 'name' => 'Camera Room',               'value' => true ],
+            [ '@type' => 'LocationFeatureSpecification', 'name' => 'Free WiFi',                 'value' => true ],
+        ],
+        'numberOfRooms' => 13,
+        'checkinTime'   => '14:00',
+        'checkoutTime'  => '12:00',
+        'currenciesAccepted' => 'USD, IDR',
+        'paymentAccepted'    => 'Cash, Credit Card, Bank Transfer',
+        'sameAs' => [
+            'https://www.facebook.com/diveintolembeh',
+            'https://www.instagram.com/diveintolembeh',
+            'https://www.youtube.com/@diveintolembeh',
+            'https://vimeo.com/liquidguru',
+        ],
+    ];
+
+    echo '<script type="application/ld+json">' . wp_json_encode( $schema, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT ) . '</script>' . "\n";
+}
+add_action( 'wp_head', 'dil_schema_jsonld' );
+
 /* ── Remove emoji scripts (not needed) ──────────────────────── */
 
 remove_action( 'wp_head',             'print_emoji_detection_script', 7 );
