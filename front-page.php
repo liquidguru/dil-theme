@@ -313,7 +313,7 @@ $explore_style = $explore_img
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════
-     SECTION 8 — FOUR MINUTES UNDER (video)
+     SECTION 8 — UNDER THE SURFACE (video)
      ═══════════════════════════════════════════════════════════ -->
 <section class="video-section">
 
@@ -321,7 +321,7 @@ $explore_style = $explore_img
         <?php esc_html_e( 'Watch', 'dil' ); ?>
     </p>
     <h2 class="video-section__heading">
-        <?php esc_html_e( 'Four minutes under', 'dil' ); ?>
+        <?php esc_html_e( 'Under the surface', 'dil' ); ?>
     </h2>
 
     <div class="video-frame">
@@ -332,7 +332,7 @@ $explore_style = $explore_img
             ?>
                 <iframe
                     src="https://player.vimeo.com/video/<?php echo esc_attr( $video_id ); ?>?h=<?php echo esc_attr( $video_hash ); ?>&color=6E1F22&byline=0&portrait=0"
-                    title="<?php esc_attr_e( 'Dive Into Lembeh — four minutes underwater', 'dil' ); ?>"
+                    title="<?php esc_attr_e( 'Dive Into Lembeh — under the surface', 'dil' ); ?>"
                     frameborder="0"
                     allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
                     allowfullscreen
