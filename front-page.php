@@ -375,9 +375,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // Ensure container has been sized by CSS before Leaflet measures it
     setTimeout(function () { map.invalidateSize(); }, 50);
 
-    // CartoDB Positron — clean, minimal, no fault/plate lines.
-    // Key is referer-restricted to diveintolembeh.com, *.diveintolembeh.com and diveintolembeh.local
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=cb1_3v34_1_23efb3e25995a7ee0f6a005d', {
+    // CartoDB Positron — clean, minimal, no fault/plate lines
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=<?php echo esc_js( DIL_CARTO_KEY ); ?>', {
         subdomains: 'abcd',
         maxZoom:    20,
     }).addTo(map);

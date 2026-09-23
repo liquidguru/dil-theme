@@ -121,7 +121,7 @@ $cdn = 'https://diveintolembeh.com/wp-content/uploads/';
                     attributionControl: false,
                 });
                 setTimeout(function () { map.invalidateSize(); }, 50);
-                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=<?php echo esc_js( DIL_CARTO_KEY ); ?>', {
                     subdomains: 'abcd',
                     maxZoom:    20,
                 }).addTo(map);

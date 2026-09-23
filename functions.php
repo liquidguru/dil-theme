@@ -10,6 +10,9 @@ define( 'DIL_VERSION', '1.2.0' );
 define( 'DIL_DIR',     get_template_directory() );
 define( 'DIL_URI',     get_template_directory_uri() );
 
+// CARTO basemaps key — referer-restricted to diveintolembeh.com, *.diveintolembeh.com, diveintolembeh.local
+define( 'DIL_CARTO_KEY', 'cb1_3v34_1_23efb3e25995a7ee0f6a005d' );
+
 /* ── Theme setup ─────────────────────────────────────────────── */
 
 function dil_setup() {
