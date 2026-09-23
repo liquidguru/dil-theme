@@ -288,7 +288,7 @@ $explore_style = $explore_img
 <section class="critter-compass" data-critters-url="<?php echo esc_url( DIL_URI . '/assets/images/critters/' ); ?>">
 
     <div class="critter-compass__text">
-        <p class="eyebrow section__kicker"><?php esc_html_e( 'What lives here', 'dil' ); ?></p>
+        <p class="eyebrow section__kicker"><?php esc_html_e( 'Lembeh\'s most wanted', 'dil' ); ?></p>
         <h2 class="section__heading" style="font-size:52px;margin-bottom:20px;">
             <?php esc_html_e( 'Critter', 'dil' ); ?><br>
             <?php esc_html_e( 'Compass', 'dil' ); ?>
