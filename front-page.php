@@ -370,7 +370,8 @@ $explore_style = $explore_img
             <?php esc_html_e( 'Compass', 'dil' ); ?>
         </h2>
         <p class="section__body critter-compass__intro" style="font-size:16px;margin-bottom:32px;max-width:400px;"
-           data-touch-text="<?php esc_attr_e( 'Tap a critter on the dial, or swipe to turn it, to meet what you\'ll find on a dive here.', 'dil' ); ?>">
+           data-touch-text="<?php esc_attr_e( 'Tap a critter on the dial, or swipe to turn it, to meet what you\'ll find on a dive here.', 'dil' ); ?>"
+           data-dial-text="<?php esc_attr_e( 'Click a critter on the dial, or use the arrows, to meet what you\'ll find on a dive here.', 'dil' ); ?>">
             <?php esc_html_e( 'Hover any species on the dial to learn more about what you\'ll find on a dive here.', 'dil' ); ?>
         </p>
 

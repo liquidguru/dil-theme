@@ -204,6 +204,11 @@
 
     if (!svg || !infoBox) return;
 
+    // Dial mode: photo in the hub, dial turns to the chosen critter, at every width.
+    // Without JS (no .is-dialmode) the hover card layout's markup is what shows.
+    const dialMode = true;
+    container.classList.add('is-dialmode');
+
     const cx = 260, cy = 260, r = 220;
     const ns = 'http://www.w3.org/2000/svg';
 
@@ -269,7 +274,9 @@
       g.appendChild(text);
 
       g.addEventListener('click',     () => activateCritter(critter, g));
-      g.addEventListener('mouseenter',() => activateCritter(critter, g));
+      // Classic: hover picks. Dial mode: click only — turning on hover would slide the pin
+      // out from under the mouse and set off the next one
+      if (!dialMode) g.addEventListener('mouseenter', () => activateCritter(critter, g));
       g.addEventListener('keydown', e => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
@@ -282,8 +289,8 @@
 
     let activePin = null;
 
-    // Phones/tablets (stacked layout): photo in the dial's hub, dial turns so the chosen
-    // critter is at the top, caption + arrows under the dial, swipe to turn
+    // Dial mode: photo in the dial's hub, dial turns so the chosen critter is at the top.
+    // Caption + arrows sit in the left column on desktop, under the dial when stacked.
     const stacked  = window.matchMedia('(max-width: 959px)');
     const pins     = Array.from(svg.querySelectorAll('.critter-pin'));
     const hub      = container.querySelector('.critter-hub');
@@ -295,19 +302,37 @@
     let dialRot    = 0;   // cumulative, so the dial always turns the short way round
 
     function turnDial(angle) {
-      const target = stacked.matches ? -angle : 0;
-      dialRot += ((target - dialRot) % 360 + 540) % 360 - 180;
-      if (!stacked.matches) dialRot = 0;
+      if (!dialMode) return;
+      dialRot += ((-angle - dialRot) % 360 + 540) % 360 - 180;
       dial.style.transform = `rotate(${dialRot}deg)`;
       // Keep the pin labels upright while the dial turns
       pins.forEach(p => { const t = p.querySelector('text'); if (t) t.style.transform = `rotate(${-dialRot}deg)`; });
     }
-    stacked.addEventListener('change', () => turnDial(CRITTERS[activeIdx].angle));
+
+    const caption  = container.querySelector('.critter-compass__caption');
+    const textCol  = container.querySelector('.critter-compass__text');
+    const svgWrap  = container.querySelector('.critter-compass__svg-wrap');
+    function placeCaption() {
+      if (!dialMode || !caption) return;
+      const home = stacked.matches ? svgWrap : textCol;
+      if (home && caption.parentNode !== home) home.appendChild(caption);
+    }
+    placeCaption();
+    stacked.addEventListener('change', placeCaption);
 
     const intro = container.querySelector('.critter-compass__intro');
-    if (intro && intro.dataset.touchText && window.matchMedia('(hover: none)').matches) {
-      intro.textContent = intro.dataset.touchText;
+    if (intro && dialMode) {
+      if (window.matchMedia('(hover: none)').matches && intro.dataset.touchText) intro.textContent = intro.dataset.touchText;
+      else if (intro.dataset.dialText) intro.textContent = intro.dataset.dialText;
     }
+
+    // Arrow keys step round the dial while focus is inside the compass
+    if (dialMode) container.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        step(e.key === 'ArrowRight' ? 1 : -1);
+      }
+    });
 
     function step(dir) {
       const i = (activeIdx + dir + CRITTERS.length) % CRITTERS.length;

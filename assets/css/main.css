@@ -1274,9 +1274,11 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   color: var(--burgundy);
 }
 
-/* Compass mode — phones/tablets, where the dial stacks under the text.
-   The card above is hidden; the photo sits in the dial's hub, the dial turns
-   so the chosen critter is at the top, and the name + arrows sit underneath. */
+/* Dial mode (.is-dialmode, added by main.js).
+   The photo sits in the dial's hub, the dial turns so the chosen critter is at
+   the top, and the name/latin/depth + arrows form a caption. Desktop: caption in
+   the left column, click (not hover) turns the dial. Stacked (≤959px): caption
+   under the dial, swipe to turn. Without .is-dialmode the classic card layout shows. */
 
 .critter-compass__dial { position: relative; line-height: 0; }
 .critter-dial { transform-box: view-box; transform-origin: 260px 260px; }
@@ -1284,49 +1286,64 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 .critter-hub,
 .critter-compass__caption { display: none; }
 
+.is-dialmode .critter-compass__info { display: none; }
+.is-dialmode .critter-dial,
+.is-dialmode .critter-pin text { transition: transform .7s cubic-bezier(.3, .7, .3, 1); }
+.is-dialmode .critter-pin:hover circle { stroke: var(--burgundy); stroke-width: 2; }
+
+.is-dialmode .critter-hub {
+  display: block; position: absolute; left: 50%; top: 50%; width: 56%; aspect-ratio: 1;
+  transform: translate(-50%, -50%); padding: 0; border-radius: 50%; overflow: hidden;
+  border: 3px solid var(--paper); box-shadow: 0 0 0 1px var(--border-mid), 0 8px 24px rgba(27,16,11,.18);
+  background: var(--cream-d); cursor: zoom-in; -webkit-tap-highlight-color: transparent;
+}
+.is-dialmode .critter-hub img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* Desktop caption: left column, large, arrows underneath */
+.is-dialmode .critter-compass__caption {
+  display: grid; grid-template-columns: auto auto 1fr; gap: 20px 12px;
+  grid-template-areas: "text text text" "prev next .";
+  line-height: normal;
+}
+.critter-compass__caption-text { grid-area: text; min-width: 0; }
+.critter-nav[data-step="-1"] { grid-area: prev; }
+.critter-nav[data-step="1"]  { grid-area: next; }
+.critter-caption__name {
+  font-family: var(--font-heading); font-size: 42px; font-weight: 500; line-height: .95;
+  letter-spacing: -0.01em; text-transform: uppercase; color: var(--ink);
+  min-height: 1.9em; display: flex; flex-direction: column; justify-content: flex-end;  /* 2 lines always: no jump */
+}
+.critter-caption__latin { font-size: 15px; font-style: italic; color: var(--ink-soft); margin-top: 10px; }
+.critter-caption__depth {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .24em; text-transform: uppercase;
+  color: var(--burgundy); margin-top: 10px;
+}
+.critter-nav {
+  width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border-mid);
+  background: transparent; color: var(--burgundy); font-size: 26px; line-height: 1; padding: 0 0 3px;
+  cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background .2s, color .2s;
+}
+.critter-nav:hover,
+.critter-nav:active { background: var(--burgundy); color: #F5ECDC; }
+
+/* Stacked (phones/tablets): caption under the dial, arrows either side */
 @media (max-width: 959px) {
-  .critter-compass { gap: 8px; }
-  .critter-compass__info { display: none; }
-  .critter-compass__intro { margin-bottom: 0 !important; }   /* overrides the inline desktop spacing */
-  .critter-compass__svg-wrap { flex-direction: column; align-items: center; }
-  .critter-compass__svg { touch-action: pan-y; }
-
-  .critter-dial,
-  .critter-pin text { transition: transform .7s cubic-bezier(.3, .7, .3, 1); }
-
-  .critter-hub {
-    display: block; position: absolute; left: 50%; top: 50%; width: 56%; aspect-ratio: 1;
-    transform: translate(-50%, -50%); padding: 0; border-radius: 50%; overflow: hidden;
-    border: 3px solid var(--paper); box-shadow: 0 0 0 1px var(--border-mid), 0 8px 24px rgba(27,16,11,.18);
-    background: var(--cream-d); cursor: zoom-in; -webkit-tap-highlight-color: transparent;
+  .is-dialmode.critter-compass { gap: 8px; }
+  .is-dialmode .critter-compass__intro { margin-bottom: 0 !important; }   /* overrides the inline desktop spacing */
+  .is-dialmode .critter-compass__svg-wrap { flex-direction: column; align-items: center; }
+  .is-dialmode .critter-compass__svg { touch-action: pan-y; }
+  .is-dialmode .critter-compass__caption {
+    grid-template-columns: 44px 1fr 44px; grid-template-areas: "prev text next";
+    align-items: center; gap: 8px; width: 100%; max-width: 380px; margin-top: 18px;
   }
-  .critter-hub img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-  .critter-compass__caption {
-    display: flex; align-items: center; justify-content: space-between; gap: 8px;
-    width: 100%; max-width: 380px; margin-top: 18px; line-height: normal;
-  }
-  .critter-compass__caption-text { flex: 1; text-align: center; min-width: 0; }
-  .critter-caption__name {
-    font-family: var(--font-heading); font-size: 26px; font-weight: 500; line-height: .95;
-    text-transform: uppercase; color: var(--ink);
-    min-height: 1.9em; display: flex; align-items: flex-end; justify-content: center;  /* 2 lines always: no jump */
-  }
-  .critter-caption__latin { font-size: 14px; font-style: italic; color: var(--ink-soft); margin-top: 6px; }
-  .critter-caption__depth {
-    font-family: var(--font-mono); font-size: 10px; letter-spacing: .24em; text-transform: uppercase;
-    color: var(--burgundy); margin-top: 6px;
-  }
-  .critter-nav {
-    flex: 0 0 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border-mid);
-    background: transparent; color: var(--burgundy); font-size: 26px; line-height: 1; padding: 0 0 3px;
-    cursor: pointer; -webkit-tap-highlight-color: transparent;
-  }
-  .critter-nav:active { background: var(--burgundy); color: #F5ECDC; }
+  .critter-compass__caption-text { text-align: center; }
+  .critter-caption__name { font-size: 26px; align-items: center; }
+  .critter-caption__latin { font-size: 14px; margin-top: 6px; }
+  .critter-caption__depth { margin-top: 6px; }
 }
 
-@media (max-width: 959px) and (prefers-reduced-motion: reduce) {
-  .critter-dial, .critter-pin text { transition: none; }
+@media (prefers-reduced-motion: reduce) {
+  .is-dialmode .critter-dial, .is-dialmode .critter-pin text { transition: none; }
 }
 
 /* ── 16. VIDEO SECTION ──────────────────────────────────────── */
