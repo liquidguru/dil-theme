@@ -30,7 +30,82 @@ if ( empty( $hero_slides ) ) {
 
 <!-- ═══════════════════════════════════════════════════════════
      SECTION 1 — HERO
+     Night-dive version when slides are set: torch follows the pointer (tap to
+     aim on touch), strobe flash = slide change, hidden critter to find.
+     Driven by the "Night-dive hero" block in main.js. Falls back to the
+     static hero below when there are no slides.
      ═══════════════════════════════════════════════════════════ -->
+<?php if ( ! empty( $hero_slides ) ) :
+    $nd_slides = array_map( 'dil_hero_slide_data', $hero_slides );
+    $nd_hidden = [
+        [ 'src' => DIL_URI . '/assets/images/hidden/bobtail-squid.jpg',  'name' => __( 'Bobtail squid', 'dil' ) ],
+        [ 'src' => DIL_URI . '/assets/images/hidden/ghost-pipefish.jpg', 'name' => __( 'Ornate ghost pipefish', 'dil' ) ],
+        [ 'src' => DIL_URI . '/assets/images/hidden/hairy-octopus.jpg',  'name' => __( 'Hairy octopus', 'dil' ) ],
+    ];
+?>
+<section class="hero hero--nightdive" aria-label="<?php esc_attr_e( 'Hero', 'dil' ); ?>"
+         data-slides="<?php echo esc_attr( wp_json_encode( $nd_slides ) ); ?>"
+         data-hidden="<?php echo esc_attr( wp_json_encode( $nd_hidden ) ); ?>"
+         data-hint-mouse="<?php esc_attr_e( 'Move your torch · click to fire the strobe', 'dil' ); ?>"
+         data-hint-touch="<?php esc_attr_e( 'Tap to shine your torch', 'dil' ); ?>"
+         data-spotted="<?php esc_attr_e( 'Spotted', 'dil' ); ?>"
+         data-frame="<?php esc_attr_e( 'Frame', 'dil' ); ?>">
+
+    <div class="nd-layer nd-ambient" aria-hidden="true">
+        <img class="nd-img" src="<?php echo esc_url( $hero_slides[0] ); ?>" alt="">
+    </div>
+    <div class="nd-layer nd-lit">
+        <img class="nd-img" src="<?php echo esc_url( $hero_slides[0] ); ?>"
+             alt="<?php esc_attr_e( 'Macro critter on the black volcanic sand of the Lembeh Strait', 'dil' ); ?>"
+             loading="eager" fetchpriority="high">
+        <img class="nd-hider" alt="" aria-hidden="true">
+    </div>
+    <div class="nd-beam" aria-hidden="true"></div>
+    <canvas class="nd-snow" aria-hidden="true"></canvas>
+    <div class="nd-vignette" aria-hidden="true"></div>
+    <div class="nd-strobe" aria-hidden="true"></div>
+    <div class="nd-ring" aria-hidden="true"></div>
+    <div class="nd-spot-label" aria-live="polite"></div>
+
+    <div class="nd-hud nd-hud--tl" aria-hidden="true">
+        <?php esc_html_e( 'Depth', 'dil' ); ?><span class="nd-big"><span class="nd-depth">0.0</span><small> m</small></span>
+        <?php esc_html_e( 'Dive time', 'dil' ); ?> <b class="nd-time">00:00</b>
+    </div>
+    <div class="nd-hud nd-hud--tr" aria-hidden="true">
+        <?php esc_html_e( 'Water', 'dil' ); ?><span class="nd-big">28&deg;</span>
+        01&deg;&nbsp;39'&nbsp;N&nbsp;&nbsp;125&deg;&nbsp;14'&nbsp;E<br>
+        <?php esc_html_e( '3 house reefs', 'dil' ); ?> &middot; <?php esc_html_e( '2 dive boats', 'dil' ); ?> &middot; <?php esc_html_e( 'since 2007', 'dil' ); ?><br>
+        <?php esc_html_e( 'Spotted', 'dil' ); ?> <b class="nd-count">0</b>
+    </div>
+    <div class="nd-hud nd-caption" aria-live="polite">
+        <span class="nd-dot"></span><span class="nd-frame"></span> &nbsp;&middot;&nbsp; <b class="nd-name"></b>
+    </div>
+
+    <div class="nd-hint" aria-hidden="true"></div>
+    <button class="nd-shutter" type="button" aria-label="<?php esc_attr_e( 'Fire the strobe', 'dil' ); ?>"><span></span></button>
+
+    <div class="hero__content">
+        <h1 class="hero__headline dil-wordmark">
+            <?php esc_html_e( 'Dive', 'dil' ); ?>
+            <em><?php esc_html_e( 'into', 'dil' ); ?></em>
+            <?php esc_html_e( 'Lembeh', 'dil' ); ?>
+        </h1>
+        <div class="hero__ctas">
+            <a href="<?php echo esc_url( home_url( '/galleries/' ) ); ?>" class="btn btn-outline">
+                <?php esc_html_e( 'Browse Galleries', 'dil' ); ?>
+            </a>
+            <a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>" class="btn btn-primary">
+                <?php esc_html_e( 'Reserve a Bungalow', 'dil' ); ?>
+            </a>
+        </div>
+    </div>
+
+    <svg class="hero__wave" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M0 60 L0 30 Q120 10 240 30 T480 30 T720 30 T960 30 T1200 30 T1440 30 L1440 60 Z" fill="#FFFFFF"/>
+    </svg>
+
+</section>
+<?php else : ?>
 <section class="hero" aria-label="<?php esc_attr_e( 'Hero', 'dil' ); ?>">
 
     <div class="hero__bg" id="hero-bg">
@@ -82,6 +157,7 @@ if ( empty( $hero_slides ) ) {
     </svg>
 
 </section>
+<?php endif; ?>
 
 <!-- ═══════════════════════════════════════════════════════════
      SECTION 2 — MUCK DIVING HEAVEN INTRO

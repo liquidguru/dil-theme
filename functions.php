@@ -136,6 +136,30 @@ function dil_placeholder( string $label, string $extra_class = '' ): string {
     return '<div class="photo-placeholder ' . esc_attr( $extra_class ) . '"><span>' . esc_html( $label ) . '</span></div>';
 }
 
+/* ── Helper: night-dive hero slide data ─────────────────────── */
+
+/**
+ * Turns a hero slide URL into { src, name } for the night-dive hero caption.
+ * Name comes from the original slide filenames, then the Media Library title
+ * (skipped when it is just the filename, which is WordPress's default).
+ */
+function dil_hero_slide_data( string $url ): array {
+    $known = [
+        'sl-pygmy'  => __( 'Pygmy seahorse', 'dil' ),
+        'sl-frog'   => __( 'Frogfish', 'dil' ),
+        'sl-nudi01' => __( 'Nudibranch', 'dil' ),
+        'sl-solar'  => __( 'Solar-powered nudibranch', 'dil' ),
+        'sl-candy'  => __( 'Candy crab', 'dil' ),
+    ];
+    $slug = strtolower( pathinfo( (string) wp_parse_url( $url, PHP_URL_PATH ), PATHINFO_FILENAME ) );
+    $name = $known[ $slug ] ?? '';
+    if ( ! $name && ( $id = attachment_url_to_postid( $url ) ) ) {
+        $title = get_the_title( $id );
+        if ( strtolower( $title ) !== $slug ) $name = $title;
+    }
+    return [ 'src' => $url, 'name' => $name ];
+}
+
 /* ── Helper: get page ID by path ─────────────────────────────── */
 
 function dil_page_id( string $path ): int {
