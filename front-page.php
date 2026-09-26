@@ -369,7 +369,8 @@ $explore_style = $explore_img
             <?php esc_html_e( 'Critter', 'dil' ); ?><br>
             <?php esc_html_e( 'Compass', 'dil' ); ?>
         </h2>
-        <p class="section__body" style="font-size:16px;margin-bottom:32px;max-width:400px;">
+        <p class="section__body critter-compass__intro" style="font-size:16px;margin-bottom:32px;max-width:400px;"
+           data-touch-text="<?php esc_attr_e( 'Tap a critter on the dial, or swipe to turn it, to meet what you\'ll find on a dive here.', 'dil' ); ?>">
             <?php esc_html_e( 'Hover any species on the dial to learn more about what you\'ll find on a dive here.', 'dil' ); ?>
         </p>
 
@@ -381,9 +382,23 @@ $explore_style = $explore_img
     </div>
 
     <div class="critter-compass__svg-wrap">
-        <svg class="critter-compass__svg" viewBox="0 0 520 520" aria-label="<?php esc_attr_e( 'Critter Compass — 8 macro species of the Lembeh Strait', 'dil' ); ?>" role="img">
-            <!-- Built by main.js -->
-        </svg>
+        <div class="critter-compass__dial">
+            <svg class="critter-compass__svg" viewBox="0 0 520 520" aria-label="<?php esc_attr_e( 'Critter Compass — 8 macro species of the Lembeh Strait', 'dil' ); ?>" role="img">
+                <!-- Built by main.js -->
+            </svg>
+            <!-- Phones/tablets only: the chosen critter's photo in the middle of the dial -->
+            <button class="critter-hub" type="button" aria-label="<?php esc_attr_e( 'View photo', 'dil' ); ?>"><img alt=""></button>
+        </div>
+        <!-- Phones/tablets only: name + prev/next under the dial -->
+        <div class="critter-compass__caption">
+            <button class="critter-nav" type="button" data-step="-1" aria-label="<?php esc_attr_e( 'Previous critter', 'dil' ); ?>">&lsaquo;</button>
+            <div class="critter-compass__caption-text" aria-live="polite">
+                <div class="critter-caption__name"></div>
+                <div class="critter-caption__latin"></div>
+                <div class="critter-caption__depth"></div>
+            </div>
+            <button class="critter-nav" type="button" data-step="1" aria-label="<?php esc_attr_e( 'Next critter', 'dil' ); ?>">&rsaquo;</button>
+        </div>
     </div>
 
 </section>

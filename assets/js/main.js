@@ -207,20 +207,25 @@
     const cx = 260, cy = 260, r = 220;
     const ns = 'http://www.w3.org/2000/svg';
 
+    // Everything on the dial sits in one group so phones can turn it like a compass bezel
+    const dial = document.createElementNS(ns, 'g');
+    dial.setAttribute('class', 'critter-dial');
+    svg.appendChild(dial);
+
     // Background ring
     const ring = document.createElementNS(ns, 'circle');
     ring.setAttribute('cx', cx); ring.setAttribute('cy', cy);
     ring.setAttribute('r', r); ring.setAttribute('fill', 'none');
     ring.setAttribute('stroke', 'rgba(110,31,34,0.14)');
     ring.setAttribute('stroke-width', '1');
-    svg.appendChild(ring);
+    dial.appendChild(ring);
 
     // Center dot
     const dot = document.createElementNS(ns, 'circle');
     dot.setAttribute('cx', cx); dot.setAttribute('cy', cy);
     dot.setAttribute('r', '4');
     dot.setAttribute('fill', 'rgba(110,31,34,0.3)');
-    svg.appendChild(dot);
+    dial.appendChild(dot);
 
     CRITTERS.forEach(critter => {
       const rad = (critter.angle - 90) * Math.PI / 180;
@@ -272,10 +277,61 @@
         }
       });
 
-      svg.appendChild(g);
+      dial.appendChild(g);
     });
 
     let activePin = null;
+
+    // Phones/tablets (stacked layout): photo in the dial's hub, dial turns so the chosen
+    // critter is at the top, caption + arrows under the dial, swipe to turn
+    const stacked  = window.matchMedia('(max-width: 959px)');
+    const pins     = Array.from(svg.querySelectorAll('.critter-pin'));
+    const hub      = container.querySelector('.critter-hub');
+    const hubImg   = hub ? hub.querySelector('img') : null;
+    const capName  = container.querySelector('.critter-caption__name');
+    const capLatin = container.querySelector('.critter-caption__latin');
+    const capDepth = container.querySelector('.critter-caption__depth');
+    let activeIdx  = 0;
+    let dialRot    = 0;   // cumulative, so the dial always turns the short way round
+
+    function turnDial(angle) {
+      const target = stacked.matches ? -angle : 0;
+      dialRot += ((target - dialRot) % 360 + 540) % 360 - 180;
+      if (!stacked.matches) dialRot = 0;
+      dial.style.transform = `rotate(${dialRot}deg)`;
+      // Keep the pin labels upright while the dial turns
+      pins.forEach(p => { const t = p.querySelector('text'); if (t) t.style.transform = `rotate(${-dialRot}deg)`; });
+    }
+    stacked.addEventListener('change', () => turnDial(CRITTERS[activeIdx].angle));
+
+    const intro = container.querySelector('.critter-compass__intro');
+    if (intro && intro.dataset.touchText && window.matchMedia('(hover: none)').matches) {
+      intro.textContent = intro.dataset.touchText;
+    }
+
+    function step(dir) {
+      const i = (activeIdx + dir + CRITTERS.length) % CRITTERS.length;
+      activateCritter(CRITTERS[i], pins[i]);
+    }
+    container.querySelectorAll('.critter-nav').forEach(b =>
+      b.addEventListener('click', () => step(parseInt(b.dataset.step, 10))));
+
+    // Tapping the hub photo opens the lightbox via the (hidden) card photo
+    if (hub) hub.addEventListener('click', () => {
+      const photo = infoBox.querySelector('.critter-card__photo');
+      if (photo) photo.click();
+    });
+
+    // Swipe left/right on the dial to turn it; vertical drags still scroll the page
+    let swipeX = null, swipeY = null;
+    svg.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') { swipeX = e.clientX; swipeY = e.clientY; } });
+    svg.addEventListener('pointercancel', () => { swipeX = null; });
+    svg.addEventListener('pointerup', e => {
+      if (swipeX === null) return;
+      const dx = e.clientX - swipeX, dy = e.clientY - swipeY;
+      swipeX = null;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) step(dx < 0 ? 1 : -1);
+    });
 
     function activateCritter(critter, pin) {
       // Reset all pins
@@ -312,6 +368,14 @@
       `;
 
       activePin = pin;
+      activeIdx = Math.max(0, pins.indexOf(pin));
+
+      if (hubImg && imgSrc) { hubImg.src = imgSrc; hubImg.alt = critter.name; }
+      if (hub) hub.setAttribute('aria-label', `View photo: ${critter.name}`);
+      if (capName)  capName.textContent  = critter.name;
+      if (capLatin) capLatin.textContent = critter.latin;
+      if (capDepth) capDepth.textContent = critter.depth;
+      turnDial(critter.angle);
     }
 
     // Start with the first critter showing, so the card is already full size and
