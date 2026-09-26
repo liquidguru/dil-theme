@@ -283,8 +283,10 @@
         p.classList.remove('is-active');
         const c = p.querySelector('circle');
         const l = p.querySelector('line');
+        const t = p.querySelector('text');
         if (c) { c.setAttribute('r', '18'); c.setAttribute('fill', '#F5ECDC'); }
         if (l) { l.setAttribute('stroke', 'rgba(110,31,34,0.18)'); l.setAttribute('stroke-width', '0.6'); }
+        if (t) t.setAttribute('fill', '#6E1F22');
       });
 
       // Activate clicked pin
@@ -311,6 +313,11 @@
 
       activePin = pin;
     }
+
+    // Start with the first critter showing, so the card is already full size and
+    // hovering only swaps its contents — nothing on the page moves
+    const firstPin = svg.querySelector('.critter-pin');
+    if (firstPin) activateCritter(CRITTERS[0], firstPin);
   }
 
   const compass = document.querySelector('.critter-compass');

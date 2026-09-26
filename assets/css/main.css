@@ -1251,6 +1251,12 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   text-transform: uppercase;
   color: var(--ink);
   margin-bottom: 8px;
+  /* Always two lines tall, so a name that wraps ("Flamboyant Cuttlefish" on narrower
+     screens) doesn't make the card taller and shift the dial. Short names sit at the bottom. */
+  min-height: 1.9em;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .critter-card__latin {
