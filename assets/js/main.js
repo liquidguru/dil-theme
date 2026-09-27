@@ -824,11 +824,19 @@
       const pad = 14 * s;
       Object.entries({ x: x - pad, y: y - pad, width: w + 2 * pad, height: h + 2 * pad })
         .forEach(([k, v]) => zParts.card.setAttribute(k, v));
-      const edge = x + w + pad, [f0, f1] = Z.focusY || [0, lh];
-      zParts.cone.setAttribute('points', narrow ? '0,0' : [
-        [edge, y + f0 * s], [c.cx - c.r * 0.5, c.cy - c.r * 0.866],
-        [c.cx - c.r * 0.5, c.cy + c.r * 0.866], [edge, y + f1 * s]
-      ].map(p => p.join(',')).join(' '));
+      // Callout lines: the card's right-hand corners (on their rounded bit, rx 22) to the circle's
+      // outer tangent points, so the cone wraps round the whole circle (joined by its far-side arc)
+      if (narrow) { zParts.cone.setAttribute('d', ''); return; }
+      const k = 22 * (1 - Math.SQRT1_2), edge = x + w + pad - k;
+      const tl = [edge, y - pad + k], bl = [edge, y + h + pad - k];
+      const tangent = (p, side) => {
+        const dx = p[0] - c.cx, dy = p[1] - c.cy, d = Math.hypot(dx, dy);
+        const a = Math.atan2(dy, dx) + side * Math.acos(Math.min(1, c.r / d));
+        return [c.cx + c.r * Math.cos(a), c.cy + c.r * Math.sin(a)];
+      };
+      const t1 = tangent(tl, 1), t2 = tangent(bl, -1), f = n => n.toFixed(1);
+      zParts.cone.setAttribute('d', `M${f(tl[0])},${f(tl[1])} L${f(t1[0])},${f(t1[1])} ` +
+        `A${c.r},${c.r} 0 0 1${f(t2[0])},${f(t2[1])} L${f(bl[0])},${f(bl[1])} Z`);
     }
     layoutZoom();
 

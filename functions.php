@@ -281,7 +281,7 @@ function dil_fly_map( string $slug ): void {
             <?php if ( $zoom ) : $l = $zoom['local']; ?>
                 <!-- Close-up: cone + card + inset; geometry set by main.js (wide vs narrow screens) -->
                 <g class="fly-map__zoom" style="transform-origin: <?php echo (float) $zoom['from']['cx']; ?>px <?php echo (float) $zoom['from']['cy']; ?>px;">
-                    <polygon class="fly-map__cone" points="0,0"/>
+                    <path class="fly-map__cone" d=""/>
                     <rect class="fly-map__card" rx="22"/>
                     <svg class="fly-map__inset" viewBox="<?php echo esc_attr( implode( ' ', array_map( 'floatval', $l ) ) ); ?>" preserveAspectRatio="xMidYMid meet" overflow="visible">
                         <?php echo $zoom_svg; // phpcs:ignore -- our own static SVG file ?>

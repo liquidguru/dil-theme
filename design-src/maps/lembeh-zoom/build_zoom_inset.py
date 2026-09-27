@@ -55,6 +55,13 @@ for t in np.linspace(0, 1, 120):               # the old drive line: Q(626,238)-
     py = (1 - t) ** 2 * 238 + 2 * (1 - t) * t * 290.5 + t * t * 273
     mask |= (xx - px) ** 2 + (yy - py) ** 2 <= 4 ** 2
 mask = ndimage.binary_fill_holes(mask)                                 # remaining text holes
+# The strait squeezes past the H of LEMBEH and turns west under the wordmark — in the source it's a
+# 1-2px gap there, which the smoothing closes, joining Lembeh island to the mainland. Carve it open.
+chan = [(830, 282), (820, 298), (815, 306), (806, 310.5), (790, 311.5), (760, 311.5)]
+for (ax, ay), (bx, by) in zip(chan, chan[1:]):
+    for t in np.linspace(0, 1, 40):
+        px, py = ax + (bx - ax) * t, ay + (by - ay) * t
+        mask &= ~((xx - px) ** 2 + (yy - py) ** 2 <= 3.5 ** 2)   # wide enough to survive the curve smoothing
 for cx, cy, rad in [(573, 271, 13), (825, 267, 11)]:                   # stars bite the coastline
     mask |= (xx - cx) ** 2 + (yy - cy) ** 2 <= rad ** 2
 mask &= ~lake
