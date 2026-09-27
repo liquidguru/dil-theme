@@ -44,17 +44,10 @@ $cdn = 'https://diveintolembeh.com/wp-content/uploads/';
                 <h2 class="section-head__title"><?php esc_html_e( 'Getting Here', 'dil' ); ?></h2>
             </div>
 
-            <?php
-            $map_img = get_theme_mod( 'dil_img_indo_map', $cdn . '2018/04/DIL_indo-loc.jpg' );
-            if ( $map_img ) :
-            ?>
-                <button class="grid-tile" data-full="<?php echo esc_url( $map_img ); ?>" data-alt="<?php esc_attr_e( 'Indonesia location map showing Lembeh Strait', 'dil' ); ?>" style="margin-bottom:28px;">
-                    <img src="<?php echo esc_url( $map_img ); ?>"
-                         alt="<?php esc_attr_e( 'Indonesia location map showing Lembeh Strait', 'dil' ); ?>"
-                         loading="lazy"
-                         style="width:100%;">
-                </button>
-            <?php endif; ?>
+            <!-- Animated flight map (data: assets/data/maps/getting-here-lembeh.json, sources: design-src/maps/) -->
+            <div style="margin-bottom:28px;">
+                <?php dil_fly_map( 'getting-here-lembeh' ); ?>
+            </div>
 
             <?php echo apply_filters( 'the_content', get_theme_mod( 'dil_text_gethere_intro', // phpcs:ignore
                 __( '<p>Manado airport — Sam Ratulangi International (MDC) — is the international gateway to North Sulawesi and is approximately a 60-minute drive from the resort. Once in Bitung you board a 15-minute speedboat to Kasawari Bay. We organise all transfers.</p>', 'dil' )

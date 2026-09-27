@@ -734,6 +734,121 @@
     }
   }
 
+  /* ── Fly map ─────────────────────────────────────────────────
+     Planes fly the routes of an animated map (markup: dil_fly_map() in
+     functions.php; data: assets/data/maps/*.json). Flights take off in turn,
+     follow the route centre-line, leave a dotted trail and fade out on landing,
+     with a ping at the arrival airport. Pauses off screen; still for reduced motion. */
+
+  document.querySelectorAll('.fly-map[data-fly-map]').forEach(initFlyMap);
+
+  function initFlyMap(root) {
+    // Keyboard: Enter/Space opens the lightbox like a click (the map is a role=button div)
+    root.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); root.click(); }
+    });
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let cfg; try { cfg = JSON.parse(root.dataset.flyMap); } catch (e) { return; }
+    const NS = 'http://www.w3.org/2000/svg';
+    const svg = root.querySelector('svg'), layer = root.querySelector('.fly-map__flights'), ping = root.querySelector('.fly-map__ping');
+    const defs = svg.querySelector('defs');
+    const SPEED = cfg.timing.speed || 300, STAGGER = cfg.timing.stagger || 3.2, REST = cfg.timing.rest || 1.5;
+
+    const el = (tag, attrs, parent = layer) => {
+      const e = document.createElementNS(NS, tag);
+      for (const k in attrs) e.setAttribute(k, attrs[k]);
+      parent.appendChild(e); return e;
+    };
+
+    let maskN = 0;
+    const flights = cfg.flights.map((f, i) => {
+      const legs = f.legs.map(([name, rev]) => {
+        const path = el('path', { d: cfg.routes[name], fill: 'none', stroke: 'none' });
+        const len = path.getTotalLength();
+        // dotted trail, revealed behind the plane through a growing mask stroke
+        const maskId = root.id + '-m' + (maskN++);
+        const mask = el('mask', { id: maskId, maskUnits: 'userSpaceOnUse', x: -1000, y: -1000, width: 9000, height: 9000 }, defs);
+        const maskPath = el('path', { d: cfg.routes[name], fill: 'none', stroke: '#fff', 'stroke-width': 30 }, mask);
+        const trail = el('path', { d: cfg.routes[name], class: 'fly-map__trail', mask: `url(#${maskId})`, opacity: 0 });
+        return { path, len, rev, maskPath, trail };
+      });
+      const total = legs.reduce((s, l) => s + l.len, 0);
+      const plane = el('use', { href: cfg.plane, class: 'fly-map__plane', opacity: 0 });
+      return { legs, total, dur: total / SPEED, plane, start: i * STAGGER, landed: false };
+    });
+    // One shared cycle keeps an even rhythm of departures
+    const CYCLE = Math.max(flights.length * STAGGER, ...flights.map(f => f.dur + REST));
+
+    // On small screens the map shrinks a lot — keep planes ≥ ~16px long and the trail visible
+    let boost = 1;
+    const measure = () => {
+      const shownPx = 84 * root.getBoundingClientRect().width / svg.viewBox.baseVal.width;
+      boost = Math.max(1, 16 / (shownPx || 16));
+      flights.forEach(f => f.legs.forEach(l => {
+        l.trail.style.strokeWidth = 5 * boost;
+        l.trail.style.strokeDasharray = `0.1 ${16 * boost}`;
+      }));
+    };
+    measure();
+    if ('ResizeObserver' in window) new ResizeObserver(measure).observe(root);
+    const ease = t => (t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+
+    function pointAt(f, dist) {
+      for (let i = 0; i < f.legs.length; i++) {
+        const l = f.legs[i];
+        if (dist <= l.len || i === f.legs.length - 1) {
+          const d = Math.max(0, Math.min(l.len, l.rev ? l.len - dist : dist));
+          const a = l.path.getPointAtLength(d);
+          const b = l.path.getPointAtLength(Math.max(0, Math.min(l.len, d + (l.rev ? -2 : 2))));
+          return { x: a.x, y: a.y, ang: Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI };
+        }
+        dist -= l.len;
+      }
+    }
+
+    let running = true, elapsed = 0, last = null;
+    function frame(now) {
+      if (!running) { last = null; return; }
+      if (last !== null) elapsed += Math.min(0.1, (now - last) / 1000);   // no jump after a pause
+      last = now;
+      flights.forEach(f => {
+        let local = elapsed - f.start;
+        if (local < 0) return;
+        local %= CYCLE;
+        if (local <= f.dur) {
+          const prog = ease(local / f.dur), dist = prog * f.total, pt = pointAt(f, dist);
+          const fade = Math.min(1, prog / 0.07, (1 - prog) / 0.1);
+          f.plane.setAttribute('transform', `translate(${pt.x},${pt.y}) rotate(${pt.ang}) scale(${(0.55 + 0.45 * fade) * boost})`);
+          f.plane.setAttribute('opacity', fade);
+          let remaining = dist;
+          f.legs.forEach(l => {
+            const shown = Math.max(0, Math.min(l.len, remaining)); remaining -= l.len;
+            l.maskPath.setAttribute('stroke-dasharray', `${shown} ${l.len + 10}`);
+            l.maskPath.setAttribute('stroke-dashoffset', l.rev ? -(l.len - shown) : 0);
+            l.trail.setAttribute('opacity', 0.9);
+          });
+          f.landed = false;
+        } else {
+          if (!f.landed && ping) { f.landed = true; ping.classList.remove('is-on'); void ping.getBBox(); ping.classList.add('is-on'); }
+          f.plane.setAttribute('opacity', 0);
+          const after = local - f.dur;                                   // trail fades after landing
+          f.legs.forEach(l => l.trail.setAttribute('opacity', Math.max(0, 0.9 - after * 0.9).toFixed(2)));
+        }
+      });
+      requestAnimationFrame(frame);
+    }
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(entries => {
+        const vis = entries[0].isIntersecting;
+        if (vis && !running) { running = true; requestAnimationFrame(frame); }
+        else if (!vis) running = false;
+      }).observe(root);
+    }
+    requestAnimationFrame(frame);
+  }
+
   /* ── Gallery filter tabs ─────────────────────────────────── */
 
   const galleryFilters = document.querySelector('.gallery-filters');

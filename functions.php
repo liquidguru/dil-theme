@@ -212,6 +212,67 @@ function dil_social_icons(): void {
     <?php
 }
 
+/* ── Helper: animated "fly map" ─────────────────────────────── */
+
+/**
+ * Prints an animated route map: a static base image with planes flying the routes
+ * (animation in main.js, styles in main.css section "Fly map").
+ * Each map is one data file — assets/data/maps/{$slug}.json — built by the scripts
+ * in design-src/maps/ (see the README there). A new map = a new JSON + base image.
+ * Clicking it opens the static map full size in the lightbox.
+ */
+function dil_fly_map( string $slug ): void {
+    $file = DIL_DIR . '/assets/data/maps/' . sanitize_file_name( $slug ) . '.json';
+    if ( ! is_readable( $file ) ) return;
+    $map = json_decode( (string) file_get_contents( $file ), true );
+    if ( ! is_array( $map ) || empty( $map['image'] ) ) return;
+
+    $img  = $map['image'];
+    $jpg  = DIL_URI . '/' . $img['jpg'];
+    $webp = DIL_URI . '/' . $img['webp'];
+    $vb   = implode( ' ', array_map( 'floatval', $map['viewBox'] ) );
+    $id   = 'fm-' . sanitize_key( $slug );
+    $alt  = $map['alt'] ?? '';
+    // Only what the animation needs goes to the browser
+    $config = wp_json_encode( [
+        'routes'  => $map['routes'],
+        'flights' => $map['flights'],
+        'timing'  => $map['timing'] ?? [],
+        'plane'   => '#' . $id . '-plane',
+    ] );
+    ?>
+    <div class="fly-map grid-tile" id="<?php echo esc_attr( $id ); ?>"
+         style="aspect-ratio: <?php echo (int) $img['width']; ?> / <?php echo (int) $img['height']; ?>;"
+         data-full="<?php echo esc_url( $jpg ); ?>" data-alt="<?php echo esc_attr( $alt ); ?>"
+         data-fly-map="<?php echo esc_attr( $config ); ?>"
+         role="button" tabindex="0" aria-label="<?php esc_attr_e( 'Open the map full size', 'dil' ); ?>">
+        <picture>
+            <source srcset="<?php echo esc_url( $webp ); ?>" type="image/webp">
+            <img src="<?php echo esc_url( $jpg ); ?>" width="<?php echo (int) $img['width']; ?>" height="<?php echo (int) $img['height']; ?>"
+                 alt="<?php echo esc_attr( $alt ); ?>" loading="lazy">
+        </picture>
+        <svg viewBox="<?php echo esc_attr( $vb ); ?>" aria-hidden="true" focusable="false">
+            <defs>
+                <!-- Top-down airliner, nose pointing +x -->
+                <g id="<?php echo esc_attr( $id ); ?>-plane">
+                    <path d="M42,0 C42,-3.5 38,-5 33,-5 L8,-5 L-6,-40 L-15,-40 L-7,-5 L-27,-5 L-34,-16 L-40,-16 L-37,-4.5 L-39,0 L-37,4.5 L-40,16 L-34,16 L-27,5 L-7,5 L-15,40 L-6,40 L8,5 L33,5 C38,5 42,3.5 42,0 Z"
+                          fill="#fff" stroke="#6b6b6b" stroke-width="2.2" stroke-linejoin="round"/>
+                    <path d="M30,-2.2 L36,-2.2" stroke="#9aa3a8" stroke-width="2.4" stroke-linecap="round"/>
+                </g>
+            </defs>
+            <?php if ( ! empty( $map['pulse'] ) ) : $p = $map['pulse']; ?>
+                <circle class="fly-map__pulse" cx="<?php echo (float) $p['cx']; ?>" cy="<?php echo (float) $p['cy']; ?>" r="<?php echo (float) $p['r']; ?>"/>
+                <circle class="fly-map__pulse fly-map__pulse--2" cx="<?php echo (float) $p['cx']; ?>" cy="<?php echo (float) $p['cy']; ?>" r="<?php echo (float) $p['r']; ?>"/>
+            <?php endif; ?>
+            <?php if ( ! empty( $map['ping'] ) ) : $g = $map['ping']; ?>
+                <circle class="fly-map__ping" cx="<?php echo (float) $g['cx']; ?>" cy="<?php echo (float) $g['cy']; ?>" r="<?php echo (float) $g['r']; ?>"/>
+            <?php endif; ?>
+            <g class="fly-map__flights"></g>
+        </svg>
+    </div>
+    <?php
+}
+
 /* ── Helper: get page ID by path ─────────────────────────────── */
 
 function dil_page_id( string $path ): int {

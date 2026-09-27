@@ -1316,6 +1316,37 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   .grid-tile__caption { opacity: 1; }
 }
 
+/* ── 14b. FLY MAP ─────────────────────────────────────────────
+   Animated route map (dil_fly_map() in functions.php, animation in main.js).
+   The SVG overlay uses the Affinity artwork's page coordinates via viewBox, so it
+   lines up with the base image at any size. Also a .grid-tile, for the lightbox. */
+
+.fly-map.grid-tile { background: #fff; display: block; width: 100%; }
+.fly-map picture, .fly-map img { display: block; width: 100%; height: 100%; }
+.fly-map.grid-tile img { object-fit: fill; }
+.fly-map.grid-tile:hover img { transform: none; }            /* the grid-tile zoom would misalign the routes */
+.fly-map svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+
+.fly-map__pulse {
+  fill: none; stroke: #E8141B; stroke-width: 6; opacity: 0;
+  transform-box: fill-box; transform-origin: center;
+  animation: fly-map-pulse 3.2s ease-out infinite;
+}
+.fly-map__pulse--2 { animation-delay: 1.6s; }
+@keyframes fly-map-pulse { 0% { transform: scale(1); opacity: .4; } 100% { transform: scale(1.5); opacity: 0; } }
+
+.fly-map__ping { fill: none; stroke: #E8141B; stroke-width: 5; opacity: 0; transform-box: fill-box; transform-origin: center; }
+.fly-map__ping.is-on { animation: fly-map-ping 1.1s ease-out; }
+@keyframes fly-map-ping { 0% { transform: scale(.4); opacity: .9; } 100% { transform: scale(3); opacity: 0; } }
+
+.fly-map__trail { fill: none; stroke: #fff; stroke-width: 5; stroke-linecap: round; stroke-dasharray: 0.1 16; }
+.fly-map__plane { filter: drop-shadow(3px 5px 3px rgba(0, 0, 0, .35)); }
+
+@media (prefers-reduced-motion: reduce) {
+  .fly-map__pulse { animation: none; }
+  .fly-map__flights { display: none; }
+}
+
 /* ── 15. CRITTER COMPASS ────────────────────────────────────── */
 
 .critter-compass {
