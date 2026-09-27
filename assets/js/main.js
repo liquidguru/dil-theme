@@ -48,9 +48,10 @@
      Mouse users get it on hover (CSS); this handles click/tap, outside
      click and Escape, and keeps aria-expanded in step. */
 
-  const navSocial = document.getElementById('nav-social');
-  if (navSocial) {
+  // One in the full header and one in the compact (scrolled) header
+  document.querySelectorAll('.nav-social').forEach(navSocial => {
     const toggle = navSocial.querySelector('.nav-social__toggle');
+    if (!toggle) return;
     const setOpen = open => {
       navSocial.classList.toggle('is-open', open);
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
@@ -61,7 +62,17 @@
       if (e.key === 'Escape' && navSocial.classList.contains('is-open')) { setOpen(false); toggle.focus(); }
     });
     navSocial.addEventListener('focusout', e => { if (!navSocial.contains(e.relatedTarget)) setOpen(false); });
-  }
+    // Close only when the header actually swaps between full and compact (not on every
+    // scroll event — momentum scrolling would shut it the instant it opened)
+    const siteHdr = navSocial.closest('.site-header');
+    if (siteHdr) {
+      let compact = siteHdr.classList.contains('is-scrolled');
+      new MutationObserver(() => {
+        const now = siteHdr.classList.contains('is-scrolled');
+        if (now !== compact) { compact = now; setOpen(false); }
+      }).observe(siteHdr, { attributes: true, attributeFilter: ['class'] });
+    }
+  });
 
   /* ── Mobile nav ──────────────────────────────────────────── */
 

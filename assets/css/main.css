@@ -462,7 +462,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 }
 .nav-social.is-open .nav-social__menu { opacity: 1; pointer-events: auto; transform: translateY(0); }
 
-.nav-social__menu a {
+.nav-social .nav-social__menu a {   /* doubled up so .compact-nav__links a doesn't restyle these */
   display: flex;
   align-items: center;
   gap: 12px;
@@ -473,9 +473,12 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   color: var(--ink);
 }
 
-.nav-social__menu a:hover { color: var(--burgundy); background: rgba(110,31,34,0.04); }
+.nav-social .nav-social__menu a:hover { color: var(--burgundy); background: rgba(110,31,34,0.04); }
 
 .nav-social__menu svg { width: 16px; height: 16px; fill: currentColor; flex: 0 0 16px; }
+
+/* Compact (scrolled) header: match its smaller menu links */
+.nav-social--compact .nav-social__toggle { font-size: 10px; height: 64px; padding-top: 0; }
 
 .nav-partner,
 .compact-nav__partner {
