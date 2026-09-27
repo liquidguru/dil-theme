@@ -44,6 +44,25 @@
     window.addEventListener('scroll', onScroll, { passive: true });
   }
 
+  /* ── Social "Follow" dropdown ────────────────────────────────
+     Mouse users get it on hover (CSS); this handles click/tap, outside
+     click and Escape, and keeps aria-expanded in step. */
+
+  const navSocial = document.getElementById('nav-social');
+  if (navSocial) {
+    const toggle = navSocial.querySelector('.nav-social__toggle');
+    const setOpen = open => {
+      navSocial.classList.toggle('is-open', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    };
+    toggle.addEventListener('click', () => setOpen(!navSocial.classList.contains('is-open')));
+    document.addEventListener('click', e => { if (!navSocial.contains(e.target)) setOpen(false); });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && navSocial.classList.contains('is-open')) { setOpen(false); toggle.focus(); }
+    });
+    navSocial.addEventListener('focusout', e => { if (!navSocial.contains(e.relatedTarget)) setOpen(false); });
+  }
+
   /* ── Mobile nav ──────────────────────────────────────────── */
 
   const hamburger        = document.getElementById('nav-hamburger');
@@ -507,8 +526,7 @@
     const siteHeader = document.getElementById('site-header');
     const fitHero = () => { if (siteHeader && window.scrollY < 10) hero.style.setProperty('--nd-header', siteHeader.offsetHeight + 'px'); };
     fitHero();
-    window.addEventListener('resize', fitHero);
-    SLIDES.forEach(s => { const i = new Image(); i.src = s.src; });
+    window.addEventListener('resize', fitHero);    SLIDES.forEach(s => { const i = new Image(); i.src = s.src; });
     HIDERS.forEach(h => { const i = new Image(); i.src = h.src; });
 
     let idx = 0;

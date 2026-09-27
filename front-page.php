@@ -77,10 +77,6 @@ if ( empty( $hero_slides ) ) {
         <?php esc_html_e( '3 house reefs', 'dil' ); ?> &middot; <?php esc_html_e( '2 dive boats', 'dil' ); ?> &middot; <?php esc_html_e( 'since 2007', 'dil' ); ?><br>
         <?php esc_html_e( 'Spotted', 'dil' ); ?> <b class="nd-count">0</b>
     </div>
-    <div class="nd-hud nd-caption" aria-live="polite">
-        <span class="nd-dot"></span><span class="nd-frame"></span> &nbsp;&middot;&nbsp; <b class="nd-name"></b>
-    </div>
-
     <div class="nd-hint" aria-hidden="true"></div>
     <button class="nd-shutter" type="button" aria-label="<?php esc_attr_e( 'Fire the strobe', 'dil' ); ?>"><span></span></button>
 
@@ -97,6 +93,9 @@ if ( empty( $hero_slides ) ) {
             <a href="<?php echo esc_url( home_url( '/contact/' ) ); ?>" class="btn btn-primary">
                 <?php esc_html_e( 'Reserve a Bungalow', 'dil' ); ?>
             </a>
+        </div>
+        <div class="nd-hud nd-caption" aria-live="polite">
+            <span class="nd-dot"></span><span class="nd-frame"></span> &nbsp;&middot;&nbsp; <b class="nd-name"></b>
         </div>
     </div>
 
