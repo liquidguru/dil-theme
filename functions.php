@@ -13,6 +13,9 @@ define( 'DIL_URI',     get_template_directory_uri() );
 // CARTO basemaps key — referer-restricted to diveintolembeh.com, *.diveintolembeh.com, diveintolembeh.local
 define( 'DIL_CARTO_KEY', 'cb1_3v34_1_23efb3e25995a7ee0f6a005d' );
 
+// Staging-only visitor log (Tools → Staging visitors). Remove this line + the file before launch.
+require_once DIL_DIR . '/inc/staging-visits.php';
+
 /* ── Theme setup ─────────────────────────────────────────────── */
 
 function dil_setup() {
