@@ -30,11 +30,13 @@
   if (header) {
     let ticking = false;
 
+    // The full header scrolls away normally; the fixed compact bar slides in once
+    // the full header has (nearly) left the screen, so the hand-over is seamless
     const onScroll = () => {
       if (!ticking) {
         requestAnimationFrame(() => {
-          header.classList.toggle('is-scrolled', window.scrollY > 80);
-          setHeaderHeight();
+          const compactH = 64;
+          header.classList.toggle('is-scrolled', window.scrollY > Math.max(80, header.offsetHeight - compactH));
           ticking = false;
         });
         ticking = true;
@@ -42,6 +44,7 @@
     };
 
     window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();   // right state if the page loads part-way down (back button, anchors)
   }
 
   /* ── Social "Follow" dropdown ────────────────────────────────
@@ -965,10 +968,13 @@
 
   /* ── Header height CSS var (for sticky subnav) ──────────── */
 
+  // Sticky bars (rates PDF bar, info subnav) pin under the fixed compact bar — the full
+  // header scrolls away, so the compact bar's bottom edge is what they sit against
   function setHeaderHeight() {
-    const h = document.getElementById('site-header');
-    if (h) {
-      document.documentElement.style.setProperty('--header-h', h.offsetHeight + 'px');
+    const c = document.querySelector('.compact-nav');
+    if (c) {
+      const top = parseFloat(getComputedStyle(c).top) || 0;   // WP admin bar offset when logged in
+      document.documentElement.style.setProperty('--header-h', (top + c.offsetHeight) + 'px');
     }
     const sub = document.querySelector('.info-subnav');
     document.documentElement.style.setProperty('--subnav-h', sub ? sub.offsetHeight + 'px' : '0px');

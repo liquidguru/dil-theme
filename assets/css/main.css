@@ -235,9 +235,10 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 
 /* ── 4. HEADER STRIPE ───────────────────────────────────────── */
 
+/* The full header scrolls away with the page (no sticky → no layout jump when it
+   hands over); the compact bar is fixed and slides down in its place (see .compact-nav). */
 .site-header {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 100;
   background: var(--paper);
 }
@@ -541,7 +542,16 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 /* ── 7. COMPACT STICKY NAV ──────────────────────────────────── */
 
 .compact-nav {
-  display: none;
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 101;
+  /* Parked just above the screen; slides down once the full header has scrolled away */
+  transform: translateY(-110%);
+  visibility: hidden;
+  transition: transform 0.35s cubic-bezier(.2, .7, .2, 1), visibility 0s linear 0.35s;
   align-items: center;
   justify-content: space-between;
   padding: 0 var(--outer-pad);
@@ -591,8 +601,17 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 /* Scroll state */
 .site-header .full-nav { transition: height 0.2s, opacity 0.2s; }
 
-.site-header.is-scrolled .full-nav  { display: none; }
-.site-header.is-scrolled .compact-nav { display: flex; }
+.site-header.is-scrolled .compact-nav {
+  transform: none;
+  visibility: visible;
+  transition: transform 0.35s cubic-bezier(.2, .7, .2, 1), visibility 0s;
+}
+.admin-bar .compact-nav { top: 32px; }   /* sit below the WP admin bar when logged in */
+@media screen and (max-width: 782px) { .admin-bar .compact-nav { top: 46px; } }
+@media screen and (max-width: 600px) { .admin-bar .compact-nav { top: 0; } }   /* admin bar isn't fixed here */
+@media (prefers-reduced-motion: reduce) {
+  .compact-nav, .site-header.is-scrolled .compact-nav { transition: none; }
+}
 
 /* Mobile hamburger */
 .nav-hamburger {
