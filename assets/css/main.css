@@ -169,7 +169,6 @@
   text-transform: uppercase;
   border-bottom: 1px solid var(--border);
 }
-.dark-mode-toggle--mobile:hover { color: var(--burgundy); }
 .dark-mode-toggle__label--light { display: none; }
 [data-theme="dark"] .dark-mode-toggle__label--dark  { display: none; }
 [data-theme="dark"] .dark-mode-toggle__label--light { display: inline; }
@@ -182,8 +181,16 @@
   border: 1px solid var(--border-mid); color: var(--ink);
   transition: color 0.2s, border-color 0.2s;
 }
-.social-icons a:hover { color: var(--burgundy); border-color: var(--burgundy); }
 .social-icons svg { width: 18px; height: 18px; fill: currentColor; }
+
+/* Hover colours for mouse users only — on touch a tap leaves :hover stuck on, and
+   burgundy on the dark-mode background is unreadable (1.8:1). Gold in dark mode. */
+@media (hover: hover) {
+  .dark-mode-toggle--mobile:hover { color: var(--burgundy); }
+  .social-icons a:hover { color: var(--burgundy); border-color: var(--burgundy); }
+  [data-theme="dark"] .dark-mode-toggle--mobile:hover { color: var(--gold); }
+  [data-theme="dark"] .social-icons a:hover { color: var(--gold); border-color: var(--gold); }
+}
 
 /* ── 2. RESET ───────────────────────────────────────────────── */
 
