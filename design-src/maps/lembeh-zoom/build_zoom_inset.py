@@ -41,10 +41,15 @@ for x0, y0, x1, y1 in [(606, 212, 664, 248),   # plane at the airport
                        (688, 256, 718, 276)]:  # "2hr"
     mask[y0:y1, x0:x1] = True
 # DIVE INTO LEMBEH sits right on the coast: a solid box pushed land into the strait, so just
-# close up the letter gaps locally — that follows the real shoreline around the wordmark
+# close up the letter gaps locally — and only keep that inside each line of text, or the closing
+# bridges the strait under the H and joins Lembeh island to the mainland
 wx0, wy0, wx1, wy1 = 740, 278, 830, 312
-mask[wy0:wy1, wx0:wx1] = morphology.closing(mask[wy0 - 8:wy1 + 8, wx0 - 8:wx1 + 8],
-                                            morphology.disk(5))[8:-8, 8:-8]
+closed = mask.copy()
+closed[wy0:wy1, wx0:wx1] = morphology.closing(mask[wy0 - 8:wy1 + 8, wx0 - 8:wx1 + 8],
+                                              morphology.disk(5))[8:-8, 8:-8]
+for x0, y0, x1, y1 in [(740, 281, 826, 296),   # DIVE INTO
+                       (749, 296, 818, 309)]:  # LEMBEH (stops at the H — the strait is right there)
+    mask[y0:y1, x0:x1] = closed[y0:y1, x0:x1]
 for t in np.linspace(0, 1, 120):               # the old drive line: Q(626,238)-(724,290.5)-(822,273)
     px = (1 - t) ** 2 * 626 + 2 * (1 - t) * t * 724 + t * t * 822
     py = (1 - t) ** 2 * 238 + 2 * (1 - t) * t * 290.5 + t * t * 273
