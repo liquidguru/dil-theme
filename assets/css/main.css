@@ -1053,7 +1053,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 26px 0;
+  padding: 26px 4px 26px 0;   /* room for the icon's 45° turn, which pokes out ~3px */
   text-align: left;
   background: none;
   border: none;
@@ -2627,6 +2627,8 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   :root { --outer-pad: 22px; }
   .section { padding: 60px var(--outer-pad); }
   .section__heading { font-size: 40px; }
+  /* "DiveintoLembeh" is one unbreakable word (~8.4em wide) — scale it to fit small phones */
+  .section__heading.dil-wordmark { font-size: min(40px, calc((100vw - 2 * var(--outer-pad)) / 9.2)); }
   .hero { height: 90vh; }
   .hero__headline { font-size: 52px; }
   .hero__ctas { flex-direction: column; align-items: flex-start; }
@@ -2639,7 +2641,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   .footer-grid { grid-template-columns: 1fr; }
   .footer-eyeline { font-size: 36px; }
   .critter-compass { padding-left: var(--outer-pad); padding-right: var(--outer-pad); }
-  .critter-compass__svg { width: 300px; height: 300px; }
+  .critter-compass__svg { width: min(300px, calc(100vw - 2 * var(--outer-pad))); height: auto; aspect-ratio: 1; }
   .insurance-cards { grid-template-columns: 1fr; }
   .region-grid { grid-template-columns: 1fr; }
 }
