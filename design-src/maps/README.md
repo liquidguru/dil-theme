@@ -56,6 +56,24 @@ Needs Python with `numpy` and `Pillow` (a throwaway venv is fine).
 - Coordinates everywhere are the Affinity page pixels; the JSON `viewBox` is the web crop
   (`CROP` in `build_web_images.py`) — keep the two in step.
 
+## lembeh-zoom (North Sulawesi close-up) — added 27 Sep 2026
+
+After every 2nd landing the flights pause and a close-up of North Sulawesi pops out of the Lembeh
+circle: the drive line draws from Manado airport to the resort with a small car and "2hr", the dive
+flags pop up and wave, the resort star glows, then it shrinks back and the flights carry on.
+
+- Source: `lembeh-zoom/popout-area-map.jpg` (929×720, from `OneDrive\DIL shared\DIL website\popout area map.jpg`
+  — the old "popout" map on the Info page's Topside section). **The .ai is lost**; `blank map.psd` beside it is
+  only the blank Indonesia map.
+- `lembeh-zoom/build_zoom_inset.py` traces the burgundy land from the JPG (fills text/plane/line holes, keeps
+  Lake Tondano) and redraws labels, stars, flags, wordmark and drive route as vectors
+  → `assets/images/map/lembeh-zoom.svg` (all coords in the JPG's pixels, inset region x 336–929, y 0–491).
+  Edit label text/positions, flag spots (`FLAGS`) or the drive route (`DRIVE`) there and re-run.
+- Wiring: the `zoom` block in `build_map_data.py` (`every` = zoom after every Nth landing, `hold` = seconds open,
+  `focusY` = where the cone meets the card, `gap` = space between card and circle).
+- Layout: wide maps put the card as large as fits left of the Lembeh circle with a cone to it; under 560px
+  wide it fills the map (labels are tiny on phones — same as the base map's labels).
+
 ## Raja Ampat version (to do)
 
 Same artwork, different selection: keep 408 (CGK→SOQ) and 409 (MDC→SOQ) and the Raja Ampat circle (723–725,

@@ -791,7 +791,75 @@
       }));
     };
     measure();
-    if ('ResizeObserver' in window) new ResizeObserver(measure).observe(root);
+    if ('ResizeObserver' in window) new ResizeObserver(() => { measure(); layoutZoom(); }).observe(root);
+
+    // ── Close-up zoom (optional): pops out of the destination circle after landings ──
+    const Z = cfg.zoom, zg = root.querySelector('.fly-map__zoom');
+    let zooming = false, landings = 0;
+    const zoomTimers = [];
+    const zParts = zg ? {
+      cone: zg.querySelector('.fly-map__cone'), card: zg.querySelector('.fly-map__card'),
+      inset: zg.querySelector('.fly-map__inset'), drive: zg.querySelector('.fz-drive'), car: zg.querySelector('.fz-car'),
+      flags: [...zg.querySelectorAll('.fz-flag')]
+    } : null;
+    if (zParts) zParts.flags.forEach((f, i) => { f.style.transitionDelay = `${i * 0.22}s`; });
+
+    // Where the close-up goes. Wide: as big as fits to the LEFT of the destination circle, with a
+    // cone from the circle to the card's edge beside Lembeh. Narrow (phones): centred, filling the map.
+    function layoutZoom() {
+      if (!zParts || !Z) return;
+      const vb = svg.viewBox.baseVal, [, , lw, lh] = Z.local, c = Z.from;
+      const narrow = root.getBoundingClientRect().width < 560;
+      const margin = vb.width * 0.012, maxH = vb.height * 0.94;
+      let s, x;
+      if (narrow) {
+        s = Math.min(maxH / lh, (vb.width * 0.96) / lw);
+        x = vb.x + (vb.width - lw * s) / 2;
+      } else {
+        x = vb.x + margin;
+        s = Math.min(maxH / lh, (c.cx - c.r - (Z.gap || 90) - x) / lw);
+      }
+      const w = lw * s, h = lh * s, y = vb.y + (vb.height - h) / 2;
+      Object.entries({ x, y, width: w, height: h }).forEach(([k, v]) => zParts.inset.setAttribute(k, v));
+      const pad = 14 * s;
+      Object.entries({ x: x - pad, y: y - pad, width: w + 2 * pad, height: h + 2 * pad })
+        .forEach(([k, v]) => zParts.card.setAttribute(k, v));
+      const edge = x + w + pad, [f0, f1] = Z.focusY || [0, lh];
+      zParts.cone.setAttribute('points', narrow ? '0,0' : [
+        [edge, y + f0 * s], [c.cx - c.r * 0.5, c.cy - c.r * 0.866],
+        [c.cx - c.r * 0.5, c.cy + c.r * 0.866], [edge, y + f1 * s]
+      ].map(p => p.join(',')).join(' '));
+    }
+    layoutZoom();
+
+    function driveCar(ms) {
+      const len = zParts.drive.getTotalLength(), t0 = performance.now();
+      zParts.car.setAttribute('opacity', 1);
+      (function step(now) {
+        const p = Math.min(1, (now - t0) / ms), e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+        const a = zParts.drive.getPointAtLength(e * len), b = zParts.drive.getPointAtLength(Math.min(len, e * len + 1));
+        const ang = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
+        zParts.car.setAttribute('transform', `translate(${a.x},${a.y}) rotate(${ang})`);
+        if (p < 1 && zooming) requestAnimationFrame(step);
+      })(t0);
+    }
+
+    function openZoom() {
+      if (!zParts || zooming) return;
+      zooming = true; layoutZoom();
+      root.classList.add('is-zooming'); zg.classList.add('is-open');
+      const at = (ms, fn) => zoomTimers.push(setTimeout(fn, ms));
+      at(900, () => { zg.classList.add('is-driving'); driveCar(2200); });
+      at(1300, () => zg.classList.add('is-flags'));
+      at(3100, () => zg.classList.add('is-arrived'));
+      at(900 + (Z.hold || 6.5) * 1000, closeZoom);
+    }
+    function closeZoom() {
+      zoomTimers.splice(0).forEach(clearTimeout);
+      zg.classList.remove('is-flags', 'is-arrived', 'is-driving', 'is-open');
+      zParts.car.setAttribute('opacity', 0);
+      zoomTimers.push(setTimeout(() => { root.classList.remove('is-zooming'); zooming = false; }, 900));
+    }
     const ease = t => (t < .5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
 
     function pointAt(f, dist) {
@@ -810,7 +878,8 @@
     let running = true, elapsed = 0, last = null;
     function frame(now) {
       if (!running) { last = null; return; }
-      if (last !== null) elapsed += Math.min(0.1, (now - last) / 1000);   // no jump after a pause
+      // flights hold still while the close-up is open; no jump after an off-screen pause
+      if (last !== null && !zooming) elapsed += Math.min(0.1, (now - last) / 1000);
       last = now;
       flights.forEach(f => {
         let local = elapsed - f.start;
@@ -830,7 +899,12 @@
           });
           f.landed = false;
         } else {
-          if (!f.landed && ping) { f.landed = true; ping.classList.remove('is-on'); void ping.getBBox(); ping.classList.add('is-on'); }
+          if (!f.landed) {
+            f.landed = true;
+            if (ping) { ping.classList.remove('is-on'); void ping.getBBox(); ping.classList.add('is-on'); }
+            landings++;
+            if (Z && landings % (Z.every || 2) === 0) zoomTimers.push(setTimeout(openZoom, 600));
+          }
           f.plane.setAttribute('opacity', 0);
           const after = local - f.dur;                                   // trail fades after landing
           f.legs.forEach(l => l.trail.setAttribute('opacity', Math.max(0, 0.9 - after * 0.9).toFixed(2)));

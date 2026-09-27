@@ -234,11 +234,21 @@ function dil_fly_map( string $slug ): void {
     $id   = 'fm-' . sanitize_key( $slug );
     $alt  = $map['alt'] ?? '';
     // Only what the animation needs goes to the browser
+    // Optional close-up that pops out after landings (its own SVG file, inlined below)
+    $zoom = $map['zoom'] ?? null;
+    $zoom_svg = '';
+    if ( $zoom && is_readable( DIL_DIR . '/' . $zoom['svg'] ) ) {
+        // keep the inner markup only; the outer <svg> is rebuilt with our own viewBox
+        $zoom_svg = preg_replace( '#^.*?<svg[^>]*>|</svg>\s*$#s', '', (string) file_get_contents( DIL_DIR . '/' . $zoom['svg'] ) );
+    } else {
+        $zoom = null;
+    }
     $config = wp_json_encode( [
         'routes'  => $map['routes'],
         'flights' => $map['flights'],
         'timing'  => $map['timing'] ?? [],
         'plane'   => '#' . $id . '-plane',
+        'zoom'    => $zoom ? array_diff_key( $zoom, [ 'svg' => 1 ] ) : null,
     ] );
     ?>
     <div class="fly-map grid-tile" id="<?php echo esc_attr( $id ); ?>"
@@ -268,6 +278,16 @@ function dil_fly_map( string $slug ): void {
                 <circle class="fly-map__ping" cx="<?php echo (float) $g['cx']; ?>" cy="<?php echo (float) $g['cy']; ?>" r="<?php echo (float) $g['r']; ?>"/>
             <?php endif; ?>
             <g class="fly-map__flights"></g>
+            <?php if ( $zoom ) : $l = $zoom['local']; ?>
+                <!-- Close-up: cone + card + inset; geometry set by main.js (wide vs narrow screens) -->
+                <g class="fly-map__zoom" style="transform-origin: <?php echo (float) $zoom['from']['cx']; ?>px <?php echo (float) $zoom['from']['cy']; ?>px;">
+                    <polygon class="fly-map__cone" points="0,0"/>
+                    <rect class="fly-map__card" rx="22"/>
+                    <svg class="fly-map__inset" viewBox="<?php echo esc_attr( implode( ' ', array_map( 'floatval', $l ) ) ); ?>" preserveAspectRatio="xMidYMid meet" overflow="visible">
+                        <?php echo $zoom_svg; // phpcs:ignore -- our own static SVG file ?>
+                    </svg>
+                </g>
+            <?php endif; ?>
         </svg>
     </div>
     <?php
