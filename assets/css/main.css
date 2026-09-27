@@ -144,11 +144,46 @@
   transition: opacity 0.2s, transform 0.3s;
   flex-shrink: 0;
 }
-.dark-mode-toggle:hover { opacity: 1; transform: rotate(15deg); }
+/* Little tilt on hover — mouse users only (on touch, a tap leaves :hover stuck on,
+   so the icon stayed tilted), and never on the full-width menu version */
+@media (hover: hover) {
+  .dark-mode-toggle:not(.dark-mode-toggle--mobile):hover { opacity: 1; transform: rotate(15deg); }
+}
 .dark-mode-toggle .icon-sun  { display: none; }
 .dark-mode-toggle .icon-moon { display: block; }
 [data-theme="dark"] .dark-mode-toggle .icon-sun  { display: block; }
 [data-theme="dark"] .dark-mode-toggle .icon-moon { display: none; }
+
+/* Mobile menu version: a full-width row with a label, like the menu items above it */
+.dark-mode-toggle--mobile {
+  width: 100%;
+  height: auto;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 20px 0;
+  opacity: 1;
+  color: var(--ink);
+  font-family: var(--font-heading);
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+.dark-mode-toggle--mobile:hover { color: var(--burgundy); }
+.dark-mode-toggle__label--light { display: none; }
+[data-theme="dark"] .dark-mode-toggle__label--dark  { display: none; }
+[data-theme="dark"] .dark-mode-toggle__label--light { display: inline; }
+
+/* Round social icon links (mobile menu) */
+.social-icons { display: flex; gap: 12px; margin-top: 24px; }
+.social-icons a {
+  width: 44px; height: 44px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border-mid); color: var(--ink);
+  transition: color 0.2s, border-color 0.2s;
+}
+.social-icons a:hover { color: var(--burgundy); border-color: var(--burgundy); }
+.social-icons svg { width: 18px; height: 18px; fill: currentColor; }
 
 /* ── 2. RESET ───────────────────────────────────────────────── */
 
@@ -208,7 +243,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 
 .btn-primary {
   background: var(--burgundy);
-  color: var(--cream);
+  color: #F5ECDC;   /* fixed light text — var(--cream) turns near-black in dark mode */
   border: 1px solid var(--burgundy);
 }
 .btn-primary:hover { background: var(--burgundy-d); border-color: var(--burgundy-d); }
@@ -225,7 +260,8 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   color: var(--burgundy);
   border: 1px solid var(--burgundy);
 }
-.btn-outline-dark:hover { background: var(--burgundy); color: var(--cream); }
+.btn-outline-dark:hover { background: var(--burgundy); color: #F5ECDC; }
+[data-theme="dark"] .btn-outline-dark { color: var(--ink); border-color: var(--burgundy-l); }   /* burgundy text vanished on near-black */
 
 .section-rule {
   border: none;
