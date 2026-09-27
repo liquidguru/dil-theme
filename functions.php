@@ -293,6 +293,16 @@ function dil_fly_map( string $slug ): void {
     <?php
 }
 
+/**
+ * The North Sulawesi close-up (the fly map's zoom inset) as a still map — drive drawn, flags up.
+ * Inlined rather than <img> so the wordmark gets the theme's logo font. Styles: .area-map in main.css.
+ */
+function dil_area_map(): void {
+    $svg = (string) file_get_contents( DIL_DIR . '/assets/images/map/lembeh-zoom.svg' );
+    $svg = preg_replace( '#^.*?<svg#s', '<svg role="img" aria-label="' . esc_attr__( 'Map of North Sulawesi: a 2-hour drive from Manado airport to Dive Into Lembeh, with dive sites around Bunaken, Bangka and the Lembeh Strait', 'dil' ) . '"', $svg, 1 );
+    echo '<div class="area-map">' . $svg . '</div>'; // phpcs:ignore -- theme's own static SVG
+}
+
 /* ── Helper: get page ID by path ─────────────────────────────── */
 
 function dil_page_id( string $path ): int {

@@ -212,15 +212,7 @@ $cdn = 'https://diveintolembeh.com/wp-content/uploads/';
                 <?php endif; endforeach; ?>
             </div>
 
-            <?php
-            $area_map = get_theme_mod( 'dil_img_area_map', $cdn . '2018/05/popout-area-map.jpg' );
-            if ( $area_map ) :
-            ?>
-                <img src="<?php echo esc_url( $area_map ); ?>"
-                     alt="<?php esc_attr_e( 'North Sulawesi area map', 'dil' ); ?>"
-                     loading="lazy"
-                     style="width:100%;margin-bottom:28px;">
-            <?php endif; ?>
+            <?php dil_area_map(); ?>
 
             <?php echo apply_filters( 'the_content', get_theme_mod( 'dil_text_topside_intro', // phpcs:ignore
                 __( '<p>There is plenty to see and do when you surface. North Sulawesi is a fascinating region with a rich history — Portuguese, Spanish, Dutch and Japanese colonial periods all left their mark before Indonesian independence in 1949. The local Minahasan culture, cuisine, and highland scenery are worth at least one rest day.</p>', 'dil' )

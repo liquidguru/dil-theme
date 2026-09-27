@@ -742,6 +742,49 @@
 
   document.querySelectorAll('.fly-map[data-fly-map]').forEach(initFlyMap);
 
+  /* ── Area map (Info → Topside, dil_area_map()) ───────────────
+     The fly map's close-up as a still map: plays the drive (car + "2hr"),
+     flags and resort glow each time it scrolls into view. Final state for reduced motion. */
+  document.querySelectorAll('.area-map').forEach(map => {
+    const drive = map.querySelector('.fz-drive'), car = map.querySelector('.fz-car');
+    if (!drive || !car) return;
+    map.querySelectorAll('.fz-flag').forEach((f, i) => { f.style.transitionDelay = `${i * 0.22}s`; });
+    const timers = [];
+    let raf = 0;
+    function placeCar(e) {
+      const len = drive.getTotalLength(), a = drive.getPointAtLength(e * len),
+        b = drive.getPointAtLength(Math.min(len, e * len + 1)), a2 = e >= 1 ? drive.getPointAtLength(len - 1) : a;
+      const ang = e >= 1 ? Math.atan2(a.y - a2.y, a.x - a2.x) : Math.atan2(b.y - a.y, b.x - a.x);
+      car.setAttribute('transform', `translate(${a.x},${a.y}) rotate(${ang * 180 / Math.PI})`);
+    }
+    function play() {
+      reset();
+      car.setAttribute('opacity', 1); placeCar(0);
+      const at = (ms, fn) => timers.push(setTimeout(fn, ms));
+      at(300, () => {
+        map.classList.add('is-driving');
+        const t0 = performance.now();
+        (function step(now) {
+          const p = Math.min(1, (now - t0) / 2200);
+          placeCar(p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2);
+          if (p < 1) raf = requestAnimationFrame(step);
+        })(t0);
+      });
+      at(700, () => map.classList.add('is-flags'));
+      at(2500, () => map.classList.add('is-arrived'));
+    }
+    function reset() {
+      timers.splice(0).forEach(clearTimeout); cancelAnimationFrame(raf);
+      map.classList.remove('is-driving', 'is-flags', 'is-arrived');
+      car.setAttribute('opacity', 0);
+    }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) {
+      map.classList.add('is-driving', 'is-flags'); car.setAttribute('opacity', 1); placeCar(1);
+      return;
+    }
+    new IntersectionObserver(([en]) => { if (en.isIntersecting) play(); else reset(); }, { threshold: 0.45 }).observe(map);
+  });
+
   function initFlyMap(root) {
     // Keyboard: Enter/Space opens the lightbox like a click (the map is a role=button div)
     root.addEventListener('keydown', e => {
