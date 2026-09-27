@@ -50,7 +50,7 @@ $cdn = 'https://diveintolembeh.com/wp-content/uploads/';
             </div>
 
             <?php echo apply_filters( 'the_content', get_theme_mod( 'dil_text_gethere_intro', // phpcs:ignore
-                __( '<p>Manado airport — Sam Ratulangi International (MDC) — is the international gateway to North Sulawesi and is approximately a 60-minute drive from the resort. Once in Bitung you board a 15-minute speedboat to Kasawari Bay. We organise all transfers.</p>', 'dil' )
+                __( '<p>Manado airport — Sam Ratulangi International (MDC) — is the international gateway to North Sulawesi and is approximately a 2-hour drive from the resort. Once in Bitung you board a 15-minute speedboat to Kasawari Bay. We organise all transfers.</p>', 'dil' )
             ) ); ?>
 
             <div class="info-flights" style="margin:24px 0 28px;">
