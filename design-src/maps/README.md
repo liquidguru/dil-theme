@@ -59,7 +59,7 @@ Needs Python with `numpy` and `Pillow` (a throwaway venv is fine).
 ## lembeh-zoom (North Sulawesi close-up) — added 27 Sep 2026
 
 After every 2nd landing the flights pause and a close-up of North Sulawesi pops out of the Lembeh
-circle: the drive line draws from Manado airport to the resort with a small car and "2hr", the dive
+circle: the drive line draws from Manado airport to the resort with a small car and "1hr" (the toll road; the 2018 source map said 2hr), the dive
 flags pop up and wave, the resort star glows, then it shrinks back and the flights carry on.
 
 - Source: `lembeh-zoom/popout-area-map.jpg` (929×720, from `OneDrive\DIL shared\DIL website\popout area map.jpg`

@@ -299,7 +299,7 @@ function dil_fly_map( string $slug ): void {
  */
 function dil_area_map(): void {
     $svg = (string) file_get_contents( DIL_DIR . '/assets/images/map/lembeh-zoom.svg' );
-    $svg = preg_replace( '#^.*?<svg#s', '<svg role="img" aria-label="' . esc_attr__( 'Map of North Sulawesi: a 2-hour drive from Manado airport to Dive Into Lembeh, with dive sites around Bunaken, Bangka and the Lembeh Strait', 'dil' ) . '"', $svg, 1 );
+    $svg = preg_replace( '#^.*?<svg#s', '<svg role="img" aria-label="' . esc_attr__( 'Map of North Sulawesi: a 1-hour drive from Manado airport to Dive Into Lembeh, with dive sites around Bunaken, Bangka and the Lembeh Strait', 'dil' ) . '"', $svg, 1 );
     echo '<div class="area-map">' . $svg . '</div>'; // phpcs:ignore -- theme's own static SVG
 }
 

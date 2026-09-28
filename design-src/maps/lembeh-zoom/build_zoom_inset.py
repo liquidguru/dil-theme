@@ -143,7 +143,7 @@ svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="{X0} 0 {X1 - X0} {Y1}
 {text(765, 237, 'Tangkoko', 11)}
 {text(765, 251, 'National', 11)}
 {text(765, 265, 'Park', 11)}
-{text(700, 258, '2hr', 15, cls='fz-label fz-2hr')}
+{text(700, 258, '1hr', 15, cls='fz-label fz-2hr')}
 <g class="fz-wordmark"><text x="782.5" y="292" text-anchor="middle" font-size="12.5">DIVE INTO</text><text x="782.5" y="305.5" text-anchor="middle" font-size="12.5">LEMBEH</text></g>
 {''.join(f'<g transform="translate({x},{y})"><g class="fz-flag">{FLAG}</g></g>' for x, y in FLAGS)}
 </svg>

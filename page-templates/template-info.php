@@ -50,7 +50,7 @@ $cdn = 'https://diveintolembeh.com/wp-content/uploads/';
             </div>
 
             <?php echo apply_filters( 'the_content', get_theme_mod( 'dil_text_gethere_intro', // phpcs:ignore
-                __( '<p>Manado airport — Sam Ratulangi International (MDC) — is the international gateway to North Sulawesi and is approximately a 2-hour drive from the resort. Once in Bitung you board a 15-minute speedboat to Kasawari Bay. We organise all transfers.</p>', 'dil' )
+                __( '<p>Manado airport — Sam Ratulangi International (MDC) — is the international gateway to North Sulawesi and is approximately a 1-hour drive from the resort.</p><p>We organise all transfers, track your flights and are in direct communication with our drivers.</p>', 'dil' )
             ) ); ?>
 
             <div class="info-flights" style="margin:24px 0 28px;">
@@ -155,7 +155,7 @@ $cdn = 'https://diveintolembeh.com/wp-content/uploads/';
                     ],
                     [
                         'q' => __( 'Best time to visit?', 'dil' ),
-                        'a' => __( 'Diving is excellent year-round in Lembeh. The dry season (May–October) generally offers calmer conditions and better visibility. The wet season (November–April) brings slightly rougher seas but equal or better critter diversity, and lower accommodation rates.', 'dil' ),
+                        'a' => __( 'Diving is excellent year-round in Lembeh.', 'dil' ),
                     ],
                     [
                         'q' => __( 'What is the climate like?', 'dil' ),

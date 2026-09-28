@@ -21,7 +21,7 @@ data = {
     'viewBox': [174, 212, 3406, 1959],          # page-pixel crop used by build_web_images.py
     'alt': 'Map of Indonesia showing flights to Manado, the gateway to Lembeh: from Singapore '
            '(SIN-MDC) or Jakarta (CGK-MDC), about 3.5 hours, or from Bali via Makassar. A close-up of '
-           'North Sulawesi shows the 2-hour drive from Manado airport to Dive Into Lembeh, with dive sites '
+           'North Sulawesi shows the 1-hour drive from Manado airport to Dive Into Lembeh, with dive sites '
            'at Bunaken, Bangka and Lembeh.',
     # Centre-lines of the red route swooshes, traced from the Affinity artwork (page pixels)
     'routes': {name: r['d'] for name, r in routes.items()},

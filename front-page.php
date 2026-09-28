@@ -182,7 +182,7 @@ if ( empty( $hero_slides ) ) {
                 <?php esc_html_e( 'The Lembeh Strait is the muck-diving capital of the world — a narrow stretch of black volcanic sand between the Indonesian mainland and Lembeh Island where critters hide in plain sight.', 'dil' ); ?>
             </p>
             <p style="margin-top:20px;">
-                <?php esc_html_e( 'Dive Into Lembeh sits right on its western shore. Our house reefs — Hairball and Aw Shucks — are among the most celebrated muck sites on earth. Three dives a day, unhurried, guided by our experienced local divemasters who know every crevice.', 'dil' ); ?>
+                <?php esc_html_e( 'Dive Into Lembeh sits on the northern end of the strait out of sight of Bitung harbor in the south, offering unspoiled views of Lembeh Island. Three dives a day, unhurried, guided by our experienced local divemasters who know every crevice.', 'dil' ); ?>
             </p>
             <?php
         }
@@ -254,7 +254,14 @@ $explore_style = $explore_img
                     <span class="accordion__icon" aria-hidden="true">+</span>
                 </button>
                 <div class="accordion__body">
-                    <p><?php esc_html_e( 'Fly into Manado (Sam Ratulangi, MDC) via Jakarta or Singapore. From there it\'s an hour\'s drive to Bitung Harbour and a 15-minute speedboat to the resort. We arrange all transfers included in your package.', 'dil' ); ?></p>
+                    <p><?php esc_html_e( 'Manado airport is situated an approximate 60-minute drive from Dive into Lembeh via toll road.', 'dil' ); ?></p>
+                    <p><?php esc_html_e( 'MDC airport is reachable by direct flight from Singapore, Jakarta, Bali, Makassar and Sorong (the gateway to Raja Ampat).', 'dil' ); ?></p>
+                    <p><?php printf(
+                        /* translators: %s: Singapore Airlines website link */
+                        esc_html__( 'Our recommended route is to use Singapore Airlines (%s) and its regional carrier Scoot, which flies 6 times a week to MDC and back to Singapore.', 'dil' ),
+                        '<a href="https://www.singaporeair.com" target="_blank" rel="noopener">www.singaporeair.com</a>'
+                    ); ?></p>
+                    <p><?php esc_html_e( 'Flights arriving from Europe and the USA arrive early enough in Singapore to allow you to connect with the Scoot flight.', 'dil' ); ?></p>
                 </div>
             </div>
 
@@ -265,7 +272,7 @@ $explore_style = $explore_img
                     <span class="accordion__icon" aria-hidden="true">+</span>
                 </button>
                 <div class="accordion__body">
-                    <p><?php esc_html_e( 'Diving is year-round. The dry season (May – October) brings calmer seas and best visibility. The wet season (November – April) can be choppy but the muck life is equally spectacular — and rates are lower.', 'dil' ); ?></p>
+                    <p><?php esc_html_e( 'Diving is year-round.', 'dil' ); ?></p>
                 </div>
             </div>
 
@@ -276,7 +283,7 @@ $explore_style = $explore_img
                     <span class="accordion__icon" aria-hidden="true">+</span>
                 </button>
                 <div class="accordion__body">
-                    <p><?php esc_html_e( 'Packages include accommodation, three dives per day, tanks, weights, boat, divemaster guide, and all meals. Minimum stay is four nights. Equipment rental, nitrox, and night dives are available as add-ons.', 'dil' ); ?></p>
+                    <p><?php esc_html_e( 'Packages include accommodation, all meals as described in our rates sheet, two or three dives by speedboat per day, 12 L tanks, weights, divemaster guide. Minimum stay is 3 nights. Equipment rental, nitrox, and night dives are available as add-ons.', 'dil' ); ?></p>
                 </div>
             </div>
 
@@ -287,7 +294,7 @@ $explore_style = $explore_img
                     <span class="accordion__icon" aria-hidden="true">+</span>
                 </button>
                 <div class="accordion__body">
-                    <p><?php esc_html_e( 'Our dedicated camera room has individual rinse tanks, drying racks, laptop stations with colour-calibrated displays, and high-speed charging. We can arrange macro-photography workshops with visiting instructors on request.', 'dil' ); ?></p>
+                    <p><?php esc_html_e( 'Our dedicated camera room has individual work stations with good lighting, rinse tanks, charging stations and airguns for drying cameras. We can arrange macro-photography workshops with our in-house photo-pro on request.', 'dil' ); ?></p>
                 </div>
             </div>
 
@@ -310,7 +317,7 @@ $explore_style = $explore_img
     </h2>
 
     <p class="section__body" style="margin:24px auto 48px; max-width:660px;">
-        <?php esc_html_e( 'Ten bungalows on the water\'s edge, two legendary muck sites at your doorstep, and a team that\'s been diving this strait since 2007.', 'dil' ); ?>
+        <?php esc_html_e( '9 bungalows, 1 bungalow suite and 3 longhouse rooms on flat property, two legendary housereef sites at your doorstep, and a team trained to look after each and every one of our guests\' needs.', 'dil' ); ?>
     </p>
 
     <div class="plate-cards">

@@ -743,7 +743,7 @@
   document.querySelectorAll('.fly-map[data-fly-map]').forEach(initFlyMap);
 
   /* ── Area map (Info → Topside, dil_area_map()) ───────────────
-     The fly map's close-up as a still map: plays the drive (car + "2hr"),
+     The fly map's close-up as a still map: plays the drive (car + "1hr"),
      flags and resort glow each time it scrolls into view. Final state for reduced motion. */
   document.querySelectorAll('.area-map').forEach(map => {
     const drive = map.querySelector('.fz-drive'), car = map.querySelector('.fz-car');
