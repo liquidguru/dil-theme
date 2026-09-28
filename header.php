@@ -29,7 +29,7 @@
         <span class="header-utility__right">
             <span><?php esc_html_e( 'Open now', 'dil' ); ?></span>
             &nbsp;·&nbsp;
-            <?php esc_html_e( 'Booking 2026 season', 'dil' ); ?>
+            <?php esc_html_e( 'Booking 2026 / 2027 seasons', 'dil' ); ?>
         </span>
     </div>
 

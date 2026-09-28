@@ -3119,15 +3119,19 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   min-width: 0;
 }
 
-@media (min-width: 960px) {
+/* Sized by the space the calculator actually has (container queries), not the screen: beside the
+   sidebar, a 960px+ screen still leaves the main column narrow, and a screen-width rule put the
+   total panel alongside and squeezed the options into ~200px (toggles overlapping). */
+#calculator { container: calc / inline-size; }
+@container calc (min-width: 720px) {
   .rates-calc {
     display: grid;
-    grid-template-columns: 1fr 300px;
+    grid-template-columns: 1fr 280px;
     align-items: start;
   }
 }
 
-.rates-calc__body { display: flex; flex-direction: column; gap: 24px; min-width: 0; }
+.rates-calc__body { display: flex; flex-direction: column; gap: 24px; min-width: 0; container: calcbody / inline-size; }
 
 .rates-calc__group {
   border: none;
@@ -3188,17 +3192,20 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 }
 
 /* Mobile-first: each field full width, side-by-side only on wider screens */
+/* Duration · Dives per day · Guests: stacked, then duration on top with the two toggles side by
+   side, then all three in a row once there's room */
 .rates-calc__row {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 16px;
 }
-
-@media (min-width: 560px) {
-  .rates-calc__row {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-  }
+@container calcbody (min-width: 300px) {
+  .rates-calc__row { grid-template-columns: 1fr 1fr; }
+  .rates-calc__row > :first-child { grid-column: 1 / -1; }
+}
+@container calcbody (min-width: 560px) {
+  .rates-calc__row { grid-template-columns: 1.4fr 1fr 1fr; }
+  .rates-calc__row > :first-child { grid-column: auto; }
 }
 
 .rates-calc__select {
@@ -3242,6 +3249,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  white-space: nowrap;
   color: var(--ink-soft);
   transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
@@ -3388,8 +3396,11 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   font-style: italic;
 }
 
+@container calc (max-width: 719px) {
+  .rates-calc__total { position: static; }   /* only sticky when it sits beside the options */
+}
+
 @media (max-width: 959px) {
-  .rates-calc__total { position: static; }
   .rates-pdf-bar { padding: 10px 20px; }
   /* Packages table: scroll horizontally rather than break layout */
   .rates-table-wrap { overflow-x: auto; width: 100%; }

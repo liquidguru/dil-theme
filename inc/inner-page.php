@@ -97,7 +97,7 @@ function dil_sidebar(): void {
         <!-- 3. Rates CTA -->
         <div class="sidebar-widget widget-rates">
             <div class="sidebar-widget__head">
-                <span class="sidebar-widget__label"><?php esc_html_e( '2026 Season', 'dil' ); ?></span>
+                <span class="sidebar-widget__label"><?php esc_html_e( '2026 / 2027 Seasons', 'dil' ); ?></span>
             </div>
             <div class="widget-rates__body">
                 <div class="widget-rates__heading">
