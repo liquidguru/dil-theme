@@ -13,34 +13,67 @@ if ( ! $banner_img && has_post_thumbnail() ) {
     $banner_img = get_the_post_thumbnail_url( null, 'dil-banner' );
 }
 
-// Pricing data — keyed by dives/day then room then nights index (3–14 nights = index 0–11)
-$price_data = [
-    '2' => [
-        'longhouse' => [470,660,850,1040,1230,1420,1610,1800,1990,2180,2370,2560],
-        'garden'    => [605,840,1075,1310,1545,1780,2015,2250,2485,2720,2955,3190],
-        'pool'      => [620,860,1100,1340,1580,1820,2060,2300,2540,2780,3020,3260],
-        'suite'     => [695,960,1225,1490,1755,2020,2285,2550,2815,3080,3345,3610],
+// ── Seasons ──────────────────────────────────────────────────────────────
+// Each season is just its per-person-per-night room rates (= the non-diver rate), the per-dive
+// price and the single supplements. Package price = nights × room + (nights − 1) × dives/day × dive
+// — that reproduces every figure on the 2026 rate sheet exactly. New season = add an entry.
+$seasons = [
+    '2026' => [
+        'valid'  => __( 'Valid 01 January 2026 – 01 January 2027', 'dil' ),
+        'rooms'  => [ 'longhouse' => 90, 'garden' => 135, 'pool' => 140, 'suite' => 165 ],
+        'dive'   => 50,
+        'single' => [ 'longhouse' => 45, 'garden' => 60, 'pool' => 60, 'suite' => 60 ],
+        'pdf'    => 'https://diveintolembeh.com/wp-content/uploads/2025/06/Dive-into-Lembeh-2026-rates.pdf',
     ],
-    '3' => [
-        'longhouse' => [570,810,1050,1290,1530,1770,2010,2250,2490,2730,2970,3210],
-        'garden'    => [705,990,1275,1560,1845,2130,2415,2700,2985,3270,3555,3840],
-        'pool'      => [720,1010,1300,1590,1880,2170,2460,2750,3040,3330,3620,3910],
-        'suite'     => [795,1110,1425,1740,2055,2370,2685,3000,3315,3630,3945,4260],
+    // 2027 room rates from the owners (28 Sep 2026). Single supplements and the PDF not yet
+    // confirmed — supplements carried over from 2026 until they are.
+    '2027' => [
+        'valid'  => __( 'Valid 01 January 2027 – 01 January 2028', 'dil' ),
+        'rooms'  => [ 'longhouse' => 90, 'garden' => 140, 'pool' => 150, 'suite' => 165 ],
+        'dive'   => 50,
+        'single' => [ 'longhouse' => 45, 'garden' => 60, 'pool' => 60, 'suite' => 60 ],
+        'pdf'    => '',
     ],
 ];
+$default_season = 2026;   // int: PHP turns numeric array keys like '2026' into ints
+
+// Package prices: [season][dives/day][room] => per-person totals for 3–14 nights (index 0–11)
+$calc_data = [];
+foreach ( $seasons as $year => $s ) {
+    foreach ( [ 2, 3 ] as $dpd ) {
+        foreach ( $s['rooms'] as $room => $rate ) {
+            foreach ( range( 3, 14 ) as $n ) {
+                $calc_data[ $year ]['prices'][ $dpd ][ $room ][] = $n * $rate + ( $n - 1 ) * $dpd * $s['dive'];
+            }
+        }
+    }
+    $calc_data[ $year ]['single']   = $s['single'];
+    $calc_data[ $year ]['nondiver'] = $s['rooms'];
+}
+$usd = static fn( int $v ): string => '$' . number_format( $v );
 ?>
 
 <?php dil_page_banner( [
-    'kicker'   => __( '2026 Published Rates', 'dil' ),
+    'kicker'   => __( 'Published Rates', 'dil' ),
     'title'    => __( 'Rates &amp; Packages', 'dil' ),
-    'subtitle' => __( 'Valid 01 January 2026 – 01 January 2027 · All prices in USD incl. 21% tax', 'dil' ),
+    'subtitle' => __( 'All prices in USD incl. 21% tax', 'dil' ),
     'bg_url'   => $banner_img,
 ] ); ?>
 
-<!-- Sticky PDF bar -->
+<!-- Sticky bar: season switch + that season's PDF (main.js "Rates season") -->
 <div class="rates-pdf-bar" id="rates-pdf-bar">
-    <span class="rates-pdf-bar__label"><?php esc_html_e( '2026 Rates', 'dil' ); ?></span>
-    <a href="https://diveintolembeh.com/wp-content/uploads/2025/06/Dive-into-Lembeh-2026-rates.pdf"
+    <div class="rates-season" role="tablist" aria-label="<?php esc_attr_e( 'Season', 'dil' ); ?>">
+        <?php foreach ( $seasons as $year => $s ) : ?>
+        <button type="button" role="tab" class="rates-season__btn<?php echo $year === $default_season ? ' is-active' : ''; ?>"
+                data-season="<?php echo esc_attr( $year ); ?>" aria-selected="<?php echo $year === $default_season ? 'true' : 'false'; ?>">
+            <?php echo esc_html( $year ); ?><span class="rates-season__word"> <?php esc_html_e( 'rates', 'dil' ); ?></span>
+        </button>
+        <?php endforeach; ?>
+    </div>
+    <?php foreach ( $seasons as $year => $s ) : ?>
+    <span class="rates-pdf-bar__valid" data-season-only="<?php echo esc_attr( $year ); ?>"<?php echo $year === $default_season ? '' : ' hidden'; ?>><?php echo esc_html( $s['valid'] ); ?></span>
+    <?php if ( $s['pdf'] ) : ?>
+    <a href="<?php echo esc_url( $s['pdf'] ); ?>" data-season-only="<?php echo esc_attr( $year ); ?>"<?php echo $year === $default_season ? '' : ' hidden'; ?>
        target="_blank" rel="noopener" class="rates-pdf-bar__btn">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
             <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
@@ -50,6 +83,8 @@ $price_data = [
         </svg>
         <?php esc_html_e( 'Download PDF', 'dil' ); ?>
     </a>
+    <?php endif; ?>
+    <?php endforeach; ?>
 </div>
 
 <div class="inner-page">
@@ -64,7 +99,8 @@ $price_data = [
             </div>
 
             <div class="rates-calc" id="rates-calc"
-                 data-prices="<?php echo esc_attr( json_encode( $price_data ) ); ?>">
+                 data-seasons="<?php echo esc_attr( wp_json_encode( $calc_data ) ); ?>"
+                 data-season="<?php echo esc_attr( $default_season ); ?>">
 
                 <div class="rates-calc__body">
 
@@ -177,7 +213,7 @@ $price_data = [
                             <label class="rates-calc__addon">
                                 <input type="checkbox" name="addon_nondiver" value="1">
                                 <span class="rates-calc__addon-label"><?php esc_html_e( 'Non-diver guest', 'dil' ); ?></span>
-                                <span class="rates-calc__addon-price rates-calc__addon-price--dynamic" id="calc-nondiver-rate"><?php esc_html_e( '+$135 / night', 'dil' ); ?></span>
+                                <span class="rates-calc__addon-price rates-calc__addon-price--dynamic" id="calc-nondiver-rate"><?php echo esc_html( '+' . $usd( $seasons[ $default_season ]['rooms']['garden'] ) . ' / night' ); ?></span>
                             </label>
                             <label class="rates-calc__addon">
                                 <input type="checkbox" name="addon_transfer" value="1">
@@ -220,12 +256,14 @@ $price_data = [
             </p>
 
             <div class="rates-tabs" role="tablist">
-                <button class="rates-tab is-active" role="tab" aria-selected="true"  data-target="rates-2dive"><?php esc_html_e( '2 dives / day', 'dil' ); ?></button>
-                <button class="rates-tab"            role="tab" aria-selected="false" data-target="rates-3dive"><?php esc_html_e( '3 dives / day', 'dil' ); ?></button>
+                <button class="rates-tab is-active" role="tab" aria-selected="true"  data-dives="2"><?php esc_html_e( '2 dives / day', 'dil' ); ?></button>
+                <button class="rates-tab"            role="tab" aria-selected="false" data-dives="3"><?php esc_html_e( '3 dives / day', 'dil' ); ?></button>
             </div>
 
-            <div class="rates-table-wrap" id="rates-2dive">
+            <?php foreach ( $seasons as $year => $s ) : foreach ( [ 2, 3 ] as $dpd ) : ?>
+            <div class="rates-table-wrap" data-season-only="<?php echo esc_attr( $year ); ?>" data-dives="<?php echo esc_attr( $dpd ); ?>"<?php echo ( $year === $default_season && 2 === $dpd ) ? '' : ' hidden'; ?>>
                 <table class="rates-table">
+                    <caption class="screen-reader-text"><?php echo esc_html( sprintf( __( '%1$s packages, %2$d dives per day', 'dil' ), $year, $dpd ) ); ?></caption>
                     <thead><tr>
                         <th><?php esc_html_e( 'Package', 'dil' ); ?></th>
                         <th><?php esc_html_e( 'Longhouse', 'dil' ); ?><span class="rates-th-sub">3 rooms</span></th>
@@ -234,55 +272,22 @@ $price_data = [
                         <th><?php esc_html_e( 'Bungalow Suite', 'dil' ); ?><span class="rates-th-sub">1 bungalow</span></th>
                     </tr></thead>
                     <tbody>
-                    <?php
-                    $rows2 = [
-                        ['3N / 2 days','4 dives','$470','$605','$620','$695'],['4N / 3 days','6 dives','$660','$840','$860','$960'],
-                        ['5N / 4 days','8 dives','$850','$1,075','$1,100','$1,225'],['6N / 5 days','10 dives','$1,040','$1,310','$1,340','$1,490'],
-                        ['7N / 6 days','12 dives','$1,230','$1,545','$1,580','$1,755'],['8N / 7 days','14 dives','$1,420','$1,780','$1,820','$2,020'],
-                        ['9N / 8 days','16 dives','$1,610','$2,015','$2,060','$2,285'],['10N / 9 days','18 dives','$1,800','$2,250','$2,300','$2,550'],
-                        ['11N / 10 days','20 dives','$1,990','$2,485','$2,540','$2,815'],['12N / 11 days','22 dives','$2,180','$2,720','$2,780','$3,080'],
-                        ['13N / 12 days','24 dives','$2,370','$2,955','$3,020','$3,345'],['14N / 13 days','26 dives','$2,560','$3,190','$3,260','$3,610'],
-                    ];
-                    foreach ( $rows2 as $r ) :
-                    ?><tr><td><span class="rates-nights"><?php echo esc_html($r[0]); ?></span><span class="rates-dives"><?php echo esc_html($r[1]); ?></span></td>
-                    <td class="rates-price"><?php echo esc_html($r[2]); ?></td><td class="rates-price"><?php echo esc_html($r[3]); ?></td>
-                    <td class="rates-price"><?php echo esc_html($r[4]); ?></td><td class="rates-price rates-price--highlight"><?php echo esc_html($r[5]); ?></td></tr>
+                    <?php foreach ( range( 3, 14 ) as $i => $n ) :
+                        $p = $calc_data[ $year ]['prices'][ $dpd ];
+                    ?><tr><td><span class="rates-nights"><?php echo esc_html( sprintf( '%dN / %d days', $n, $n - 1 ) ); ?></span><span class="rates-dives"><?php echo esc_html( sprintf( '%d dives', ( $n - 1 ) * $dpd ) ); ?></span></td>
+                    <td class="rates-price"><?php echo esc_html( $usd( $p['longhouse'][ $i ] ) ); ?></td><td class="rates-price"><?php echo esc_html( $usd( $p['garden'][ $i ] ) ); ?></td>
+                    <td class="rates-price"><?php echo esc_html( $usd( $p['pool'][ $i ] ) ); ?></td><td class="rates-price rates-price--highlight"><?php echo esc_html( $usd( $p['suite'][ $i ] ) ); ?></td></tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
-
-            <div class="rates-table-wrap" id="rates-3dive" hidden>
-                <table class="rates-table">
-                    <thead><tr>
-                        <th><?php esc_html_e( 'Package', 'dil' ); ?></th>
-                        <th><?php esc_html_e( 'Longhouse', 'dil' ); ?><span class="rates-th-sub">3 rooms</span></th>
-                        <th><?php esc_html_e( 'Garden / Seaview', 'dil' ); ?><span class="rates-th-sub">6 bungalows</span></th>
-                        <th><?php esc_html_e( 'Pool Front', 'dil' ); ?><span class="rates-th-sub">3 bungalows</span></th>
-                        <th><?php esc_html_e( 'Bungalow Suite', 'dil' ); ?><span class="rates-th-sub">1 bungalow</span></th>
-                    </tr></thead>
-                    <tbody>
-                    <?php
-                    $rows3 = [
-                        ['3N / 2 days','6 dives','$570','$705','$720','$795'],['4N / 3 days','9 dives','$810','$990','$1,010','$1,110'],
-                        ['5N / 4 days','12 dives','$1,050','$1,275','$1,300','$1,425'],['6N / 5 days','15 dives','$1,290','$1,560','$1,590','$1,740'],
-                        ['7N / 6 days','18 dives','$1,530','$1,845','$1,880','$2,055'],['8N / 7 days','21 dives','$1,770','$2,130','$2,170','$2,370'],
-                        ['9N / 8 days','24 dives','$2,010','$2,415','$2,460','$2,685'],['10N / 9 days','27 dives','$2,250','$2,700','$2,750','$3,000'],
-                        ['11N / 10 days','30 dives','$2,490','$2,985','$3,040','$3,315'],['12N / 11 days','33 dives','$2,730','$3,270','$3,330','$3,630'],
-                        ['13N / 12 days','36 dives','$2,970','$3,555','$3,620','$3,945'],['14N / 13 days','39 dives','$3,210','$3,840','$3,910','$4,260'],
-                    ];
-                    foreach ( $rows3 as $r ) :
-                    ?><tr><td><span class="rates-nights"><?php echo esc_html($r[0]); ?></span><span class="rates-dives"><?php echo esc_html($r[1]); ?></span></td>
-                    <td class="rates-price"><?php echo esc_html($r[2]); ?></td><td class="rates-price"><?php echo esc_html($r[3]); ?></td>
-                    <td class="rates-price"><?php echo esc_html($r[4]); ?></td><td class="rates-price rates-price--highlight"><?php echo esc_html($r[5]); ?></td></tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+            <?php endforeach; endforeach; ?>
 
             <div class="rates-footnotes">
                 <p><?php esc_html_e( '* All prices per person sharing twin/double. Incl. 21% tax, air tanks, weights and weight belt.', 'dil' ); ?></p>
-                <p><?php esc_html_e( '* Single supplement: Bungalows USD 60/night · Longhouse USD 45/night', 'dil' ); ?></p>
+                <?php foreach ( $seasons as $year => $s ) : ?>
+                <p data-season-only="<?php echo esc_attr( $year ); ?>"<?php echo $year === $default_season ? '' : ' hidden'; ?>><?php echo esc_html( sprintf( __( '* Single supplement: Bungalows USD %1$d/night · Longhouse USD %2$d/night', 'dil' ), $s['single']['garden'], $s['single']['longhouse'] ) ); ?></p>
+                <?php endforeach; ?>
                 <p><?php esc_html_e( '* Nitrox EANx32: USD 7/tank or USD 20/day · Round-trip airport transfers: USD 40/person', 'dil' ); ?></p>
                 <p><?php esc_html_e( '* No dives on arrival day unless agreed in advance. Unused dives are non-refundable.', 'dil' ); ?></p>
             </div>
@@ -334,11 +339,12 @@ $price_data = [
 
             <div style="margin-top:32px;padding:24px 28px;border:1px solid var(--border);">
                 <h3 style="font-family:var(--font-heading);font-size:13px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:16px;"><?php esc_html_e( 'Non-diver rates (per person / per night)', 'dil' ); ?></h3>
-                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
+                <?php foreach ( $seasons as $year => $s ) : ?>
+                <div data-season-only="<?php echo esc_attr( $year ); ?>"<?php echo $year === $default_season ? '' : ' hidden'; ?> style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;">
                     <?php foreach ( [
-                        ['Longhouse room','USD 90'],['Garden / Seaview bungalow','USD 135'],
-                        ['Pool Front bungalow','USD 140'],['Bungalow Suite','USD 165'],
-                    ] as [$label,$price] ) : ?>
+                        ['Longhouse room', $s['rooms']['longhouse']],['Garden / Seaview bungalow', $s['rooms']['garden']],
+                        ['Pool Front bungalow', $s['rooms']['pool']],['Bungalow Suite', $s['rooms']['suite']],
+                    ] as [$label,$rate] ) : $price = 'USD ' . $rate; ?>
                     <div style="padding:12px 16px;background:var(--surface);">
                         <div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;font-family:var(--font-heading);color:var(--ink-soft);margin-bottom:4px;"><?php echo esc_html($label); ?></div>
                         <div style="font-family:var(--font-mono);font-size:18px;color:var(--burgundy);"><?php echo esc_html($price); ?></div>
@@ -346,6 +352,7 @@ $price_data = [
                     </div>
                     <?php endforeach; ?>
                 </div>
+                <?php endforeach; ?>
             </div>
         </div>
 

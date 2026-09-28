@@ -1191,20 +1191,36 @@
     });
   }
 
-  /* ── Rates page tab switcher ────────────────────────────── */
+  /* ── Rates page: season switch + dives/day tabs ─────────── */
+  // Everything season-specific carries data-season-only="<year>" (package tables also
+  // data-dives); the calculator reads its prices from data-season on #rates-calc.
 
-  document.querySelectorAll('.rates-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      const target = tab.dataset.target;
-      document.querySelectorAll('.rates-tab').forEach(t => {
-        t.classList.toggle('is-active', t === tab);
-        t.setAttribute('aria-selected', t === tab ? 'true' : 'false');
-      });
-      document.querySelectorAll('.rates-table-wrap').forEach(wrap => {
-        wrap.hidden = wrap.id !== target;
-      });
+  const ratesView = { season: null, dives: '2' };
+  function showRates() {
+    document.querySelectorAll('[data-season-only]').forEach(el => {
+      el.hidden = el.dataset.seasonOnly !== ratesView.season || (!!el.dataset.dives && el.dataset.dives !== ratesView.dives);
     });
-  });
+  }
+  function pickTab(tabs, active) {
+    tabs.forEach(t => { t.classList.toggle('is-active', t === active); t.setAttribute('aria-selected', t === active ? 'true' : 'false'); });
+  }
+  const seasonBtns = [...document.querySelectorAll('.rates-season__btn')];
+  if (seasonBtns.length) {
+    ratesView.season = (seasonBtns.find(b => b.classList.contains('is-active')) || seasonBtns[0]).dataset.season;
+    seasonBtns.forEach(btn => btn.addEventListener('click', () => {
+      ratesView.season = btn.dataset.season;
+      pickTab(seasonBtns, btn);
+      showRates();
+      const calc = document.getElementById('rates-calc');
+      if (calc) { calc.dataset.season = ratesView.season; calc.dispatchEvent(new Event('change')); }
+    }));
+  }
+  const diveTabs = [...document.querySelectorAll('.rates-tab')];
+  diveTabs.forEach(tab => tab.addEventListener('click', () => {
+    ratesView.dives = tab.dataset.dives;
+    pickTab(diveTabs, tab);
+    showRates();
+  }));
 
   /* ── Header height CSS var (for sticky subnav) ──────────── */
 
@@ -1239,9 +1255,7 @@
 
   const ratesCalc = document.getElementById('rates-calc');
   if (ratesCalc) {
-    const prices = JSON.parse(ratesCalc.dataset.prices || '{}');
-    const SINGLE_SUPP   = { longhouse: 45, garden: 60,  pool: 60,  suite: 60  };
-    const NONDIVER_RATE = { longhouse: 90, garden: 135, pool: 140, suite: 165 };
+    const seasons = JSON.parse(ratesCalc.dataset.seasons || '{}');   // { year: { prices, single, nondiver } }
     const ROOM_LABELS = {
       longhouse: 'Longhouse Room',
       garden:    'Garden / Seaview Bungalow',
@@ -1256,7 +1270,9 @@
     }
 
     function calcUpdate() {
-      const roomEl   = ratesCalc.querySelector('input[name="calc_room"]:checked');
+      const S = seasons[ratesCalc.dataset.season] || Object.values(seasons)[0] || {};
+      const prices = S.prices || {}, SINGLE_SUPP = S.single || {}, NONDIVER_RATE = S.nondiver || {};
+      const roomEl  = ratesCalc.querySelector('input[name="calc_room"]:checked');
       const divesEl  = ratesCalc.querySelector('input[name="calc_dives"]:checked');
       const guestsEl = ratesCalc.querySelector('input[name="calc_guests"]:checked');
       const room   = roomEl   ? roomEl.value   : 'garden';

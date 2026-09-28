@@ -58,7 +58,7 @@ $cdn = 'https://diveintolembeh.com/wp-content/uploads/';
                 <div style="display:grid;gap:12px;">
                     <div style="padding:16px 20px;border:1px solid var(--border);">
                         <strong style="font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;"><?php esc_html_e( 'Via Singapore', 'dil' ); ?></strong>
-                        <p style="margin-top:6px;font-size:15px;color:var(--ink-soft);"><?php esc_html_e( 'Singapore Airlines and Scoot fly direct to Manado. Flights operate Monday, Wednesday and Friday. Book via traveloka.com or your preferred booking portal.', 'dil' ); ?></p>
+                        <p style="margin-top:6px;font-size:15px;color:var(--ink-soft);"><?php esc_html_e( 'Singapore Airlines and its regional carrier Scoot fly direct to Manado 6 times a week. Book via singaporeair.com — flights from Europe and the USA arrive in Singapore in time to connect.', 'dil' ); ?></p>
                     </div>
                     <div style="padding:16px 20px;border:1px solid var(--border);">
                         <strong style="font-family:var(--font-heading);font-size:13px;letter-spacing:0.1em;text-transform:uppercase;"><?php esc_html_e( 'Via Jakarta', 'dil' ); ?></strong>

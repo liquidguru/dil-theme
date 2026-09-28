@@ -3083,6 +3083,31 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   text-decoration: none;
 }
 
+/* Season switch (2026 rates | 2027 rates) — main.js "Rates page: season switch" */
+.rates-season { display: inline-flex; border: 1px solid rgba(255,255,255,0.5); }
+.rates-season__btn {
+  font-family: var(--font-heading);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  background: none;
+  border: 0;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.rates-season__btn + .rates-season__btn { border-left: 1px solid rgba(255,255,255,0.5); }
+.rates-season__btn.is-active { background: #F5ECDC; color: var(--burgundy); }
+@media (hover: hover) { .rates-season__btn:not(.is-active):hover { background: rgba(255,255,255,0.15); } }
+.rates-season__btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+[data-season-only][hidden] { display: none !important; }   /* beats inline display:grid etc. */
+.rates-pdf-bar__valid {
+  margin-left: auto;
+  font-size: 13px;
+  opacity: 0.8;
+}
+
 /* ── Rates calculator ── */
 
 /* Mobile-first: stack by default, side-by-side only on wide screens */
@@ -3374,6 +3399,13 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 @media (max-width: 480px) {
   .rates-calc__rooms { grid-template-columns: 1fr; }
   .rates-pdf-bar__label { display: none; }
+}
+
+@media (max-width: 640px) {
+  .rates-pdf-bar__valid { display: none; }   /* the button row alone fits a phone */
+  .rates-pdf-bar__btn { margin-left: auto; padding: 8px 12px; }
+  .rates-season__btn { padding: 8px 14px; white-space: nowrap; }
+  .rates-season__word { display: none; }
 }
 
 /* ── 28. PHOTO PLACEHOLDER (dev only) ───────────────────────── */
