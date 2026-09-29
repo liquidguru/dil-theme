@@ -13,29 +13,9 @@ if ( ! $banner_img && has_post_thumbnail() ) {
     $banner_img = get_the_post_thumbnail_url( null, 'dil-banner' );
 }
 
-// ── Seasons ──────────────────────────────────────────────────────────────
-// Each season is just its per-person-per-night room rates (= the non-diver rate), the per-dive
-// price and the single supplements. Package price = nights × room + (nights − 1) × dives/day × dive
-// — that reproduces every figure on the 2026 rate sheet exactly. New season = add an entry.
-$seasons = [
-    '2026' => [
-        'valid'  => __( 'Valid 01 January 2026 – 01 January 2027', 'dil' ),
-        'rooms'  => [ 'longhouse' => 90, 'garden' => 135, 'pool' => 140, 'suite' => 165 ],
-        'dive'   => 50,
-        'single' => [ 'longhouse' => 45, 'garden' => 60, 'pool' => 60, 'suite' => 60 ],
-        'pdf'    => 'https://diveintolembeh.com/wp-content/uploads/2025/06/Dive-into-Lembeh-2026-rates.pdf',
-    ],
-    // 2027 room rates from the owners (28 Sep 2026). Single supplements and the PDF not yet
-    // confirmed — supplements carried over from 2026 until they are.
-    '2027' => [
-        'valid'  => __( 'Valid 01 January 2027 – 01 January 2028', 'dil' ),
-        'rooms'  => [ 'longhouse' => 90, 'garden' => 140, 'pool' => 150, 'suite' => 165 ],
-        'dive'   => 50,
-        'single' => [ 'longhouse' => 45, 'garden' => 60, 'pool' => 60, 'suite' => 60 ],
-        'pdf'    => '',
-    ],
-];
-$default_season = 2026;   // int: PHP turns numeric array keys like '2026' into ints
+// Seasons (rates, supplements, PDF, when each comes off the page): dil_rate_seasons() in functions.php
+$seasons        = dil_rate_seasons();
+$default_season = array_key_first( $seasons );   // int — PHP turns numeric keys like '2026' into ints
 
 // Package prices: [season][dives/day][room] => per-person totals for 3–14 nights (index 0–11)
 $calc_data = [];
@@ -62,6 +42,7 @@ $usd = static fn( int $v ): string => '$' . number_format( $v );
 
 <!-- Sticky bar: season switch + that season's PDF (main.js "Rates season") -->
 <div class="rates-pdf-bar" id="rates-pdf-bar">
+    <?php if ( count( $seasons ) > 1 ) : ?>
     <div class="rates-season" role="tablist" aria-label="<?php esc_attr_e( 'Season', 'dil' ); ?>">
         <?php foreach ( $seasons as $year => $s ) : ?>
         <button type="button" role="tab" class="rates-season__btn<?php echo $year === $default_season ? ' is-active' : ''; ?>"
@@ -70,6 +51,7 @@ $usd = static fn( int $v ): string => '$' . number_format( $v );
         </button>
         <?php endforeach; ?>
     </div>
+    <?php endif; ?>
     <?php foreach ( $seasons as $year => $s ) : ?>
     <span class="rates-pdf-bar__valid" data-season-only="<?php echo esc_attr( $year ); ?>"<?php echo $year === $default_season ? '' : ' hidden'; ?>><?php echo esc_html( $s['valid'] ); ?></span>
     <?php if ( $s['pdf'] ) : ?>

@@ -1205,6 +1205,7 @@
     tabs.forEach(t => { t.classList.toggle('is-active', t === active); t.setAttribute('aria-selected', t === active ? 'true' : 'false'); });
   }
   const seasonBtns = [...document.querySelectorAll('.rates-season__btn')];
+  ratesView.season = document.getElementById('rates-calc')?.dataset.season || null;   // one season left = no buttons
   if (seasonBtns.length) {
     ratesView.season = (seasonBtns.find(b => b.classList.contains('is-active')) || seasonBtns[0]).dataset.season;
     seasonBtns.forEach(btn => btn.addEventListener('click', () => {

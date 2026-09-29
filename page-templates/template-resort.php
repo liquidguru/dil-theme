@@ -50,15 +50,15 @@ $cdn25 = 'https://diveintolembeh.com/wp-content/uploads/2025/07/';
             <div class="image-grid image-grid--3col" style="margin-top:28px;">
                 <?php
                 $bungalows = [
-                    [ 'mod' => 'dil_img_bung1',  'default' => $cdn25 . 'Bungalow-bed-scaled.jpg',          'alt' => __( 'Bungalow bedroom', 'dil' ),          'caption' => __( 'Bedroom', 'dil' ),          'sub' => 'King-size bed' ],
+                    [ 'mod' => 'dil_img_bung1',  'default' => DIL_URI . '/assets/images/resort/bungalow-bed.webp',          'alt' => __( 'Bungalow bedroom with four-poster bed', 'dil' ),          'caption' => __( 'Bedroom', 'dil' ),          'sub' => 'King-size bed' ],
                     [ 'mod' => 'dil_img_bung2',  'default' => $cdn25 . 'Onsen-Evening.jpg',                'alt' => __( 'Onsen at evening', 'dil' ),           'caption' => __( 'Onsen', 'dil' ),            'sub' => 'All bungalows' ],
-                    [ 'mod' => 'dil_img_bung3',  'default' => $cdn25 . 'inside-bungalow-scaled.jpg',       'alt' => __( 'Inside the bungalow', 'dil' ),        'caption' => __( 'Bungalow interior', 'dil' ),'sub' => 'Ensuite bathroom' ],
+                    [ 'mod' => 'dil_img_bung3',  'default' => DIL_URI . '/assets/images/resort/bungalow-interior.webp',       'alt' => __( 'Inside a bungalow', 'dil' ),        'caption' => __( 'Bungalow interior', 'dil' ),'sub' => 'Ensuite bathroom' ],
                     [ 'mod' => 'dil_img_bung4',  'default' => $cdn25 . 'Drone-room-3-and-5-scaled.png',    'alt' => __( 'Bungalows from above', 'dil' ),       'caption' => __( 'Bungalows', 'dil' ),        'sub' => 'Drone view' ],
-                    [ 'mod' => 'dil_img_bung5',  'default' => $cdn25 . 'bungalow-with-flowers.jpg',        'alt' => __( 'Bungalow exterior', 'dil' ),          'caption' => __( 'Garden entrance', 'dil' ),  'sub' => 'Grounds' ],
-                    [ 'mod' => 'dil_img_bung6',  'default' => $cdn18 . '05/front-view-bungalow-4-Medium.jpg', 'alt' => __( 'Bungalow front view', 'dil' ),    'caption' => __( 'Bungalow 4', 'dil' ),       'sub' => 'Front view' ],
-                    [ 'mod' => 'dil_img_bung7',  'default' => $cdn18 . '03/Room-side-view-Medium.jpg',     'alt' => __( 'Bungalow side view', 'dil' ),         'caption' => __( 'Bungalow', 'dil' ),         'sub' => 'Side view' ],
+                    [ 'mod' => 'dil_img_bung5',  'default' => DIL_URI . '/assets/images/resort/bungalow-garden-path.webp',        'alt' => __( 'Garden path to a bungalow', 'dil' ),          'caption' => __( 'Garden entrance', 'dil' ),  'sub' => 'Grounds' ],
+                    [ 'mod' => 'dil_img_bung6',  'default' => DIL_URI . '/assets/images/resort/bungalow-flowers.webp', 'alt' => __( 'Bungalow among frangipani', 'dil' ),    'caption' => __( 'Bungalow', 'dil' ),       'sub' => 'Garden setting' ],
+                    [ 'mod' => 'dil_img_bung7',  'default' => DIL_URI . '/assets/images/resort/bungalow-garden.webp',     'alt' => __( 'Bungalow in the tropical garden', 'dil' ),         'caption' => __( 'Bungalow', 'dil' ),         'sub' => 'Tropical garden' ],
                     [ 'mod' => 'dil_img_bung8',  'default' => $cdn18 . '05/Onsen-Medium.jpg',              'alt' => __( 'Onsen balcony', 'dil' ),              'caption' => __( 'Onsen balcony', 'dil' ),    'sub' => 'Daytime' ],
-                    [ 'mod' => 'dil_img_bung9',  'default' => $cdn18 . '05/Room-inside-Medium.jpg',        'alt' => __( 'Room interior', 'dil' ),              'caption' => __( 'Room interior', 'dil' ),    'sub' => 'Air-conditioned' ],
+                    [ 'mod' => 'dil_img_bung9',  'default' => DIL_URI . '/assets/images/resort/bungalow-welcome.webp',        'alt' => __( 'Towel swans on the bed at check-in', 'dil' ),              'caption' => __( 'Welcome', 'dil' ),    'sub' => 'Every arrival' ],
                 ];
                 foreach ( $bungalows as $tile ) :
                     $src = get_theme_mod( $tile['mod'], $tile['default'] ?? '' );
@@ -92,11 +92,12 @@ $cdn25 = 'https://diveintolembeh.com/wp-content/uploads/2025/07/';
             <div class="image-grid image-grid--3col" style="margin-top:28px;">
                 <?php
                 $suite = [
-                    [ 'mod' => 'dil_img_suite1', 'default' => $cdn25 . 'suite-bedroom.jpg',  'alt' => __( 'Suite bedroom', 'dil' ),  'caption' => __( 'Suite bedroom', 'dil' ),  'sub' => 'King-size bed' ],
-                    [ 'mod' => 'dil_img_suite2', 'default' => $cdn25 . 'suite-bathroom.jpg', 'alt' => __( 'Suite bathroom', 'dil' ), 'caption' => __( 'Rain shower', 'dil' ),     'sub' => 'Semi-open ensuite' ],
-                    [ 'mod' => 'dil_img_suite3', 'default' => $cdn25 . 'suite-veranda.jpg',  'alt' => __( 'Suite veranda', 'dil' ),  'caption' => __( 'Veranda', 'dil' ),         'sub' => 'Strait view' ],
-                    [ 'mod' => 'dil_img_suite4', 'default' => $cdn25 . 'suite-lounge-3.jpg', 'alt' => __( 'Suite lounge', 'dil' ),   'caption' => __( 'Lounge area', 'dil' ),     'sub' => 'Separate lounge' ],
-                    [ 'mod' => 'dil_img_suite5', 'default' => $cdn25 . 'suite-lounge-2.jpg', 'alt' => __( 'Suite lounge', 'dil' ),   'caption' => __( 'Lounge', 'dil' ),          'sub' => 'Large TV' ],
+                    [ 'mod' => 'dil_img_suite1', 'default' => DIL_URI . '/assets/images/resort/suite-bedroom.webp',  'alt' => __( 'Suite bedroom', 'dil' ),  'caption' => __( 'Suite bedroom', 'dil' ),  'sub' => 'King-size bed' ],
+                    [ 'mod' => 'dil_img_suite2', 'default' => DIL_URI . '/assets/images/resort/suite-bathroom.webp', 'alt' => __( 'Suite open-air bathroom', 'dil' ), 'caption' => __( 'Rain shower', 'dil' ),     'sub' => 'Semi-open ensuite' ],
+                    [ 'mod' => 'dil_img_suite3', 'default' => DIL_URI . '/assets/images/resort/suite-terrace.webp',  'alt' => __( 'Suite terrace', 'dil' ),  'caption' => __( 'Terrace', 'dil' ),         'sub' => 'Strait view' ],
+                    [ 'mod' => 'dil_img_suite4', 'default' => DIL_URI . '/assets/images/resort/suite-living.webp', 'alt' => __( 'Suite living room', 'dil' ),   'caption' => __( 'Living room', 'dil' ),     'sub' => 'Separate lounge' ],
+                    [ 'mod' => 'dil_img_suite5', 'default' => DIL_URI . '/assets/images/resort/suite-lounge.webp', 'alt' => __( 'Suite lounge with recliners', 'dil' ),   'caption' => __( 'Lounge', 'dil' ),          'sub' => 'Large TV' ],
+                    [ 'mod' => 'dil_img_suite6', 'default' => DIL_URI . '/assets/images/resort/suite-outside.webp', 'alt' => __( 'The bungalow suite from outside', 'dil' ), 'caption' => __( 'Suite', 'dil' ), 'sub' => 'From the garden' ],
                 ];
                 foreach ( $suite as $tile ) :
                     $src = get_theme_mod( $tile['mod'], $tile['default'] ?? '' );
@@ -130,8 +131,8 @@ $cdn25 = 'https://diveintolembeh.com/wp-content/uploads/2025/07/';
             <div class="image-grid image-grid--3col" style="margin-top:28px;">
                 <?php
                 $longhouse = [
-                    [ 'mod' => 'dil_img_lh1', 'default' => $cdn25 . 'Longhouse-outside-scaled.jpg', 'alt' => __( 'Longhouse exterior', 'dil' ), 'caption' => __( 'Longhouse', 'dil' ),  'sub' => 'Exterior' ],
-                    [ 'mod' => 'dil_img_lh2', 'default' => $cdn25 . 'P1012348-scaled.jpg',           'alt' => __( 'Longhouse room', 'dil' ),     'caption' => __( 'Room', 'dil' ),       'sub' => 'Ensuite bathroom' ],
+                    [ 'mod' => 'dil_img_lh1', 'default' => DIL_URI . '/assets/images/resort/longhouse.webp', 'alt' => __( 'Longhouse exterior', 'dil' ), 'caption' => __( 'Longhouse', 'dil' ),  'sub' => 'Exterior' ],
+                    [ 'mod' => 'dil_img_lh2', 'default' => DIL_URI . '/assets/images/resort/longhouse-rooms.webp',           'alt' => __( 'Longhouse rooms 2 and 3', 'dil' ),     'caption' => __( 'Room', 'dil' ),       'sub' => 'Ensuite bathroom' ],
                     [ 'mod' => 'dil_img_lh3', 'default' => $cdn25 . 'Longhouse-scaled.jpg',          'alt' => __( 'Longhouse interior', 'dil' ), 'caption' => __( 'Interior', 'dil' ),   'sub' => 'Air-conditioned' ],
                 ];
                 foreach ( $longhouse as $tile ) :
@@ -166,12 +167,12 @@ $cdn25 = 'https://diveintolembeh.com/wp-content/uploads/2025/07/';
             <div class="image-grid image-grid--3col" style="margin-top:28px;">
                 <?php
                 $pool = [
-                    [ 'mod' => 'dil_img_pool1', 'default' => $cdn18 . '05/dil008.jpg',              'alt' => __( 'Pool overview', 'dil' ),       'caption' => __( 'Pool', 'dil' ),         'sub' => '18m × 6m' ],
+                    [ 'mod' => 'dil_img_pool1', 'default' => DIL_URI . '/assets/images/resort/pool-day.webp',              'alt' => __( 'Pool overview', 'dil' ),       'caption' => __( 'Pool', 'dil' ),         'sub' => '18m × 6m' ],
                     [ 'mod' => 'dil_img_pool2', 'default' => $cdn18 . '03/New-Pool-2-Medium.jpeg',  'alt' => __( 'Pool and sun deck', 'dil' ),   'caption' => __( 'Sun deck', 'dil' ),     'sub' => 'Freshwater' ],
                     [ 'mod' => 'dil_img_pool3', 'default' => $cdn18 . '03/New-Pool-view.jpeg',      'alt' => __( 'Pool with strait view', 'dil' ),'caption' => __( 'Strait view', 'dil' ), 'sub' => 'From the pool' ],
                     [ 'mod' => 'dil_img_pool4', 'default' => $cdn18 . '05/pool-5-rooms-DIL-F-copy-Medium.jpg', 'alt' => __( 'Pool and bungalows', 'dil' ), 'caption' => __( 'Pool & bungalows', 'dil' ), 'sub' => 'Kasawari Bay' ],
                     [ 'mod' => 'dil_img_pool5', 'default' => $cdn18 . '05/dil001.jpg',              'alt' => __( 'Pool bar area', 'dil' ),       'caption' => __( 'Pool bar', 'dil' ),     'sub' => 'Evening' ],
-                    [ 'mod' => 'dil_img_pool6', 'default' => $cdn18 . '03/New-Pool-Medium.jpeg',    'alt' => __( 'Pool at dawn', 'dil' ),        'caption' => __( 'Pool', 'dil' ),         'sub' => 'Dawn' ],
+                    [ 'mod' => 'dil_img_pool6', 'default' => DIL_URI . '/assets/images/resort/pool-night.webp',    'alt' => __( 'Pool lit up at night', 'dil' ),        'caption' => __( 'Pool', 'dil' ),         'sub' => 'After dark' ],
                 ];
                 foreach ( $pool as $tile ) :
                     $src = get_theme_mod( $tile['mod'], $tile['default'] ?? '' );
@@ -205,13 +206,13 @@ $cdn25 = 'https://diveintolembeh.com/wp-content/uploads/2025/07/';
             <div class="image-grid image-grid--3col" style="margin-top:28px;">
                 <?php
                 $restaurant = [
-                    [ 'mod' => 'dil_img_rest1', 'default' => $cdn25 . 'Open-air-resto-scaled.jpg',        'alt' => __( 'Open-air restaurant', 'dil' ),   'caption' => __( 'Restaurant', 'dil' ),      'sub' => 'Open-air dining' ],
+                    [ 'mod' => 'dil_img_rest1', 'default' => DIL_URI . '/assets/images/resort/restaurant.webp',        'alt' => __( 'Open-air restaurant', 'dil' ),   'caption' => __( 'Restaurant', 'dil' ),      'sub' => 'Open-air dining' ],
                     [ 'mod' => 'dil_img_rest2', 'default' => $cdn25 . '3-Resort-Aerial-scaled.jpg',       'alt' => __( 'Resort aerial view', 'dil' ),    'caption' => __( 'Resort aerial', 'dil' ),   'sub' => 'Drone' ],
                     [ 'mod' => 'dil_img_rest3', 'default' => $cdn25 . 'Signature.jpg',                    'alt' => __( 'Signature dish', 'dil' ),        'caption' => __( 'Signature dish', 'dil' ),  'sub' => 'Daily menu' ],
                     [ 'mod' => 'dil_img_rest4', 'default' => $cdn18 . '05/Drone-high-Medium.jpg',         'alt' => __( 'Resort from high above', 'dil' ),'caption' => __( 'High aerial', 'dil' ),     'sub' => 'Drone' ],
-                    [ 'mod' => 'dil_img_rest5', 'default' => $cdn18 . '05/4-Resort-Aerial3-Medium.jpg',   'alt' => __( 'Resort aerial', 'dil' ),         'caption' => __( 'Aerial view', 'dil' ),     'sub' => 'Drone' ],
-                    [ 'mod' => 'dil_img_rest6', 'default' => $cdn18 . '05/4A-Resort-aerial-2-Medium.jpg', 'alt' => __( 'Resort aerial 2', 'dil' ),       'caption' => __( 'Aerial view', 'dil' ),     'sub' => 'Drone' ],
-                    [ 'mod' => 'dil_img_rest7', 'default' => $cdn18 . '05/3A-Aerial-4-Medium.jpg',        'alt' => __( 'Resort aerial 3', 'dil' ),       'caption' => __( 'Aerial view', 'dil' ),     'sub' => 'Drone' ],
+                    [ 'mod' => 'dil_img_rest5', 'default' => DIL_URI . '/assets/images/resort/restaurant-evening.webp',   'alt' => __( 'Restaurant in the evening', 'dil' ),         'caption' => __( 'Restaurant', 'dil' ),     'sub' => 'Evening' ],
+                    [ 'mod' => 'dil_img_rest6', 'default' => DIL_URI . '/assets/images/resort/bar-night.webp', 'alt' => __( 'The bar at night', 'dil' ),       'caption' => __( 'Bar', 'dil' ),     'sub' => 'After the night dive' ],
+                    [ 'mod' => 'dil_img_rest7', 'default' => DIL_URI . '/assets/images/resort/restaurant-table.webp',        'alt' => __( 'Table set for dinner', 'dil' ),       'caption' => __( 'Dinner', 'dil' ),     'sub' => 'Table set' ],
                     [ 'mod' => 'dil_img_rest8', 'default' => $cdn18 . '05/dil006.jpg',                    'alt' => __( 'Resort grounds', 'dil' ),        'caption' => __( 'Resort grounds', 'dil' ),  'sub' => 'Grounds' ],
                     [ 'mod' => 'dil_img_rest9', 'default' => $cdn18 . '03/DIL_drone-1.jpg',               'alt' => __( 'Resort drone shot', 'dil' ),     'caption' => __( 'Drone view', 'dil' ),      'sub' => 'Kasawari Bay' ],
                 ];

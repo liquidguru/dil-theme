@@ -182,7 +182,7 @@ if ( empty( $hero_slides ) ) {
                 <?php esc_html_e( 'The Lembeh Strait is the muck-diving capital of the world — a narrow stretch of black volcanic sand between the Indonesian mainland and Lembeh Island where critters hide in plain sight.', 'dil' ); ?>
             </p>
             <p style="margin-top:20px;">
-                <?php esc_html_e( 'Dive Into Lembeh sits on the northern end of the strait out of sight of Bitung harbor in the south, offering unspoiled views of Lembeh Island. Three dives a day, unhurried, guided by our experienced local divemasters who know every crevice.', 'dil' ); ?>
+                <?php esc_html_e( 'Dive Into Lembeh sits on the northern end of the strait out of sight of Bitung harbor in the south, offering unspoiled views of Lembeh Island. Our house reefs — Hairball and Aw Shucks — are among the most celebrated muck sites on earth. Three dives a day, unhurried, guided by our experienced local divemasters who know every crevice.', 'dil' ); ?>
             </p>
             <?php
         }

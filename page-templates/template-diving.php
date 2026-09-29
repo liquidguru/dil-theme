@@ -49,7 +49,7 @@ if ( ! $banner_img && has_post_thumbnail() ) {
                     [ 'mod' => 'dil_img_boat1', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/16b-Medium.jpg',                               'alt' => __( 'Dive boat', 'dil' ),              'caption' => __( 'Dive boat', 'dil' ),         'sub' => 'Morning departure' ],
                     [ 'mod' => 'dil_img_boat2', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/boat-side-view-Medium.jpeg',                   'alt' => __( 'Dive boat side view', 'dil' ),    'caption' => __( 'Dive boat', 'dil' ),         'sub' => 'Side view' ],
                     [ 'mod' => 'dil_img_boat3', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Dive-into-Lembeh-1-Speedboat-Medium.jpg',     'alt' => __( 'Speedboat on the strait', 'dil' ),'caption' => __( 'Speedboat', 'dil' ),         'sub' => 'Kasawari Bay' ],
-                    [ 'mod' => 'dil_img_boat4', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Engines.jpeg',                                'alt' => __( 'Twin engines', 'dil' ),           'caption' => __( 'Twin engines', 'dil' ),      'sub' => 'Fiberglass boats' ],
+                    [ 'mod' => 'dil_img_boat4', 'default' => DIL_URI . '/assets/images/resort/dive-boats.webp',                                'alt' => __( 'Our two dive boats on the strait', 'dil' ),           'caption' => __( 'Dive boats', 'dil' ),      'sub' => 'Fiberglass speedboats' ],
                     [ 'mod' => 'dil_img_boat5', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Sun-area-on-boat-Medium-1-e1471947051439.jpg','alt' => __( 'Sun deck on the boat', 'dil' ),   'caption' => __( 'Sun deck', 'dil' ),          'sub' => 'Surface interval' ],
                     [ 'mod' => 'dil_img_boat6', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/View-from-Dive-center-Medium.jpeg',            'alt' => __( 'View from the dive centre', 'dil' ),'caption' => __( 'Dive centre view', 'dil' ),'sub' => 'Kasawari Bay' ],
                 ];
@@ -85,7 +85,7 @@ if ( ! $banner_img && has_post_thumbnail() ) {
             <div class="image-grid image-grid--3col" style="margin-top:28px;">
                 <?php
                 $camera_room = [
-                    [ 'mod' => 'dil_img_cam1', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/CAMERA-ROOM.jpeg',            'alt' => __( 'Camera room overview', 'dil' ),      'caption' => __( 'Camera room', 'dil' ),  'sub' => 'Full facilities' ],
+                    [ 'mod' => 'dil_img_cam1', 'default' => DIL_URI . '/assets/images/resort/camera-room.webp',            'alt' => __( 'Camera room overview', 'dil' ),      'caption' => __( 'Camera room', 'dil' ),  'sub' => 'Full facilities' ],
                     [ 'mod' => 'dil_img_cam2', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Camera-rinse-tanks.jpg',       'alt' => __( 'Camera rinse tanks', 'dil' ),        'caption' => __( 'Rinse tanks', 'dil' ),  'sub' => 'Individual' ],
                     [ 'mod' => 'dil_img_cam3', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Camera-room-and-mats-copy.jpg','alt' => __( 'Camera room and dive mats', 'dil' ), 'caption' => __( 'Camera room', 'dil' ),  'sub' => 'With dive mats' ],
                 ];

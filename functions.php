@@ -303,6 +303,48 @@ function dil_area_map(): void {
     echo '<div class="area-map">' . $svg . '</div>'; // phpcs:ignore -- theme's own static SVG
 }
 
+/* ── Rate seasons (Rates page, top bar, sidebar box) ─────────── */
+
+/**
+ * The rate seasons currently on offer, oldest first. Each is its per-person-per-night room rates
+ * (= the non-diver rate), the per-dive price and the single supplements; package price =
+ * nights × room + (nights − 1) × dives/day × dive, which reproduces every figure on the 2026 sheet.
+ * `show_until` takes a season off the site on that date (site time) — the owners want the old
+ * season gone in early December. New season = add an entry. NB the SiteGround page cache can keep
+ * serving the old page until it's flushed.
+ */
+function dil_rate_seasons(): array {
+    $all = [
+        '2026' => [
+            'valid'      => __( 'Valid 01 January 2026 – 01 January 2027', 'dil' ),
+            'rooms'      => [ 'longhouse' => 90, 'garden' => 135, 'pool' => 140, 'suite' => 165 ],
+            'dive'       => 50,
+            'single'     => [ 'longhouse' => 45, 'garden' => 60, 'pool' => 60, 'suite' => 60 ],
+            'pdf'        => 'https://diveintolembeh.com/wp-content/uploads/2025/06/Dive-into-Lembeh-2026-rates.pdf',
+            'show_until' => '2026-12-01',
+        ],
+        // 2027 room rates from the owners (28 Sep 2026; "rates look good", valid to 1 Jan 2028).
+        // Single supplements carried over from 2026 — not separately confirmed. PDF still to come.
+        '2027' => [
+            'valid'      => __( 'Valid 01 January 2027 – 01 January 2028', 'dil' ),
+            'rooms'      => [ 'longhouse' => 90, 'garden' => 140, 'pool' => 150, 'suite' => 165 ],
+            'dive'       => 50,
+            'single'     => [ 'longhouse' => 45, 'garden' => 60, 'pool' => 60, 'suite' => 60 ],
+            'pdf'        => '',
+            'show_until' => '2028-01-01',
+        ],
+    ];
+    $today = wp_date( 'Y-m-d' );
+    $shown = array_filter( $all, static fn( $s ) => $today < $s['show_until'] );
+    return $shown ?: array_slice( $all, -1, 1, true );   // never an empty rates page
+}
+
+/** "2026 / 2027 seasons" or "2027 season" — the years currently bookable. */
+function dil_booking_seasons_label(): string {
+    $years = array_keys( dil_rate_seasons() );
+    return implode( ' / ', $years ) . ' ' . _n( 'season', 'seasons', count( $years ), 'dil' );
+}
+
 /* ── Helper: get page ID by path ─────────────────────────────── */
 
 function dil_page_id( string $path ): int {
