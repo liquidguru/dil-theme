@@ -1191,6 +1191,24 @@
     });
   }
 
+  /* ── Facebook sidebar: page plugin at the column's width ─── */
+  // Facebook renders at the width= in the URL (its range is 180–500px) and ignores the iframe's
+  // size, so a sidebar narrower than 300 clipped it. Re-point it when the width really changes.
+  document.querySelectorAll('.widget-facebook__body iframe').forEach(frame => {
+    const body = frame.parentElement;
+    let current = 0, timer = 0;
+    const fit = () => {
+      const w = Math.max(180, Math.min(500, Math.floor(body.clientWidth)));
+      if (Math.abs(w - current) < 12) return;   // ignore scrollbar-sized jitters: each change reloads it
+      current = w;
+      frame.src = frame.src.replace(/([?&]width=)\d+/, '$1' + w);
+    };
+    fit();
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(() => { clearTimeout(timer); timer = setTimeout(fit, 400); }).observe(body);
+    }
+  });
+
   /* ── Rates page: season switch + dives/day tabs ─────────── */
   // Everything season-specific carries data-season-only="<year>" (package tables also
   // data-dives); the calculator reads its prices from data-season on #rates-calc.

@@ -1959,9 +1959,12 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   overflow: hidden;
 }
 
+/* The page plugin draws at the width= in its URL (180–500px) — adapt_container_width only works
+   with Facebook's JS SDK — so main.js rewrites that to the column's real width ("Facebook sidebar") */
 .widget-facebook__body iframe {
   display: block;
-  flex-shrink: 0;
+  width: 100%;
+  max-width: 500px;
 }
 
 /* Weather widget */
