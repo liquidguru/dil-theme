@@ -323,14 +323,14 @@ function dil_rate_seasons(): array {
             'pdf'        => 'https://diveintolembeh.com/wp-content/uploads/2025/06/Dive-into-Lembeh-2026-rates.pdf',
             'show_until' => '2026-12-01',
         ],
-        // 2027 room rates from the owners (28 Sep 2026; "rates look good", valid to 1 Jan 2028).
-        // Single supplements carried over from 2026 — not separately confirmed. PDF still to come.
+        // 2027 rate sheet from the owners (29 Sep 2026) — every package price matches the formula;
+        // bungalow single supplement up to US$70. PDF kept in the theme (assets/docs/).
         '2027' => [
             'valid'      => __( 'Valid 01 January 2027 – 01 January 2028', 'dil' ),
             'rooms'      => [ 'longhouse' => 90, 'garden' => 140, 'pool' => 150, 'suite' => 165 ],
             'dive'       => 50,
-            'single'     => [ 'longhouse' => 45, 'garden' => 60, 'pool' => 60, 'suite' => 60 ],
-            'pdf'        => '',
+            'single'     => [ 'longhouse' => 45, 'garden' => 70, 'pool' => 70, 'suite' => 70 ],
+            'pdf'        => DIL_URI . '/assets/docs/Dive-into-Lembeh-2027-rates.pdf',
             'show_until' => '2028-01-01',
         ],
     ];
