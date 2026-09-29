@@ -345,6 +345,11 @@ function dil_booking_seasons_label(): string {
     return implode( ' / ', $years ) . ' ' . _n( 'season', 'seasons', count( $years ), 'dil' );
 }
 
+/** Attributes that tie an element to one season: shown by the Rates page's season switch (main.js). */
+function dil_season_attrs( int $year, int $current ): string {
+    return ' data-season-only="' . $year . '"' . ( $year === $current ? '' : ' hidden' );
+}
+
 /* ── Helper: get page ID by path ─────────────────────────────── */
 
 function dil_page_id( string $path ): int {

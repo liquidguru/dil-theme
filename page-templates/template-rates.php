@@ -272,6 +272,9 @@ $usd = static fn( int $v ): string => '$' . number_format( $v );
                 <?php endforeach; ?>
                 <p><?php esc_html_e( '* Nitrox EANx32: USD 7/tank or USD 20/day · Round-trip airport transfers: USD 40/person', 'dil' ); ?></p>
                 <p><?php esc_html_e( '* No dives on arrival day unless agreed in advance. Unused dives are non-refundable.', 'dil' ); ?></p>
+                <?php if ( isset( $seasons[2027] ) ) : ?>
+                <p<?php echo dil_season_attrs( 2027, $default_season ); ?>><?php esc_html_e( '* Day dives cannot be exchanged for night dives.', 'dil' ); ?></p>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -287,16 +290,19 @@ $usd = static fn( int $v ): string => '$' . number_format( $v );
                     <ul>
                         <?php foreach ( [
                             'Welcome drink on arrival',
-                            'Full board — breakfast, lunch & dinner (lunch excluded arrival day)',
-                            'Breakfast on check-out day',
+                            [ 'Full board — breakfast, lunch & dinner (lunch excluded arrival day)', 2026 ],
+                            [ 'Breakfast on check-out day', 2026 ],
+                            [ 'All meals, from dinner on arrival day to breakfast on departure day', 2027 ],
                             'Unlimited tea, local coffee & drinking water',
                             'Guided dives by speedboat as per package',
                             'House-reef access 8AM–6PM on diving days',
                             'Air tanks, weights & weight belt',
                             'Free Wi-Fi throughout the resort',
                             'All government taxes (21%)',
-                        ] as $item ) : ?>
-                        <li><?php echo esc_html( $item ); ?></li>
+                        ] as $item ) :
+                            [ $text, $only ] = is_array( $item ) ? $item : [ $item, null ];
+                            if ( $only && ! isset( $seasons[ $only ] ) ) continue; ?>
+                        <li<?php echo $only ? dil_season_attrs( $only, $default_season ) : ''; ?>><?php echo esc_html( $text ); ?></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
@@ -371,44 +377,65 @@ $usd = static fn( int $v ): string => '$' . number_format( $v );
             </div>
         </div>
 
-        <!-- Section 5 — Policies -->
+        <!-- Section 5 — Policies. Items that differ between rate sheets carry a season (2026 wording =
+             the old site; 2027 = the owners' 2027 PDF) and follow the season switch; the rest are shared. -->
+        <?php
+        $th    = 'text-align:left;padding:8px 0;font-family:var(--font-heading);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;';
+        $tiers = static function ( array $rows ) use ( $th ): string {   // notice-period → charge table
+            $h = '<table style="margin-top:12px;width:100%;font-size:14px;border-collapse:collapse;"><tr style="border-bottom:1px solid var(--border);">'
+               . '<th style="' . $th . '">' . esc_html__( 'Notice', 'dil' ) . '</th><th style="' . $th . '">' . esc_html__( 'Charge', 'dil' ) . '</th></tr>';
+            foreach ( $rows as $i => [ $when, $what ] ) {
+                $last = $i === count( $rows ) - 1;
+                $h .= '<tr' . ( $last ? '' : ' style="border-bottom:1px solid var(--border);"' ) . '>'
+                    . '<td style="padding:8px 12px 8px 0;white-space:nowrap;vertical-align:top;">' . esc_html( $when ) . '</td>'
+                    . '<td style="padding:8px 0;' . ( 0 === $i ? 'color:var(--burgundy);' : '' ) . '">' . esc_html( $what ) . '</td></tr>';
+            }
+            return $h . '</table>';
+        };
+        $para = static fn( string $t, bool $gap = false ): string => '<p' . ( $gap ? ' style="margin-top:12px;"' : '' ) . '>' . esc_html( $t ) . '</p>';
+        // [ title, season or null for both, body HTML ]
+        $policies = [
+            [ 'Check-in & check-out', null, $para( 'Check-in from 2PM. Early check-in (subject to availability): USD 30/person. Check-out by 11AM. Late check-out to 5PM: half-day room charge. Beyond 5PM: full-day charge.' ) ],
+            [ 'Child policy', null, $para( 'Children under 6 sharing with guardian: free. Children 6–12 years: USD 40/day for accommodation and all meals.' ) ],
+            [ 'Group offers', 2026, $para( 'Group of 8 paying guests: 1 place free. Group of 20: 3 places free. FOC based on twin/double sharing, minimum 3 nights / 2 diving days.' ) ],
+            [ 'Group offers', 2027, $para( 'Every group of 8 paying guests: 1 place free of charge. Every group of 21 paying guests: 3 places free. Free places apply to packages of at least 3 nights with 2 days of diving, and are based on twin/double sharing in the lowest room and diving package booked within the group.' ) ],
+            [ 'Deposit & payment', 2026, $para( '20% non-refundable deposit (min USD 250/person) within 14 days of invoice. Final payment 30 days before arrival. For bookings within 30 days of arrival, full payment required immediately.' )
+                . $para( 'Accepted: IDR, USD, EUR, GBP, SGD. Visa/MasterCard accepted with 2% surcharge.', true ) ],
+            [ 'Deposit & payment', 2027, $para( 'A 20% deposit (minimum USD 250 per person) secures your booking, due within 14 days of the invoice date — we hold the reservation for up to 2 weeks while it arrives. Final payment is due at the latest 30 days before arrival; for bookings made within 30 days of arrival, full payment is required as soon as possible. Bookings not paid on time may be released.' )
+                . $para( 'Bank charges cannot be deducted — the invoice total must reach our bank. In resort we accept IDR, USD, EUR, GBP and SGD; Visa/MasterCard with a 2% surcharge.', true ) ],
+            [ 'Cancellation', 2026, $para( 'All cancellations in writing to info@diveintolembeh.com.' ) . $tiers( [
+                [ '45 days or less', 'Forfeit all monies paid' ],
+                [ '46–90 days', '50% fee, or deposit held 6 months' ],
+                [ '91–180 days', '25% fee, or deposit held 6 months' ],
+            ] ) ],
+            [ 'Cancellation', 2027, $para( 'All cancellations in writing to info@diveintolembeh.com — please let us know as early as you can.' ) . $tiers( [
+                [ '45 days or less', 'Forfeit all monies received for the booking' ],
+                [ '46–90 days', 'Deposit forfeited' ],
+                [ '91–180 days', 'Deposit refunded minus bank fees and a 50% cancellation fee, or deposit usable within 6 months of the original arrival date' ],
+                [ 'More than 180 days', 'Deposit refunded minus bank fees and a 15% cancellation fee, or deposit usable within 6 months of the original arrival date' ],
+            ] ) ],
+            [ 'Group bookings', 2027, $para( 'Groups pay the same 20% deposit (minimum USD 250 per person) within 14 days of the invoice. The rooming list is due 120 days before arrival: all rooms are then confirmed, the group is responsible for them, and dates can no longer be changed. Final payment is due in full 60 days before arrival.' ) . $tiers( [
+                [ '60 days or less', 'Forfeit all monies received for the booking' ],
+                [ '61–120 days', 'Deposit forfeited' ],
+                [ '120–240 days', '50% of the deposit refunded (minus bank fees), or the full deposit usable within 6 months' ],
+            ] ) ],
+            [ 'Insurance & illness', 2027, $para( 'Dive insurance is mandatory in Indonesia — we recommend DAN (Divers Alert Network). We also strongly recommend international travel insurance from the time you pay your deposit. A no-show, for whatever reason, means no refund.' )
+                . $para( 'Dives missed through illness in resort are not refunded, but we can provide a letter for your insurance claim.', true ) ],
+        ];
+        ?>
         <div class="inner-section" id="policies">
             <div class="section-head">
                 <div class="section-head__number mono">05</div>
                 <h2 class="section-head__title"><?php esc_html_e( 'Policies', 'dil' ); ?></h2>
             </div>
             <div class="accordion">
-                <div class="accordion__item">
-                    <button class="accordion__trigger" aria-expanded="false"><span class="accordion__title"><?php esc_html_e('Check-in & check-out','dil'); ?></span><span class="accordion__icon" aria-hidden="true">+</span></button>
-                    <div class="accordion__body"><p><?php esc_html_e('Check-in from 2PM. Early check-in (subject to availability): USD 30/person. Check-out by 11AM. Late check-out to 5PM: half-day room charge. Beyond 5PM: full-day charge.','dil'); ?></p></div>
+                <?php foreach ( $policies as [ $title, $only, $body ] ) :
+                    if ( $only && ! isset( $seasons[ $only ] ) ) continue; ?>
+                <div class="accordion__item"<?php echo $only ? dil_season_attrs( $only, $default_season ) : ''; ?>>
+                    <button class="accordion__trigger" aria-expanded="false"><span class="accordion__title"><?php echo esc_html( $title ); ?></span><span class="accordion__icon" aria-hidden="true">+</span></button>
+                    <div class="accordion__body"><?php echo $body; // phpcs:ignore -- assembled from escaped parts above ?></div>
                 </div>
-                <div class="accordion__item">
-                    <button class="accordion__trigger" aria-expanded="false"><span class="accordion__title"><?php esc_html_e('Child policy','dil'); ?></span><span class="accordion__icon" aria-hidden="true">+</span></button>
-                    <div class="accordion__body"><p><?php esc_html_e('Children under 6 sharing with guardian: free. Children 6–12 years: USD 40/day for accommodation and all meals.','dil'); ?></p></div>
-                </div>
-                <div class="accordion__item">
-                    <button class="accordion__trigger" aria-expanded="false"><span class="accordion__title"><?php esc_html_e('Group offers','dil'); ?></span><span class="accordion__icon" aria-hidden="true">+</span></button>
-                    <div class="accordion__body"><p><?php esc_html_e('Group of 8 paying guests: 1 place free. Group of 20: 3 places free. FOC based on twin/double sharing, minimum 3 nights / 2 diving days.','dil'); ?></p></div>
-                </div>
-                <div class="accordion__item">
-                    <button class="accordion__trigger" aria-expanded="false"><span class="accordion__title"><?php esc_html_e('Deposit & payment','dil'); ?></span><span class="accordion__icon" aria-hidden="true">+</span></button>
-                    <div class="accordion__body">
-                        <p><?php esc_html_e('20% non-refundable deposit (min USD 250/person) within 14 days of invoice. Final payment 30 days before arrival. For bookings within 30 days of arrival, full payment required immediately.','dil'); ?></p>
-                        <p style="margin-top:12px;"><?php esc_html_e('Accepted: IDR, USD, EUR, GBP, SGD. Visa/MasterCard accepted with 2% surcharge.','dil'); ?></p>
-                    </div>
-                </div>
-                <div class="accordion__item">
-                    <button class="accordion__trigger" aria-expanded="false"><span class="accordion__title"><?php esc_html_e('Cancellation','dil'); ?></span><span class="accordion__icon" aria-hidden="true">+</span></button>
-                    <div class="accordion__body">
-                        <p><?php esc_html_e('All cancellations in writing to info@diveintolembeh.com.','dil'); ?></p>
-                        <table style="margin-top:12px;width:100%;font-size:14px;border-collapse:collapse;">
-                            <tr style="border-bottom:1px solid var(--border);"><th style="text-align:left;padding:8px 0;font-family:var(--font-heading);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;"><?php esc_html_e('Notice','dil'); ?></th><th style="text-align:left;padding:8px 0;font-family:var(--font-heading);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;"><?php esc_html_e('Charge','dil'); ?></th></tr>
-                            <tr style="border-bottom:1px solid var(--border);"><td style="padding:8px 0;"><?php esc_html_e('91–180 days','dil'); ?></td><td style="padding:8px 0;"><?php esc_html_e('25% fee, or deposit held 6 months','dil'); ?></td></tr>
-                            <tr style="border-bottom:1px solid var(--border);"><td style="padding:8px 0;"><?php esc_html_e('46–90 days','dil'); ?></td><td style="padding:8px 0;"><?php esc_html_e('50% fee, or deposit held 6 months','dil'); ?></td></tr>
-                            <tr><td style="padding:8px 0;"><?php esc_html_e('45 days or less','dil'); ?></td><td style="padding:8px 0;color:var(--burgundy);"><?php esc_html_e('Forfeit all monies paid','dil'); ?></td></tr>
-                        </table>
-                    </div>
-                </div>
+                <?php endforeach; ?>
                 <div class="accordion__item">
                     <button class="accordion__trigger" aria-expanded="false"><span class="accordion__title"><?php esc_html_e('How to book','dil'); ?></span><span class="accordion__icon" aria-hidden="true">+</span></button>
                     <div class="accordion__body">
