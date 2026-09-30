@@ -74,7 +74,7 @@ if ( empty( $hero_slides ) ) {
     <div class="nd-hud nd-hud--tr" aria-hidden="true">
         <?php esc_html_e( 'Water', 'dil' ); ?><span class="nd-big">28&deg;</span>
         01&deg;&nbsp;39'&nbsp;N&nbsp;&nbsp;125&deg;&nbsp;14'&nbsp;E<br>
-        <?php esc_html_e( '3 house reefs', 'dil' ); ?> &middot; <?php esc_html_e( '2 dive boats', 'dil' ); ?> &middot; <?php esc_html_e( 'since 2007', 'dil' ); ?><br>
+        <?php esc_html_e( '2 house reefs', 'dil' ); ?> &middot; <?php esc_html_e( '3 dive boats', 'dil' ); ?> &middot; <?php esc_html_e( 'since 2007', 'dil' ); ?><br>
         <?php esc_html_e( 'Spotted', 'dil' ); ?> <b class="nd-count">0</b>
     </div>
     <div class="nd-hint" aria-hidden="true"></div>
@@ -129,8 +129,8 @@ if ( empty( $hero_slides ) ) {
         01&deg;&nbsp;39'&nbsp;N&nbsp;&nbsp;125&deg;&nbsp;14'&nbsp;E
     </div>
     <div class="hero__meta-tr mono" aria-hidden="true">
-        —&nbsp;<?php esc_html_e( '3 house reefs', 'dil' ); ?>
-        &nbsp;·&nbsp;<?php esc_html_e( '2 dive boats', 'dil' ); ?>
+        —&nbsp;<?php esc_html_e( '2 house reefs', 'dil' ); ?>
+        &nbsp;·&nbsp;<?php esc_html_e( '3 dive boats', 'dil' ); ?>
         &nbsp;·&nbsp;<?php esc_html_e( 'since 2007', 'dil' ); ?>
     </div>
 
