@@ -318,19 +318,19 @@ function dil_old_site_redirects(): void {
     $map = [
         'hotel'                              => '/the-resort/',
         'spa'                                => '/the-resort/',
-        'about'                              => '/the-resort/',            // Kaj to confirm
+        'about'                              => '/',                       // was a leftover Dive Into Ambon "About us"
         'diving'                             => '/the-diving/',
         'diving-test'                        => '/the-diving/',
         'gethere'                            => '/info/#getting-here',
-        '2018/04/05/location-is-everything'  => '/info/#getting-here',     // old blog post — Kaj to confirm
+        '2018/04/05/location-is-everything'  => '/the-diving/#house-reefs', // 2018 post about the house reefs
         'topside'                            => '/info/#topside',
         'faq'                                => '/info/#faqs',
         'dan'                                => '/info/#dive-insurance',
         'contactus'                          => '/contact/',
-        'booking'                            => '/contact/',               // Kaj to confirm
+        'booking'                            => '/contact/',               // was a Dive Into Ambon booking form
         'dilgallery'                         => '/galleries/',             // + its sub-pages, below
         '360-photos'                         => '/galleries/',
-        'ambon'                              => '/',                       // Dive Into Ambon, closed — Kaj to confirm
+        'ambon'                              => '/',                       // Dive Into Ambon, closed
         'dia'                                => '/',                       // ditto
         'whoops-404'                         => '/',
     ];
