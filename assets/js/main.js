@@ -1119,6 +1119,21 @@
 
   if (contactForm && typeof DIL !== 'undefined') {
     const REQUIRED_FIELDS = ['name', 'email', 'message'];
+    const formOpened = Date.now();
+    const submitBtn  = contactForm.querySelector('.contact-form__submit');
+    const btnHTML    = submitBtn.innerHTML;   // label + arrow icon, restored after a failed send
+    const statusEl   = contactForm.querySelector('.form-status');
+    const SEND_FAILED = "Sorry — your message didn't send. Please email us at info@diveintolembeh.com.";
+
+    function showStatus(msg) {
+      if (!statusEl) return;
+      statusEl.textContent = msg;
+      statusEl.hidden = !msg;
+    }
+    function resetButton() {
+      submitBtn.disabled  = false;
+      submitBtn.innerHTML = btnHTML;
+    }
 
     function validateField(name, value) {
       if (name === 'email') {
@@ -1154,31 +1169,38 @@
 
       if (!valid) return;
 
-      const submitBtn = contactForm.querySelector('.contact-form__submit');
       submitBtn.disabled    = true;
       submitBtn.textContent = 'Sending…';
+      showStatus('');
 
-      data.append('action', 'dil_contact');
-      data.append('nonce',  DIL.nonce);
+      // The page is cached, so the security token in it may be days old: get a fresh one first
+      const post = body => fetch(DIL.ajaxUrl, { method: 'POST', body, credentials: 'same-origin' })
+        .then(r => r.json().catch(() => null));
+      const tokenReq = new FormData();
+      tokenReq.append('action', 'dil_contact_nonce');
 
-      fetch(DIL.ajaxUrl, { method: 'POST', body: data })
-        .then(r => r.json())
-        .then(res => {
-          if (res.success) {
-            contactForm.style.display  = 'none';
-            if (formSuccess) formSuccess.classList.add('is-visible');
-          } else {
-            if (res.data && res.data.errors) {
-              Object.entries(res.data.errors).forEach(([name, msg]) => setFieldError(name, msg));
-            }
-            submitBtn.disabled    = false;
-            submitBtn.textContent = 'Send Message →';
-          }
+      post(tokenReq)
+        .then(tok => {
+          if (!tok || !tok.success) throw new Error('no token');
+          data.append('action',  'dil_contact');
+          data.append('nonce',   tok.data.nonce);
+          data.append('elapsed', String(Date.now() - formOpened));   // bots submit instantly
+          return post(data);
         })
-        .catch(() => {
-          submitBtn.disabled    = false;
-          submitBtn.textContent = 'Send Message →';
-        });
+        .then(res => {
+          if (res && res.success) {
+            contactForm.style.display = 'none';
+            if (formSuccess) formSuccess.classList.add('is-visible');
+            return;
+          }
+          if (res && res.data && res.data.errors) {
+            Object.entries(res.data.errors).forEach(([name, msg]) => setFieldError(name, msg));
+          } else {
+            showStatus((res && res.data && res.data.message) || SEND_FAILED);
+          }
+          resetButton();
+        })
+        .catch(() => { showStatus(SEND_FAILED); resetButton(); });
     });
 
     // Live validation on blur

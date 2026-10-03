@@ -46,12 +46,12 @@ if ( ! $banner_img && has_post_thumbnail() ) {
             <div class="image-grid image-grid--3col" style="margin-top:28px;">
                 <?php
                 $boats = [
-                    [ 'mod' => 'dil_img_boat1', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/16b-Medium.jpg',                               'alt' => __( 'Dive boat', 'dil' ),              'caption' => __( 'Dive boat', 'dil' ),         'sub' => 'Morning departure' ],
-                    [ 'mod' => 'dil_img_boat2', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/boat-side-view-Medium.jpeg',                   'alt' => __( 'Dive boat side view', 'dil' ),    'caption' => __( 'Dive boat', 'dil' ),         'sub' => 'Side view' ],
-                    [ 'mod' => 'dil_img_boat3', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Dive-into-Lembeh-1-Speedboat-Medium.jpg',     'alt' => __( 'Speedboat on the strait', 'dil' ),'caption' => __( 'Speedboat', 'dil' ),         'sub' => 'Kasawari Bay' ],
+                    [ 'mod' => 'dil_img_boat1', 'default' => DIL_URI . '/assets/images/site/16b-medium.webp',                               'alt' => __( 'Dive boat', 'dil' ),              'caption' => __( 'Dive boat', 'dil' ),         'sub' => 'Morning departure' ],
+                    [ 'mod' => 'dil_img_boat2', 'default' => DIL_URI . '/assets/images/site/boat-side-view-medium.webp',                   'alt' => __( 'Dive boat side view', 'dil' ),    'caption' => __( 'Dive boat', 'dil' ),         'sub' => 'Side view' ],
+                    [ 'mod' => 'dil_img_boat3', 'default' => DIL_URI . '/assets/images/site/dive-into-lembeh-1-speedboat-medium.webp',     'alt' => __( 'Speedboat on the strait', 'dil' ),'caption' => __( 'Speedboat', 'dil' ),         'sub' => 'Kasawari Bay' ],
                     [ 'mod' => 'dil_img_boat4', 'default' => DIL_URI . '/assets/images/resort/dive-boats.webp',                                'alt' => __( 'Two of our three dive boats on the strait', 'dil' ),           'caption' => __( 'Dive boats', 'dil' ),      'sub' => 'Fiberglass speedboats' ],
-                    [ 'mod' => 'dil_img_boat5', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Sun-area-on-boat-Medium-1-e1471947051439.jpg','alt' => __( 'Sun deck on the boat', 'dil' ),   'caption' => __( 'Sun deck', 'dil' ),          'sub' => 'Surface interval' ],
-                    [ 'mod' => 'dil_img_boat6', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/View-from-Dive-center-Medium.jpeg',            'alt' => __( 'View from the dive centre', 'dil' ),'caption' => __( 'Dive centre view', 'dil' ),'sub' => 'Kasawari Bay' ],
+                    [ 'mod' => 'dil_img_boat5', 'default' => DIL_URI . '/assets/images/site/sun-area-on-boat-medium-1.webp','alt' => __( 'Sun deck on the boat', 'dil' ),   'caption' => __( 'Sun deck', 'dil' ),          'sub' => 'Surface interval' ],
+                    [ 'mod' => 'dil_img_boat6', 'default' => DIL_URI . '/assets/images/site/view-from-dive-center-medium.webp',            'alt' => __( 'View from the dive centre', 'dil' ),'caption' => __( 'Dive centre view', 'dil' ),'sub' => 'Kasawari Bay' ],
                 ];
                 foreach ( $boats as $tile ) :
                     $src = get_theme_mod( $tile['mod'], $tile['default'] ?? '' );
@@ -86,8 +86,8 @@ if ( ! $banner_img && has_post_thumbnail() ) {
                 <?php
                 $camera_room = [
                     [ 'mod' => 'dil_img_cam1', 'default' => DIL_URI . '/assets/images/resort/camera-room.webp',            'alt' => __( 'Camera room overview', 'dil' ),      'caption' => __( 'Camera room', 'dil' ),  'sub' => 'Full facilities' ],
-                    [ 'mod' => 'dil_img_cam2', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Camera-rinse-tanks.jpg',       'alt' => __( 'Camera rinse tanks', 'dil' ),        'caption' => __( 'Rinse tanks', 'dil' ),  'sub' => 'Individual' ],
-                    [ 'mod' => 'dil_img_cam3', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Camera-room-and-mats-copy.jpg','alt' => __( 'Camera room and dive mats', 'dil' ), 'caption' => __( 'Camera room', 'dil' ),  'sub' => 'With dive mats' ],
+                    [ 'mod' => 'dil_img_cam2', 'default' => DIL_URI . '/assets/images/site/camera-rinse-tanks.webp',       'alt' => __( 'Camera rinse tanks', 'dil' ),        'caption' => __( 'Rinse tanks', 'dil' ),  'sub' => 'Individual' ],
+                    [ 'mod' => 'dil_img_cam3', 'default' => DIL_URI . '/assets/images/site/camera-room-and-mats-copy.webp','alt' => __( 'Camera room and dive mats', 'dil' ), 'caption' => __( 'Camera room', 'dil' ),  'sub' => 'With dive mats' ],
                 ];
                 foreach ( $camera_room as $tile ) :
                     $src = get_theme_mod( $tile['mod'], $tile['default'] ?? '' );
@@ -121,12 +121,12 @@ if ( ! $banner_img && has_post_thumbnail() ) {
             <div class="image-grid image-grid--3col" style="margin-top:28px;">
                 <?php
                 $dive_centre = [
-                    [ 'mod' => 'dil_img_dc1', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Guest-locker-room-copy-Medium-1-e1471947448866.jpg', 'alt' => __( 'Guest locker room', 'dil' ),       'caption' => __( 'Locker room', 'dil' ),     'sub' => 'Personal lockers' ],
-                    [ 'mod' => 'dil_img_dc2', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Equipment-room-night-shot-Medium.jpeg',              'alt' => __( 'Equipment room at night', 'dil' ), 'caption' => __( 'Equipment room', 'dil' ),  'sub' => 'Night shot' ],
-                    [ 'mod' => 'dil_img_dc3', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Equipment-room-Medium-1-e1471947482648.jpg',         'alt' => __( 'Equipment room', 'dil' ),          'caption' => __( 'Equipment room', 'dil' ),  'sub' => 'Full kit storage' ],
-                    [ 'mod' => 'dil_img_dc4', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Boat-Interior-Medium.jpg',                           'alt' => __( 'Boat interior', 'dil' ),           'caption' => __( 'Boat interior', 'dil' ),   'sub' => 'Twin-engine boat' ],
-                    [ 'mod' => 'dil_img_dc5', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/Giant-stride-Medium.jpg',                            'alt' => __( 'Giant stride entry', 'dil' ),      'caption' => __( 'Giant stride', 'dil' ),    'sub' => 'House reef' ],
-                    [ 'mod' => 'dil_img_dc6', 'default' => 'https://diveintolembeh.com/wp-content/uploads/2018/03/camera-tank-view-Medium.jpg',                        'alt' => __( 'Camera tank view', 'dil' ),        'caption' => __( 'Camera tanks', 'dil' ),    'sub' => 'Dive centre' ],
+                    [ 'mod' => 'dil_img_dc1', 'default' => DIL_URI . '/assets/images/site/guest-locker-room-copy-medium-1.webp', 'alt' => __( 'Guest locker room', 'dil' ),       'caption' => __( 'Locker room', 'dil' ),     'sub' => 'Personal lockers' ],
+                    [ 'mod' => 'dil_img_dc2', 'default' => DIL_URI . '/assets/images/site/equipment-room-night-shot-medium.webp',              'alt' => __( 'Equipment room at night', 'dil' ), 'caption' => __( 'Equipment room', 'dil' ),  'sub' => 'Night shot' ],
+                    [ 'mod' => 'dil_img_dc3', 'default' => DIL_URI . '/assets/images/site/equipment-room-medium-1.webp',         'alt' => __( 'Equipment room', 'dil' ),          'caption' => __( 'Equipment room', 'dil' ),  'sub' => 'Full kit storage' ],
+                    [ 'mod' => 'dil_img_dc4', 'default' => DIL_URI . '/assets/images/site/boat-interior-medium.webp',                           'alt' => __( 'Boat interior', 'dil' ),           'caption' => __( 'Boat interior', 'dil' ),   'sub' => 'Twin-engine boat' ],
+                    [ 'mod' => 'dil_img_dc5', 'default' => DIL_URI . '/assets/images/site/giant-stride-medium.webp',                            'alt' => __( 'Giant stride entry', 'dil' ),      'caption' => __( 'Giant stride', 'dil' ),    'sub' => 'House reef' ],
+                    [ 'mod' => 'dil_img_dc6', 'default' => DIL_URI . '/assets/images/site/camera-tank-view-medium.webp',                        'alt' => __( 'Camera tank view', 'dil' ),        'caption' => __( 'Camera tanks', 'dil' ),    'sub' => 'Dive centre' ],
                 ];
                 foreach ( $dive_centre as $tile ) :
                     $src = get_theme_mod( $tile['mod'], $tile['default'] ?? '' );

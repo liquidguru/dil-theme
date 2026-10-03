@@ -303,6 +303,46 @@ function dil_area_map(): void {
     echo '<div class="area-map">' . $svg . '</div>'; // phpcs:ignore -- theme's own static SVG
 }
 
+/* ── Old-site addresses → new pages (301) ───────────────────── */
+
+/**
+ * Every page in the old site's sitemap (checked 4 Oct 2026), mapped to its new home, so search
+ * results, TripAdvisor links and bookmarks still land somewhere useful after launch. Kept in the
+ * theme rather than a redirect plugin so it travels with the migration and lives in git.
+ * Only runs when WordPress would otherwise show "not found" — a real page always wins.
+ */
+function dil_old_site_redirects(): void {
+    if ( ! is_404() ) {
+        return;
+    }
+    $map = [
+        'hotel'                              => '/the-resort/',
+        'spa'                                => '/the-resort/',
+        'about'                              => '/the-resort/',            // Kaj to confirm
+        'diving'                             => '/the-diving/',
+        'diving-test'                        => '/the-diving/',
+        'gethere'                            => '/info/#getting-here',
+        '2018/04/05/location-is-everything'  => '/info/#getting-here',     // old blog post — Kaj to confirm
+        'topside'                            => '/info/#topside',
+        'faq'                                => '/info/#faqs',
+        'dan'                                => '/info/#dive-insurance',
+        'contactus'                          => '/contact/',
+        'booking'                            => '/contact/',               // Kaj to confirm
+        'dilgallery'                         => '/galleries/',             // + its sub-pages, below
+        '360-photos'                         => '/galleries/',
+        'ambon'                              => '/',                       // Dive Into Ambon, closed — Kaj to confirm
+        'dia'                                => '/',                       // ditto
+        'whoops-404'                         => '/',
+    ];
+    $path = trim( (string) wp_parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ), '/' );
+    $to   = $map[ $path ] ?? ( str_starts_with( $path, 'dilgallery/' ) ? '/galleries/' : null );
+    if ( $to ) {
+        wp_safe_redirect( home_url( $to ), 301, 'Dive Into Lembeh theme' );
+        exit;
+    }
+}
+add_action( 'template_redirect', 'dil_old_site_redirects', 1 );
+
 /* ── Rate seasons (Rates page, top bar, sidebar box) ─────────── */
 
 /**
@@ -320,7 +360,7 @@ function dil_rate_seasons(): array {
             'rooms'      => [ 'longhouse' => 90, 'garden' => 135, 'pool' => 140, 'suite' => 165 ],
             'dive'       => 50,
             'single'     => [ 'longhouse' => 45, 'garden' => 60, 'pool' => 60, 'suite' => 60 ],
-            'pdf'        => 'https://diveintolembeh.com/wp-content/uploads/2025/06/Dive-into-Lembeh-2026-rates.pdf',
+            'pdf'        => DIL_URI . '/assets/docs/Dive-into-Lembeh-2026-rates.pdf',
             'show_until' => '2026-12-01',
         ],
         // 2027 rate sheet from the owners (29 Sep 2026) — every package price matches the formula;
@@ -368,8 +408,36 @@ function dil_thumbnail( int $post_id, string $size = 'dil-tile', string $label =
 
 /* ── Contact form AJAX handler ───────────────────────────────── */
 
+// The contact page is page-cached (SiteGround), so a nonce printed into it goes stale within a day
+// and every send would then fail. The form asks for a fresh one here, at the moment of sending —
+// admin-ajax POSTs are never cached.
+function dil_contact_nonce() {
+    nocache_headers();
+    wp_send_json_success( [ 'nonce' => wp_create_nonce( 'dil_nonce' ) ] );
+}
+add_action( 'wp_ajax_nopriv_dil_contact_nonce', 'dil_contact_nonce' );
+add_action( 'wp_ajax_dil_contact_nonce',        'dil_contact_nonce' );
+
 function dil_handle_contact() {
-    check_ajax_referer( 'dil_nonce', 'nonce' );
+    $fail = static fn( string $why ) => wp_send_json_error( [ 'code' => $why, 'message' => __( "Sorry — your message didn't send. Please email us at info@diveintolembeh.com.", 'dil' ) ] );
+
+    if ( ! check_ajax_referer( 'dil_nonce', 'nonce', false ) ) {
+        $fail( 'expired' );
+    }
+    // Spam guards: a hidden field only bots fill in (pretend it worked, send nothing), a form sent
+    // within 3 seconds of the page loading, and at most 5 messages an hour from one address.
+    if ( ! empty( $_POST['website'] ) ) {
+        wp_send_json_success();
+    }
+    if ( (int) ( $_POST['elapsed'] ?? 0 ) < 3000 ) {
+        $fail( 'too_fast' );
+    }
+    $ip   = sanitize_text_field( wp_unslash( $_SERVER['HTTP_CF_CONNECTING_IP'] ?? $_SERVER['REMOTE_ADDR'] ?? '' ) );   // behind Cloudflare
+    $key  = 'dil_contact_' . md5( $ip . wp_salt() );
+    $sent_this_hour = (int) get_transient( $key );
+    if ( $sent_this_hour >= 5 ) {
+        $fail( 'rate_limited' );
+    }
 
     $name     = sanitize_text_field( $_POST['name']    ?? '' );
     $email    = sanitize_email(      $_POST['email']   ?? '' );
@@ -402,10 +470,10 @@ function dil_handle_contact() {
     $sent = wp_mail( $to, $subject, $body, $headers );
 
     if ( $sent ) {
+        set_transient( $key, $sent_this_hour + 1, HOUR_IN_SECONDS );
         wp_send_json_success( [ 'message' => __( "Thank you — we'll reply within 24 hours.", 'dil' ) ] );
-    } else {
-        wp_send_json_error( [ 'message' => __( 'Something went wrong. Please email us directly.', 'dil' ) ] );
     }
+    $fail( 'mail_failed' );
 }
 add_action( 'wp_ajax_nopriv_dil_contact', 'dil_handle_contact' );
 add_action( 'wp_ajax_dil_contact',        'dil_handle_contact' );
@@ -419,7 +487,7 @@ function dil_schema_jsonld() {
         'name'        => 'Dive Into Lembeh',
         'alternateName' => 'DIL',
         'description' => 'Boutique macro-dive resort on the Lembeh Strait, North Sulawesi. World-class muck diving, private Onsen bungalows, freshwater pool and personalised service.',
-        'url'         => 'https://www.diveintolembeh.com',
+        'url'         => home_url( '/' ),
         'logo'        => get_template_directory_uri() . '/assets/images/logo.png',
         'image'       => get_template_directory_uri() . '/assets/images/hero-1.jpg',
         'telephone'   => '',

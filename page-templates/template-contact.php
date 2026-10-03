@@ -23,7 +23,13 @@ require_once get_template_directory() . '/inc/inner-page.php';
         <h2 class="contact-form__title"><?php esc_html_e( 'Send us a message', 'dil' ); ?></h2>
 
         <form id="dil-contact-form" novalidate>
-            <?php wp_nonce_field( 'dil_nonce', 'dil_form_nonce' ); ?>
+            <?php // No nonce in the markup: this page is cached, so main.js fetches a fresh one when sending ?>
+
+            <!-- Spam trap: hidden from people, filled in by bots (the server then quietly sends nothing) -->
+            <div class="form-hp" aria-hidden="true">
+                <label for="contact-website">Website</label>
+                <input type="text" id="contact-website" name="website" tabindex="-1" autocomplete="off">
+            </div>
 
             <div class="form-row" data-field="name">
                 <label for="contact-name"><?php esc_html_e( 'Your name', 'dil' ); ?></label>
@@ -49,7 +55,7 @@ require_once get_template_directory() . '/inc/inner-page.php';
                 <label for="contact-nights"><?php esc_html_e( 'Number of nights', 'dil' ); ?></label>
                 <select id="contact-nights" name="nights">
                     <option value=""><?php esc_html_e( 'Select…', 'dil' ); ?></option>
-                    <?php foreach ( [ 4, 5, 7, 10, 14, 21 ] as $n ) : ?>
+                    <?php foreach ( [ 3, 4, 5, 7, 10, 14, 21 ] as $n ) : ?>
                         <option value="<?php echo esc_attr( $n ); ?>">
                             <?php echo esc_html( $n ); ?>
                         </option>
@@ -75,6 +81,8 @@ require_once get_template_directory() . '/inc/inner-page.php';
                 <textarea id="contact-message" name="message" rows="5" required></textarea>
                 <span class="form-error" aria-live="polite"></span>
             </div>
+
+            <p class="form-status" role="alert" hidden></p>
 
             <button type="submit" class="contact-form__submit">
                 <?php esc_html_e( 'Send message', 'dil' ); ?>

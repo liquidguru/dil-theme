@@ -2194,6 +2194,13 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 
 .contact-form__submit:hover { background: var(--burgundy-d); }
 
+/* Spam trap field (template-contact.php) — off screen, not display:none, so bots still fill it */
+.form-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+/* Shown when a send fails (main.js "Contact form") */
+.form-status { margin: 0 0 16px; color: var(--burgundy); font-size: 15px; }
+[data-theme="dark"] .form-status { color: var(--gold); }
+.form-status[hidden] { display: none; }
+
 .form-success {
   border: 1px double var(--border);
   padding: 48px 36px;

@@ -15,7 +15,6 @@ if ( ! $banner_img && has_post_thumbnail() ) {
     $banner_img = get_the_post_thumbnail_url( null, 'dil-banner' );
 }
 
-$cdn = 'https://diveintolembeh.com/wp-content/uploads/';
 ?>
 
 <?php dil_page_banner( [
@@ -201,8 +200,8 @@ $cdn = 'https://diveintolembeh.com/wp-content/uploads/';
             </div>
 
             <?php
-            $ts1 = get_theme_mod( 'dil_img_topside1', $cdn . '2018/05/TS01.jpg' );
-            $ts2 = get_theme_mod( 'dil_img_topside2', $cdn . '2018/05/TS02.jpg' );
+            $ts1 = get_theme_mod( 'dil_img_topside1', DIL_URI . '/assets/images/site/ts01.webp' );
+            $ts2 = get_theme_mod( 'dil_img_topside2', DIL_URI . '/assets/images/site/ts02.webp' );
             ?>
             <div class="image-grid image-grid--2col" style="margin-bottom:28px;">
                 <?php foreach ( [ $ts1, $ts2 ] as $i => $src ) : if ( $src ) : ?>
@@ -246,7 +245,7 @@ $cdn = 'https://diveintolembeh.com/wp-content/uploads/';
 
             <div style="display:flex;align-items:flex-start;gap:32px;flex-wrap:wrap;margin-bottom:28px;">
                 <?php
-                $dan_logo = get_theme_mod( 'dil_img_dan_logo', $cdn . '2017/07/DAN-2-Mobile-249x300.png' );
+                $dan_logo = get_theme_mod( 'dil_img_dan_logo', DIL_URI . '/assets/images/site/dan-2-mobile-249x300.webp' );
                 if ( $dan_logo ) :
                 ?>
                     <img src="<?php echo esc_url( $dan_logo ); ?>"
