@@ -162,6 +162,51 @@ function dil_placeholder( string $label, string $extra_class = '' ): string {
     return '<div class="photo-placeholder ' . esc_attr( $extra_class ) . '"><span>' . esc_html( $label ) . '</span></div>';
 }
 
+/* ── Instagram: Behold JSON feed, cached server-side ────────── */
+
+/**
+ * Latest Instagram posts for the sidebar, from the Behold feed (behold.so, account liquidguru@gmail.com,
+ * source @diveinto_lembeh). Fetched at most every 6 hours and kept in a transient, so visitor page views
+ * never reach Behold (free plan: 1,200 feed views a month). The last good copy is also kept in an option
+ * and served whenever Behold is down or the feed breaks, so the box never empties once it has worked.
+ * Returns [ [ 'url', 'img', 'alt' ], ... ], or [] if there has never been a good fetch.
+ */
+const DIL_BEHOLD_FEED = 'https://feeds.behold.so/xvwfoCILm5L2oSU3IQST';
+
+function dil_instagram_posts(): array {
+    $posts = get_transient( 'dil_ig_feed' );
+    if ( is_array( $posts ) ) {
+        return $posts;
+    }
+
+    $posts = [];
+    $res   = wp_remote_get( DIL_BEHOLD_FEED, [ 'timeout' => 5 ] );
+    $data  = is_wp_error( $res ) || 200 !== wp_remote_retrieve_response_code( $res )
+        ? null : json_decode( wp_remote_retrieve_body( $res ), true );
+
+    foreach ( (array) ( $data['posts'] ?? [] ) as $p ) {
+        $img = $p['sizes']['small']['mediaUrl'] ?? ( $p['thumbnailUrl'] ?? '' );
+        if ( empty( $p['permalink'] ) || ! $img ) {
+            continue;
+        }
+        $posts[] = [
+            'url' => $p['permalink'],
+            'img' => $img,
+            'alt' => wp_trim_words( (string) ( $p['prunedCaption'] ?? '' ), 12, '…' ),
+        ];
+    }
+
+    if ( $posts ) {
+        update_option( 'dil_ig_feed_stale', $posts, false );
+        set_transient( 'dil_ig_feed', $posts, 6 * HOUR_IN_SECONDS );
+    } else {
+        // Failed: fall back to the last good copy, and don't retry for 30 minutes.
+        $posts = (array) get_option( 'dil_ig_feed_stale', [] );
+        set_transient( 'dil_ig_feed', $posts, 30 * MINUTE_IN_SECONDS );
+    }
+    return $posts;
+}
+
 /* ── Helper: night-dive hero slide data ─────────────────────── */
 
 /**
@@ -208,7 +253,7 @@ function dil_hero_slide_data( string $url ): array {
 function dil_social_links(): array {
     return [
         'Facebook'  => [ 'https://www.facebook.com/diveintolembeh', '<path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>' ],
-        'Instagram' => [ 'https://www.instagram.com/diveintolembeh', '<rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.5"/>' ],
+        'Instagram' => [ 'https://www.instagram.com/diveinto_lembeh', '<rect x="2" y="2" width="20" height="20" rx="5" ry="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.5"/>' ],
         'YouTube'   => [ 'https://www.youtube.com/@diveintolembeh', '<path d="M22.54 6.42a2.78 2.78 0 00-1.94-1.96C18.88 4 12 4 12 4s-6.88 0-8.6.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.94 1.96C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 001.94-1.96A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75,15.02 15.5,12 9.75,8.98 9.75,15.02" style="fill:var(--paper, #fff)"/>' ],
         'Vimeo'     => [ 'https://vimeo.com/liquidguru', '<path d="M23.977 6.416c-.105 2.338-1.739 5.543-4.894 9.609-3.268 4.247-6.026 6.37-8.29 6.37-1.409 0-2.578-1.294-3.553-3.881L5.322 11.4C4.603 8.816 3.834 7.522 3.01 7.522c-.179 0-.806.378-1.881 1.132L0 7.197a315.065 315.065 0 003.501-3.128C5.08 2.701 6.266 1.984 7.055 1.91c1.867-.18 3.016 1.1 3.447 3.838.465 2.953.789 4.789.971 5.507.539 2.45 1.131 3.674 1.776 3.674.502 0 1.256-.796 2.265-2.385 1.004-1.589 1.54-2.797 1.612-3.628.144-1.371-.395-2.061-1.614-2.061-.574 0-1.167.121-1.777.391 1.186-3.868 3.434-5.757 6.762-5.637 2.473.06 3.628 1.664 3.48 4.807z"/>' ],
     ];
@@ -590,7 +635,7 @@ function dil_schema_jsonld() {
         'paymentAccepted'    => 'Cash, Credit Card, Bank Transfer',
         'sameAs' => [
             'https://www.facebook.com/diveintolembeh',
-            'https://www.instagram.com/diveintolembeh',
+            'https://www.instagram.com/diveinto_lembeh',
             'https://www.youtube.com/@diveintolembeh',
             'https://vimeo.com/liquidguru',
         ],

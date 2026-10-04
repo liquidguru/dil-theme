@@ -119,15 +119,28 @@ function dil_sidebar(): void {
             </div>
             <div class="sidebar-widget__body widget-instagram">
                 <?php
-                // Output from Instagram Feed plugin (Smash Balloon / SBI) if active
-                if ( shortcode_exists( 'instagram-feed' ) ) {
+                $ig_posts = dil_instagram_posts();
+                if ( $ig_posts ) {
+                    // Latest posts from the cached Behold feed
+                    echo '<div class="widget-instagram__grid">';
+                    foreach ( array_slice( $ig_posts, 0, 6 ) as $p ) {
+                        printf(
+                            '<a href="%s" target="_blank" rel="noopener"><img src="%s" alt="%s" width="302" height="302" loading="lazy" decoding="async"></a>',
+                            esc_url( $p['url'] ),
+                            esc_url( $p['img'] ),
+                            esc_attr( $p['alt'] ?: __( 'Instagram post', 'dil' ) )
+                        );
+                    }
+                    echo '</div>';
+                } elseif ( shortcode_exists( 'instagram-feed' ) ) {
+                    // Output from Instagram Feed plugin (Smash Balloon / SBI) if active
                     echo do_shortcode( '[instagram-feed num=9 cols=3 showheader=false showbutton=false showfollow=false]' );
                 } else {
                     ?>
                     <div class="widget-instagram__grid">
                         <?php
                         for ( $i = 0; $i < 9; $i++ ) {
-                            echo '<a href="https://www.instagram.com/diveintolembeh" target="_blank" rel="noopener" aria-label="' . esc_attr__( 'Instagram post', 'dil' ) . '">';
+                            echo '<a href="https://www.instagram.com/diveinto_lembeh" target="_blank" rel="noopener" aria-label="' . esc_attr__( 'Instagram post', 'dil' ) . '">';
                             echo dil_placeholder( 'IG' ); // phpcs:ignore
                             echo '</a>';
                         }
