@@ -52,10 +52,10 @@ if ( empty( $hero_slides ) ) {
          data-frame="<?php esc_attr_e( 'Frame', 'dil' ); ?>">
 
     <div class="nd-layer nd-ambient" aria-hidden="true">
-        <img class="nd-img" src="<?php echo esc_url( $hero_slides[0] ); ?>" alt="">
+        <img class="nd-img" src="<?php echo esc_url( dil_webp_url( $hero_slides[0] ) ); ?>" alt="">
     </div>
     <div class="nd-layer nd-lit">
-        <img class="nd-img" src="<?php echo esc_url( $hero_slides[0] ); ?>"
+        <img class="nd-img" src="<?php echo esc_url( dil_webp_url( $hero_slides[0] ) ); ?>"
              alt="<?php esc_attr_e( 'Macro critter on the black volcanic sand of the Lembeh Strait', 'dil' ); ?>"
              loading="eager" fetchpriority="high">
         <img class="nd-hider" alt="" aria-hidden="true">
@@ -110,7 +110,7 @@ if ( empty( $hero_slides ) ) {
     <div class="hero__bg" id="hero-bg">
         <?php if ( ! empty( $hero_slides ) ) : ?>
             <?php foreach ( $hero_slides as $i => $slide_url ) : ?>
-                <img src="<?php echo esc_url( $slide_url ); ?>"
+                <img src="<?php echo esc_url( dil_webp_url( $slide_url ) ); ?>"
                      class="hero__slide<?php echo $i === 0 ? ' is-active' : ''; ?>"
                      alt="<?php esc_attr_e( 'Macro critter on the black volcanic sand of the Lembeh Strait', 'dil' ); ?>"
                      loading="<?php echo $i === 0 ? 'eager' : 'lazy'; ?>"
@@ -206,11 +206,14 @@ if ( empty( $hero_slides ) ) {
      SECTION 4 — COME, EXPLORE LEMBEH (full-bleed)
      ═══════════════════════════════════════════════════════════ -->
 <?php
-$explore_style = $explore_img
-    ? 'background-image: url(' . esc_url( $explore_img ) . ');'
-    : '';
+// Background loads as the section nears the screen (main.js "Lazy backgrounds"), not with the hero —
+// it's the biggest photo on the page and far below the fold. <noscript> keeps it without JS.
+$explore_bg = $explore_img ? dil_webp_url( $explore_img ) : '';
 ?>
-<section class="section--fullbleed section--parallax" style="<?php echo esc_attr( $explore_style ); ?>">
+<?php if ( $explore_bg ) : ?>
+<noscript><style>.section--parallax[data-bg] { background-image: url(<?php echo esc_url( $explore_bg ); ?>); }</style></noscript>
+<?php endif; ?>
+<section class="section--fullbleed section--parallax"<?php if ( $explore_bg ) : ?> data-bg="<?php echo esc_url( $explore_bg ); ?>"<?php endif; ?>>
 
     <div class="section__overlay" aria-hidden="true"></div>
 
@@ -328,7 +331,7 @@ $explore_style = $explore_img
                 $diving_card_img = get_theme_mod( 'dil_card_diving_image', '' );
                 if ( $diving_card_img ) :
                 ?>
-                    <img src="<?php echo esc_url( $diving_card_img ); ?>"
+                    <img src="<?php echo esc_url( dil_webp_url( $diving_card_img ) ); ?>"
                          alt="<?php esc_attr_e( 'Diver on the Lembeh house reef', 'dil' ); ?>"
                          loading="lazy">
                 <?php else : ?>
@@ -347,7 +350,7 @@ $explore_style = $explore_img
                 $resort_card_img = get_theme_mod( 'dil_card_resort_image', '' );
                 if ( $resort_card_img ) :
                 ?>
-                    <img src="<?php echo esc_url( $resort_card_img ); ?>"
+                    <img src="<?php echo esc_url( dil_webp_url( $resort_card_img ) ); ?>"
                          alt="<?php esc_attr_e( 'Bungalow at Dive Into Lembeh resort', 'dil' ); ?>"
                          loading="lazy">
                 <?php else : ?>

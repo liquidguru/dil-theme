@@ -3,10 +3,13 @@
    ============================================================ */
 
 /* ── 0. FONT FACES ──────────────────────────────────────────── */
+/* WOFF2 first (Oct 2026: 690 KB -> 131 KB for the four fonts in use); header.php preloads the three
+   the first screen needs, so the hero text doesn't jump when they arrive. */
 
 @font-face {
   font-family: 'code-pro-light-lc';
-  src: url('../fonts/Fontfabric - Code-Pro-Light-LC.otf') format('opentype');
+  src: url('../fonts/code-pro-light-lc.woff2') format('woff2'),
+       url('../fonts/Fontfabric - Code-Pro-Light-LC.otf') format('opentype');
   font-weight: normal;
   font-style:  normal;
   font-display: swap;
@@ -22,7 +25,10 @@
 
 @font-face {
   font-family: 'pt-sans';
-  src: url('../fonts/PT Sans Regular.ttf') format('truetype');
+  src: url('../fonts/pt-sans-latin.woff2') format('woff2'),
+       url('../fonts/PT Sans Regular.ttf') format('truetype');
+  /* the WOFF2 is trimmed to Latin + the symbols the site uses (502 KB -> 48 KB); anything else falls back */
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2070-209F, U+20AC, U+2122, U+2190-21FF, U+2212, U+2215, U+2248, U+2264-2265, U+25CF, U+2713, U+FEFF, U+FFFD;
   font-weight: normal;
   font-style:  normal;
   font-display: swap;
@@ -30,7 +36,8 @@
 
 @font-face {
   font-family: 'deli-deluxe';
-  src: url('../fonts/DeliDeluxeITCStd.otf') format('opentype');
+  src: url('../fonts/deli-deluxe.woff2') format('woff2'),
+       url('../fonts/DeliDeluxeITCStd.otf') format('opentype');
   font-weight: normal;
   font-style:  normal;
   font-display: swap;
@@ -46,7 +53,8 @@
 
 @font-face {
   font-family: 'zapfino';
-  src: url('../fonts/ZapfinoLT.ttf') format('truetype');
+  src: url('../fonts/zapfino.woff2') format('woff2'),
+       url('../fonts/ZapfinoLT.ttf') format('truetype');
   font-weight: normal;
   font-style:  normal;
   font-display: swap;

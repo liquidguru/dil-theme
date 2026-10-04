@@ -44,10 +44,10 @@ add_action( 'after_setup_theme', 'dil_setup' );
 /* ── Enqueue scripts & styles ───────────────────────────────── */
 
 function dil_scripts() {
-    // Google Fonts — DM Mono only (Code Pro & PT Sans via Use Any Font plugin)
+    // Google Fonts — DM Mono only (the theme's own fonts are self-hosted in assets/fonts, see main.css)
     wp_enqueue_style(
         'dil-google-fonts',
-        'https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Tangerine:wght@400;700&display=swap',
+        'https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap',
         [],
         null
     );
@@ -69,6 +69,31 @@ function dil_scripts() {
         wp_enqueue_script( 'leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',  [], '1.9.4', true );
     }
 }
+
+/**
+ * Speed (Oct 2026). Fetch the fonts the first screen needs straight away, so the hero text doesn't
+ * re-flow when they arrive late on slow connections (that showed up as layout shift in Cloudflare's
+ * Web Analytics) — body font everywhere, the wordmark's two fonts on the home page only.
+ */
+function dil_preload_fonts(): void {
+    $fonts = [ 'pt-sans-latin.woff2' ];
+    if ( is_front_page() ) {
+        array_push( $fonts, 'deli-deluxe.woff2', 'zapfino.woff2' );
+    }
+    echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' . "\n";
+    foreach ( $fonts as $f ) {
+        printf( '<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin>' . "\n", esc_url( DIL_URI . '/assets/fonts/' . $f ) );
+    }
+}
+add_action( 'wp_head', 'dil_preload_fonts', 1 );
+
+/** The map's stylesheet doesn't need to hold up the first paint — the maps are far down the page. */
+add_filter( 'style_loader_tag', static function ( string $tag, string $handle ): string {
+    if ( 'leaflet' === $handle ) {
+        $tag = str_replace( "media='all'", "media='print' onload=\"this.media='all'\"", $tag );
+    }
+    return $tag;
+}, 10, 2 );
 add_action( 'wp_enqueue_scripts', 'dil_scripts' );
 
 /* ── Widget areas ───────────────────────────────────────────── */
@@ -144,6 +169,22 @@ function dil_placeholder( string $label, string $extra_class = '' ): string {
  * Name comes from the original slide filenames, then the Media Library title
  * (skipped when it is just the filename, which is WordPress's default).
  */
+/**
+ * Media-library photo → its WebP copy, if one sits next to it on disk (e.g. uploads/dil/sl-pygmy.jpg →
+ * sl-pygmy.webp). Lets lighter versions be dropped in beside the originals without touching the
+ * Customizer settings that point at the JPGs. Anything else is returned unchanged.
+ */
+function dil_webp_url( string $url ): string {
+    $up  = wp_get_upload_dir();
+    $rel = strstr( (string) wp_parse_url( $url, PHP_URL_PATH ), '/wp-content/uploads/' );
+    if ( ! $rel || ! preg_match( '/\.(jpe?g|png)$/i', $rel ) ) {
+        return $url;
+    }
+    $file = $up['basedir'] . substr( $rel, strlen( '/wp-content/uploads' ) );
+    $webp = preg_replace( '/\.(jpe?g|png)$/i', '.webp', $file );
+    return file_exists( $webp ) ? preg_replace( '/\.(jpe?g|png)$/i', '.webp', $url ) : $url;
+}
+
 function dil_hero_slide_data( string $url ): array {
     $known = [
         'sl-pygmy'  => __( 'Pygmy seahorse', 'dil' ),
@@ -158,7 +199,7 @@ function dil_hero_slide_data( string $url ): array {
         $title = get_the_title( $id );
         if ( strtolower( $title ) !== $slug ) $name = $title;
     }
-    return [ 'src' => $url, 'name' => $name ];
+    return [ 'src' => dil_webp_url( $url ), 'name' => $name ];
 }
 
 /* ── Social links (Follow dropdown + mobile menu icons) ─────── */

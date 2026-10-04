@@ -168,7 +168,7 @@
       latin: 'Antennarius striatus',
       depth: '5 – 40 m',
       angle: 0,
-      img:   'hairy-frogfish.jpg',
+      img:   'hairy-frogfish.webp',
     },
     {
       id:    'mimic-octopus',
@@ -176,7 +176,7 @@
       latin: 'Thaumoctopus mimicus',
       depth: '3 – 20 m',
       angle: 45,
-      img:   'mimic-octopus.jpg',
+      img:   'mimic-octopus.webp',
     },
     {
       id:    'blue-ringed-octopus',
@@ -184,7 +184,7 @@
       latin: 'Hapalochlaena lunulata',
       depth: '1 – 20 m',
       angle: 90,
-      img:   'blue-ringed-octopus.jpg',
+      img:   'blue-ringed-octopus.webp',
     },
     {
       id:    'mandarin-fish',
@@ -192,7 +192,7 @@
       latin: 'Synchiropus splendidus',
       depth: '1 – 18 m',
       angle: 135,
-      img:   'mandarin-fish.jpg',
+      img:   'mandarin-fish.webp',
     },
     {
       id:    'flamboyant-cuttlefish',
@@ -200,7 +200,7 @@
       latin: 'Metasepia pfefferi',
       depth: '3 – 30 m',
       angle: 180,
-      img:   'flamboyant-cuttlefish.jpg',
+      img:   'flamboyant-cuttlefish.webp',
     },
     {
       id:    'rhinopias',
@@ -208,7 +208,7 @@
       latin: 'Rhinopias frondosa',
       depth: '10 – 30 m',
       angle: 225,
-      img:   'rhinopias.jpg',
+      img:   'rhinopias.webp',
     },
     {
       id:    'melibe-colemani',
@@ -216,7 +216,7 @@
       latin: 'Melibe colemani',
       depth: '5 – 25 m',
       angle: 270,
-      img:   'melibe-colemani.jpg',
+      img:   'melibe-colemani.webp',
     },
     {
       id:    'pygmy-seahorse',
@@ -224,7 +224,7 @@
       latin: 'Hippocampus bargibanti',
       depth: '10 – 40 m',
       angle: 315,
-      img:   'pygmy-seahorse.jpg',
+      img:   'pygmy-seahorse.webp',
     },
   ];
 
@@ -1211,6 +1211,19 @@
         }
       });
     });
+  }
+
+  /* ── Lazy backgrounds ─────────────────────────────────────── */
+  // [data-bg] sections get their background photo when they come within ~1 screen of view
+  const lazyBgs = document.querySelectorAll('[data-bg]');
+  const setBg = el => { el.style.backgroundImage = `url("${el.dataset.bg}")`; };
+  if ('IntersectionObserver' in window) {
+    const bgIo = new IntersectionObserver(entries => entries.forEach(en => {
+      if (en.isIntersecting) { setBg(en.target); bgIo.unobserve(en.target); }
+    }), { rootMargin: '100% 0px' });
+    lazyBgs.forEach(el => bgIo.observe(el));
+  } else {
+    lazyBgs.forEach(setBg);
   }
 
   /* ── Facebook sidebar: page plugin at the column's width ─── */
