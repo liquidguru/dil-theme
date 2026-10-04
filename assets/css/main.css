@@ -2194,6 +2194,11 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 
 .contact-form__submit:hover { background: var(--burgundy-d); }
 
+/* "Contact us for rates" note — shown on /contact/?rates=enquire (the Indonesia redirect target) */
+.contact-rates-note { border-left: 3px solid var(--burgundy); background: var(--cream); padding: 18px 22px; margin-bottom: 32px; }
+.contact-rates-note__title { font-family: var(--font-heading); font-size: 20px; margin: 0 0 8px; }
+.contact-rates-note p:last-child { margin: 0; }
+
 /* Spam trap field (template-contact.php) — off screen, not display:none, so bots still fill it */
 .form-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 /* Shown when a send fails (main.js "Contact form") */

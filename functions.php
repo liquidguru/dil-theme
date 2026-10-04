@@ -13,8 +13,6 @@ define( 'DIL_URI',     get_template_directory_uri() );
 // CARTO basemaps key — referer-restricted to diveintolembeh.com, *.diveintolembeh.com, diveintolembeh.local
 define( 'DIL_CARTO_KEY', 'cb1_3v34_1_23efb3e25995a7ee0f6a005d' );
 
-// Staging-only visitor log (Tools → Staging visitors). Remove this line + the file before launch.
-require_once DIL_DIR . '/inc/staging-visits.php';
 
 /* ── Theme setup ─────────────────────────────────────────────── */
 
@@ -471,10 +469,34 @@ function dil_handle_contact() {
 
     if ( $sent ) {
         set_transient( $key, $sent_this_hour + 1, HOUR_IN_SECONDS );
+        dil_contact_confirmation( $email, $name );
         wp_send_json_success( [ 'message' => __( "Thank you — we'll reply within 24 hours.", 'dil' ) ] );
     }
     $fail( 'mail_failed' );
 }
+/**
+ * "We've got your message" email to the sender. Deliberately a FIXED text: forms that echo the
+ * visitor's message back get abused to send spam from the resort's address to strangers, so the
+ * only thing reused is a first name, and only if it looks like one. Sent as info@ via WP Mail SMTP.
+ */
+function dil_contact_confirmation( string $email, string $name ): void {
+    $first = trim( strtok( $name, ' ' ) ?: '' );
+    if ( mb_strlen( $first ) > 30 || preg_match( '~[@/:.\d]|www|http~i', $first ) ) {
+        $first = '';
+    }
+    $hello = $first ? sprintf( __( 'Hi %s,', 'dil' ), $first ) : __( 'Hi there,', 'dil' );
+    $body  = $hello . "\n\n"
+        . __( "Thanks for getting in touch with Dive Into Lembeh. We've received your message and will reply within 24 hours.", 'dil' ) . "\n\n"
+        . __( 'If you need us sooner, just reply to this email or write to info@diveintolembeh.com.', 'dil' ) . "\n\n"
+        . __( 'Warm regards,', 'dil' ) . "\n"
+        . __( 'The Dive Into Lembeh team', 'dil' ) . "\n"
+        . home_url( '/' ) . "\n";
+    wp_mail( $email, __( "We've received your message — Dive Into Lembeh", 'dil' ), $body, [
+        'Content-Type: text/plain; charset=UTF-8',
+        'Reply-To: Dive Into Lembeh <info@diveintolembeh.com>',
+    ] );
+}
+
 add_action( 'wp_ajax_nopriv_dil_contact', 'dil_handle_contact' );
 add_action( 'wp_ajax_dil_contact',        'dil_handle_contact' );
 

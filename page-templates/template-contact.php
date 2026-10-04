@@ -20,6 +20,17 @@ require_once get_template_directory() . '/inc/inner-page.php';
 
     <!-- Contact form -->
     <div class="contact-form-wrap" id="main-content" tabindex="-1">
+        <?php
+        // Visitors from Indonesia can't be shown USD prices (Indonesian law): a Cloudflare redirect rule
+        // sends them from /rates/ and the rate-sheet PDFs to /contact/?rates=enquire. The owners' own
+        // wording from the old rates page. (A query string also skips SiteGround's page cache.)
+        if ( 'enquire' === ( $_GET['rates'] ?? '' ) ) : ?>
+            <div class="contact-rates-note" role="note">
+                <p class="contact-rates-note__title"><?php esc_html_e( 'Thanks for your interest in coming to visit Dive Into Lembeh', 'dil' ); ?></p>
+                <p><?php esc_html_e( 'To book your dive trip, speak with your Dive Travel Agent or email us directly at info@diveintolembeh.com — or use the form below and we will send you our rates.', 'dil' ); ?></p>
+            </div>
+        <?php endif; ?>
+
         <h2 class="contact-form__title"><?php esc_html_e( 'Send us a message', 'dil' ); ?></h2>
 
         <form id="dil-contact-form" novalidate>
