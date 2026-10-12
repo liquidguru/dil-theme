@@ -106,7 +106,7 @@ function dil_sidebar(): void {
                 <p class="widget-rates__text">
                     <?php esc_html_e( 'Packages from 3 nights. Includes diving, meals, and transfers. Limited availability.', 'dil' ); ?>
                 </p>
-                <a href="<?php echo esc_url( home_url( '/info/rates/' ) ); ?>" class="btn btn-outline">
+                <a href="<?php echo esc_url( home_url( '/rates/' ) ); ?>" class="btn btn-outline">
                     <?php esc_html_e( 'View Rates', 'dil' ); ?>
                 </a>
             </div>
