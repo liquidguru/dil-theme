@@ -220,7 +220,7 @@ function dil_sidebar(): void {
                         <div>
                             <div class="widget-partner__name">Raja Ampat</div>
                             <div class="widget-partner__desc">
-                                <a href="<?php echo esc_url( home_url( '/raja-ampat/' ) ); ?>">
+                                <a href="https://diveintorajaampat.com/" target="_blank" rel="noopener">
                                     <?php esc_html_e( 'Our sister destination', 'dil' ); ?>
                                 </a>
                             </div>
