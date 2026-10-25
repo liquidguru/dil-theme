@@ -432,7 +432,7 @@ $explore_bg = $explore_img ? dil_webp_url( $explore_img ) : '';
             $video_hash = get_theme_mod( 'dil_hero_video_hash', 'b6d8638803' );
             ?>
                 <iframe
-                    src="https://player.vimeo.com/video/<?php echo esc_attr( $video_id ); ?>?h=<?php echo esc_attr( $video_hash ); ?>&color=6E1F22&byline=0&portrait=0"
+                    src="https://player.vimeo.com/video/<?php echo esc_attr( $video_id ); ?>?h=<?php echo esc_attr( $video_hash ); ?>&color=6E1F22&byline=0&portrait=0&dnt=1"
                     title="<?php esc_attr_e( 'Dive Into Lembeh — under the surface', 'dil' ); ?>"
                     frameborder="0"
                     allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"

@@ -44,16 +44,11 @@ add_action( 'after_setup_theme', 'dil_setup' );
 /* ── Enqueue scripts & styles ───────────────────────────────── */
 
 function dil_scripts() {
-    // Google Fonts — DM Mono only (the theme's own fonts are self-hosted in assets/fonts, see main.css)
-    wp_enqueue_style(
-        'dil-google-fonts',
-        'https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap',
-        [],
-        null
-    );
+    // All fonts are self-hosted in assets/fonts (see main.css) — DM Mono too since Oct 2026, so no visitor
+    // IP goes to Google Fonts (privacy: no third-party requests that would need consent).
 
     // Main stylesheet — version from file mtime for automatic cache-busting
-    wp_enqueue_style( 'dil-style', DIL_URI . '/assets/css/main.css', [ 'dil-google-fonts' ], filemtime( DIL_DIR . '/assets/css/main.css' ) );
+    wp_enqueue_style( 'dil-style', DIL_URI . '/assets/css/main.css', [], filemtime( DIL_DIR . '/assets/css/main.css' ) );
 
     // Main JS
     wp_enqueue_script( 'dil-main', DIL_URI . '/assets/js/main.js', [], filemtime( DIL_DIR . '/assets/js/main.js' ), true );
@@ -65,8 +60,9 @@ function dil_scripts() {
     ] );
     // Leaflet map — front page and info page
     if ( is_front_page() || is_page_template( 'page-templates/template-info.php' ) ) {
-        wp_enqueue_style(  'leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', [], '1.9.4' );
-        wp_enqueue_script( 'leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',  [], '1.9.4', true );
+        // Leaflet 1.9.4, self-hosted (was unpkg.com) for the same privacy reason
+        wp_enqueue_style(  'leaflet', DIL_URI . '/assets/vendor/leaflet/leaflet.css', [], '1.9.4' );
+        wp_enqueue_script( 'leaflet', DIL_URI . '/assets/vendor/leaflet/leaflet.js',  [], '1.9.4', true );
     }
 }
 
@@ -80,7 +76,6 @@ function dil_preload_fonts(): void {
     if ( is_front_page() ) {
         array_push( $fonts, 'deli-deluxe.woff2', 'zapfino.woff2' );
     }
-    echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>' . "\n";
     foreach ( $fonts as $f ) {
         printf( '<link rel="preload" href="%s" as="font" type="font/woff2" crossorigin>' . "\n", esc_url( DIL_URI . '/assets/fonts/' . $f ) );
     }
